@@ -1,3 +1,18 @@
 idea.md
 estructura-ambiciosa-NO-USAR.md
 documentacion-de-referencia.md
+
+# Dependencies
+node_modules/
+
+# Environment
+.env
+
+# Build
+artifacts/
+cache/
+coverage/
+
+# OS
+.DS_Store
+Thumbs.db

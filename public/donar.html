@@ -88,12 +88,12 @@
 <div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
 <div class="text-2xl font-bold tracking-tighter text-blue-900 dark:text-blue-50">ImpactPool</div>
 <div class="hidden md:flex gap-8 items-center">
-<a class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="dashboard.html">Dashboard</a>
-<a class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="donar.html">Donar</a>
-<a class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="vouchers.html">Vouchers</a>
-<a class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="terminos_condiciones.html">Terminos y condiciones</a>
+<a data-role="organization" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="dashboard.html">Dashboard</a>
+<a data-role="donor" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="donar.html">Donar</a>
+<a data-role="organization" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="vouchers.html">Vouchers</a>
+<a data-role="donor" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="terminos_condiciones.html">Terminos y condiciones</a>
 </div>
-<button class="bg-primary text-on-primary px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-all" onclick="location.href='inicio.html'">Cerrar sesion</button>
+<button data-action="logout" class="bg-primary text-on-primary px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-all" onclick="Session.logout()">Cerrar sesion</button>
 </div>
 </nav>
 
@@ -160,14 +160,14 @@
 </div>
 <!-- Currency Selector -->
 <div class="grid grid-cols-2 gap-4 mb-8">
-<button class="flex flex-col items-center justify-center p-6 rounded-xl border-2 border-primary bg-surface-container-low transition-all duration-300">
+<button id="btn-crypto" onclick="selectPaymentMethod('crypto')" class="flex flex-col items-center justify-center p-6 rounded-xl border-2 border-primary bg-surface-container-low transition-all duration-300">
 <span class="material-symbols-outlined text-primary mb-2" style="font-variation-settings: 'FILL' 1;">currency_bitcoin</span>
-<span class="font-bold text-primary">Cripto (USDC)</span>
-<span class="text-[10px] text-on-surface-variant uppercase mt-1">LIQUIDACIÓN INMEDIATA</span>
+<span class="font-bold text-primary">USDC</span>
+<span class="text-[10px] text-on-surface-variant uppercase mt-1">CRIPTO — WALLET</span>
 </button>
-<button class="flex flex-col items-center justify-center p-6 rounded-xl border-2 border-transparent hover:border-outline-variant bg-surface-container-low transition-all duration-300">
+<button id="btn-fiat" onclick="selectPaymentMethod('fiat')" class="flex flex-col items-center justify-center p-6 rounded-xl border-2 border-transparent hover:border-outline-variant bg-surface-container-low transition-all duration-300">
 <span class="material-symbols-outlined text-on-surface-variant mb-2">payments</span>
-<span class="font-bold text-on-surface">Fiat (USD)</span>
+<span class="font-bold text-on-surface">USD</span>
 <span class="text-[10px] text-on-surface-variant uppercase mt-1">CONVERSIÓN AUTOMÁTICA</span>
 </button>
 </div>
@@ -266,4 +266,6 @@
 </div>
 </div>
 </footer>
+<script src="js/session.js"></script>
+<script src="js/donar.js"></script>
 </body></html>

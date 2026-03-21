@@ -12,6 +12,8 @@ const { HTTPFacilitatorClient } = require('@x402/core/server');
 const donationsRoutes = require('./src/routes/donations.routes');
 const usersRoutes = require('./src/routes/users.routes');
 const x402InfoRoutes = require('./src/routes/x402.routes');
+const associationsRoutes = require('./src/routes/associations.routes');
+const rewardsRoutes = require('./src/routes/rewards.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,6 +21,13 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Ruta raíz: servir inicio.html en lugar de index.html
+// Debe ir ANTES de express.static para que no sirva index.html automáticamente
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'inicio.html'));
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // x402 Payment Middleware — protects premium endpoints
@@ -137,6 +146,52 @@ app.get('/api/donations/transparency', async (req, res) => {
 app.use('/api/donations', donationsRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/x402', x402InfoRoutes);
+app.use('/api/associations', associationsRoutes);
+app.use('/api/rewards', rewardsRoutes);
+
+// GET /api/stats — estadísticas públicas
+app.get('/api/stats', async (req, res) => {
+  try {
+    const Donation = require('./src/models/Donation.model');
+    const Association = require('./src/models/Association.model');
+    const User = require('./src/models/User.model');
+
+    const [totalDonations, totalAssociations, verifiedAssociations, totalDonors] = await Promise.all([
+      Donation.countDocuments(),
+      Association.countDocuments(),
+      Association.countDocuments({ verified: true }),
+      User.countDocuments({ role: 'donor' }),
+    ]);
+
+    const donationAgg = await Donation.aggregate([
+      { $match: { status: 'completed' } },
+      {
+        $group: {
+          _id: null,
+          totalDonated: { $sum: '$totalAmount' },
+          totalToAssociations: { $sum: '$associationAmount' },
+          totalToVault: { $sum: '$vaultAmount' },
+        },
+      },
+    ]);
+
+    const agg = donationAgg[0] || { totalDonated: 0, totalToAssociations: 0, totalToVault: 0 };
+
+    res.json({
+      totalDonations,
+      totalDonated: agg.totalDonated,
+      totalToAssociations: agg.totalToAssociations,
+      totalToVault: agg.totalToVault,
+      totalAssociations,
+      verifiedAssociations,
+      totalDonors,
+      splitRatio: '70/30',
+      rewardRate: '5%',
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -148,6 +203,58 @@ async function start() {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('MongoDB conectado');
+
+    // Crear usuarios de desarrollo automáticamente si no existen (solo en dev)
+    if (process.env.NODE_ENV !== 'production') {
+      try {
+        const User = require('./src/models/User.model');
+        const Association = require('./src/models/Association.model');
+
+        // Seed: usuario donador
+        const seedEmail = process.env.DEV_SEED_EMAIL || 'user@gmail.com';
+        const seedPassword = process.env.DEV_SEED_PASSWORD || 'user123';
+        const seedName = 'Usuario de Prueba';
+
+        const existing = await User.findOne({ email: seedEmail });
+        if (!existing) {
+          await User.create({ email: seedEmail, password: seedPassword, name: seedName, role: 'donor' });
+          console.log(`Dev user created: ${seedEmail} / ${seedPassword}`);
+        } else {
+          console.log('Dev user already exists:', seedEmail);
+        }
+
+        // Seed: usuario organización
+        const orgEmail = 'organizacion@gmail.com';
+        const orgPassword = 'organizacion123';
+        const orgName = 'Organización ImpactPool';
+
+        let orgUser = await User.findOne({ email: orgEmail });
+        if (!orgUser) {
+          orgUser = await User.create({ email: orgEmail, password: orgPassword, name: orgName, role: 'association' });
+          console.log(`Org user created: ${orgEmail} / ${orgPassword}`);
+        } else {
+          console.log('Org user already exists:', orgEmail);
+        }
+
+        // Seed: asociación vinculada a la org
+        const existingAssoc = await Association.findOne({ admin: orgUser._id });
+        if (!existingAssoc) {
+          await Association.create({
+            name: 'Fundación ImpactPool',
+            description: 'Organización principal de ImpactPool para recibir donaciones',
+            walletAddress: '0x0000000000000000000000000000000000000001',
+            category: 'social',
+            verified: true,
+            admin: orgUser._id,
+          });
+          console.log('Org association created: Fundación ImpactPool (verified)');
+        } else {
+          console.log('Org association already exists');
+        }
+      } catch (err) {
+        console.warn('No se pudo crear usuarios dev:', err.message);
+      }
+    }
 
     app.listen(PORT, () => {
       console.log(`ImpactoPool corriendo en http://localhost:${PORT}`);

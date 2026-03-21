@@ -85,19 +85,13 @@
 <div class="flex justify-between items-center px-6 py-4 max-w-screen-2xl mx-auto">
 <div class="text-2xl font-black tracking-tighter text-blue-900 dark:text-white">ImpactPool</div>
 <div class="hidden md:flex items-center gap-8">
-<a class="text-slate-500 dark:text-slate-400 font-medium hover:text-blue-900 dark:hover:text-white transition-colors" href="#">Impacto</a>
-<a class="text-blue-900 dark:text-white font-bold border-b-2 border-blue-900 dark:border-blue-400 pb-1" href="#">Vouchers</a>
-<a class="text-slate-500 dark:text-slate-400 font-medium hover:text-blue-900 dark:hover:text-white transition-colors" href="#">Donar</a>
-<a class="text-slate-500 dark:text-slate-400 font-medium hover:text-blue-900 dark:hover:text-white transition-colors" href="#">Gobernanza</a>
+<a data-role="organization" class="text-slate-500 dark:text-slate-400 font-medium hover:text-blue-900 dark:hover:text-white transition-colors" href="dashboard.html">Dashboard</a>
+<a data-role="donor" class="text-slate-500 dark:text-slate-400 font-medium hover:text-blue-900 dark:hover:text-white transition-colors" href="donar.html">Donar</a>
+<a data-role="organization" class="text-blue-900 dark:text-white font-bold border-b-2 border-blue-900 dark:border-blue-400 pb-1" href="vouchers.html">Vouchers</a>
+<a data-role="donor" class="text-slate-500 dark:text-slate-400 font-medium hover:text-blue-900 dark:hover:text-white transition-colors" href="terminos_condiciones.html">Términos y condiciones</a>
 </div>
 <div class="flex items-center gap-4">
-<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all active:scale-95 text-blue-900 dark:text-blue-400">
-<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
-</button>
-<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all active:scale-95 text-blue-900 dark:text-blue-400">
-<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-</button>
-<img alt="Avatar de usuario" class="w-10 h-10 rounded-full object-cover border-2 border-primary-fixed" data-alt="Close-up portrait of a smiling user avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqF3NJ9cZgvENC-Zpl-uwX-krtN-z1ajuo1FaELm3tkpxmKubBdxhdvQ2oiuOHuKgkzy20RbB0WLN9R0I00K5LqtuOV-QNA0SWYE-kMHic60eRj4NBWZPl5w179U7q1ErN16esTm0NURpwAs8zsBpp3oDNmuBlCETN9Tubhopf1HR_GmYRCBKuvBs_ZEhF7I3rFt3m8S40I36gB6wIDPER6JuqwBuxTD1c9aXWOArHlBKjtBqLkl8bPk2HgxDsSRlNgqL61TV4fFE"/>
+<button data-action="logout" class="bg-primary text-on-primary px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-all" onclick="Session.logout()">Cerrar sesión</button>
 </div>
 </div>
 </nav>
@@ -310,4 +304,5 @@
 <p class="text-sm font-inter text-slate-600 dark:text-slate-400">© 2024 ImpactPool. Todos los derechos reservados. Transparencia inmutable.</p>
 </div>
 </footer>
+<script src="js/session.js"></script>
 </body></html>

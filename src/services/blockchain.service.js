@@ -47,6 +47,31 @@ class BlockchainService {
     this.provider = null;
     this.signer = null;
     this.contracts = {};
+    this.MAX_RETRIES = 3;
+    this.RETRY_DELAY_MS = 2000;
+  }
+
+  /**
+   * Retry helper: ejecuta fn hasta MAX_RETRIES veces con delay exponencial
+   */
+  async _withRetry(fn, label = 'blockchain call') {
+    let lastError;
+    for (let attempt = 1; attempt <= this.MAX_RETRIES; attempt++) {
+      try {
+        return await fn();
+      } catch (error) {
+        lastError = error;
+        console.warn(`[${label}] intento ${attempt}/${this.MAX_RETRIES} falló: ${error.message}`);
+        if (attempt < this.MAX_RETRIES) {
+          await new Promise((r) => setTimeout(r, this.RETRY_DELAY_MS * attempt));
+          // Reset provider/signer en caso de fallo de conexión
+          this.provider = null;
+          this.signer = null;
+          this.contracts = {};
+        }
+      }
+    }
+    throw lastError;
   }
 
   _getProvider() {
@@ -77,35 +102,39 @@ class BlockchainService {
   // ================================
 
   /**
-   * Transfiere el 70% a la wallet de la asociación
+   * Transfiere el 70% a la wallet de la asociación (con retry)
    */
   async transferToAssociation(associationWallet, amount) {
-    const signer = this._getSigner();
-    const usdc = new ethers.Contract(blockchainConfig.usdcToken, ERC20_ABI, signer);
+    return this._withRetry(async () => {
+      const signer = this._getSigner();
+      const usdc = new ethers.Contract(blockchainConfig.usdcToken, ERC20_ABI, signer);
 
-    const amountWei = ethers.parseUnits(amount.toString(), 6);
-    const tx = await usdc.transfer(associationWallet, amountWei);
-    const receipt = await tx.wait();
-    return receipt.hash;
+      const amountWei = ethers.parseUnits(amount.toString(), 6);
+      const tx = await usdc.transfer(associationWallet, amountWei);
+      const receipt = await tx.wait();
+      return receipt.hash;
+    }, 'transferToAssociation');
   }
 
   /**
-   * Deposita el 30% en el DonationVault
+   * Deposita el 30% en el DonationVault (con retry)
    * @param donorWallet Wallet address of the donor
    * @param associationWallet Wallet address of the association
    * @param amount Amount in USDC (human readable)
    */
   async depositToVault(donorWallet, associationWallet, amount) {
-    const vault = this._getContract(
-      'vault',
-      blockchainConfig.contracts.donationVault,
-      DONATION_VAULT_ABI
-    );
+    return this._withRetry(async () => {
+      const vault = this._getContract(
+        'vault',
+        blockchainConfig.contracts.donationVault,
+        DONATION_VAULT_ABI
+      );
 
-    const amountWei = ethers.parseUnits(amount.toString(), 6);
-    const tx = await vault.deposit(donorWallet, associationWallet, amountWei);
-    const receipt = await tx.wait();
-    return receipt.hash;
+      const amountWei = ethers.parseUnits(amount.toString(), 6);
+      const tx = await vault.deposit(donorWallet, associationWallet, amountWei);
+      const receipt = await tx.wait();
+      return receipt.hash;
+    }, 'depositToVault');
   }
 
   /**

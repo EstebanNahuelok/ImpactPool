@@ -97,10 +97,11 @@
 <div class="text-2xl font-black text-[#002045] dark:text-blue-500 tracking-tighter">ImpactPool</div>
 <div class="hidden md:flex items-center gap-8 font-['Inter'] font-medium tracking-tight">
 </div>
-<button  class="bg-primary text-on-primary px-6 py-2 rounded-md font-medium hover:opacity-90 transition-all duration-200">
-
-    <a class="text-slate-300 hover:text-[#0a6c44] transition-all" href="login.html">Iniciar Sesion</a>
-
+<button data-action="login" class="bg-primary text-on-primary px-6 py-2 rounded-md font-medium hover:opacity-90 transition-all duration-200" onclick="location.href='login.html'">
+    Iniciar Sesión
+</button>
+<button data-action="logout" style="display:none;" class="bg-primary text-on-primary px-6 py-2 rounded-md font-medium hover:opacity-90 transition-all duration-200" onclick="Session.logout()">
+    Cerrar Sesión
 </button>
 </nav>
 </header>
@@ -286,4 +287,5 @@
 </div>
 </div>
 </footer>
+<script src="js/session.js"></script>
 </body></html>

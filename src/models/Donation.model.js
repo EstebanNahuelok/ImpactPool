@@ -41,6 +41,11 @@ const donationSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  paymentMethod: {
+    type: String,
+    enum: ['crypto', 'fiat'],
+    default: 'crypto',
+  },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Donation', donationSchema);

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-bright": "#faf9fd",
+              "surface-container-high": "#e9e7eb",
+              "surface-dim": "#dad9dd",
+              "inverse-on-surface": "#f1f0f4",
+              "on-secondary": "#ffffff",
+              "tertiary-fixed": "#ffdbca",
+              "error-container": "#ffdad6",
+              "inverse-primary": "#adc7f7",
+              "on-secondary-container": "#167249",
+              "surface-container-lowest": "#ffffff",
+              "on-primary": "#ffffff",
+              "background": "#faf9fd",
+              "on-tertiary-fixed": "#331100",
+              "primary-fixed-dim": "#adc7f7",
+              "on-tertiary-container": "#f57d32",
+              "surface-container-low": "#f4f3f7",
+              "inverse-surface": "#2f3033",
+              "on-primary-fixed": "#001b3c",
+              "surface-tint": "#455f88",
+              "surface-variant": "#e3e2e6",
+              "secondary-container": "#9ff5c1",
+              "on-primary-container": "#86a0cd",
+              "on-surface-variant": "#43474e",
+              "surface": "#faf9fd",
+              "secondary-fixed-dim": "#83d8a6",
+              "secondary-fixed": "#9ff5c1",
+              "on-error": "#ffffff",
+              "error": "#ba1a1a",
+              "primary-fixed": "#d6e3ff",
+              "on-secondary-fixed": "#002111",
+              "surface-container-highest": "#e3e2e6",
+              "on-secondary-fixed-variant": "#005231",
+              "on-error-container": "#93000a",
+              "secondary": "#0a6c44",
+              "primary-container": "#1a365d",
+              "outline-variant": "#c4c6cf",
+              "primary": "#002045",
+              "on-tertiary-fixed-variant": "#773200",
+              "on-primary-fixed-variant": "#2d476f",
+              "tertiary-fixed-dim": "#ffb68f",
+              "tertiary-container": "#5d2500",
+              "on-surface": "#1a1c1e",
+              "tertiary": "#3b1500",
+              "surface-container": "#efedf1",
+              "on-tertiary": "#ffffff",
+              "on-background": "#1a1c1e",
+              "outline": "#74777f"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- Top Navigation -->
+<nav class="w-full top-0 sticky bg-white dark:bg-slate-950 z-50">
+<div class="flex justify-between items-center max-w-7xl mx-auto px-6 h-20">
+<div class="text-2xl font-black text-[#002045] dark:text-blue-500 tracking-tighter">ImpactPool</div>
+<div class="hidden md:flex items-center gap-8 font-['Inter'] font-medium tracking-tight">
+<a class="text-slate-600 dark:text-slate-400 hover:text-[#002045] transition-colors duration-200 ease-in-out" href="#">Misión</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-[#002045] transition-colors duration-200 ease-in-out" href="#">Impacto</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-[#002045] transition-colors duration-200 ease-in-out" href="#">Donar</a>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-md font-medium transition-colors duration-200 ease-in-out hover:bg-primary-container">
+            Iniciar Sesión
+        </button>
+</div>
+</nav>
+<!-- Header Section -->
+<header class="bg-surface-container-low pt-24 pb-16">
+<div class="max-w-7xl mx-auto px-6">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
+<div class="max-w-2xl">
+<span class="text-secondary font-bold tracking-widest text-xs uppercase mb-4 block">Marco Legal</span>
+<h1 class="text-[3.5rem] font-black leading-none tracking-tighter text-primary mb-6">Términos y Condiciones</h1>
+<p class="text-body-md text-on-surface-variant leading-relaxed opacity-80">
+                    Fecha de vigencia: 24 de octubre de 2024. Estos términos rigen la gobernanza, los protocolos financieros y los estándares éticos que regulan el ecosistema ImpactPool.
+                </p>
+</div>
+<div class="flex flex-col items-end">
+<div class="text-xs font-mono text-outline mb-1">CONTRACT_HASH_ID</div>
+<div class="text-sm font-mono bg-surface-container-highest px-3 py-1 rounded">0x71C765...d8976f</div>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-20">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+<!-- Table of Contents (Sticky) -->
+<aside class="lg:col-span-3 hidden lg:block">
+<div class="sticky top-32 space-y-6">
+<h3 class="font-bold text-primary tracking-tight">Secciones</h3>
+<nav class="flex flex-col gap-4 text-sm text-on-surface-variant">
+<a class="hover:text-secondary transition-colors border-l-2 border-transparent hover:border-secondary pl-4" href="#fund-separation">Reglas de Separación</a>
+<a class="hover:text-secondary transition-colors border-l-2 border-transparent hover:border-secondary pl-4" href="#yield-limitations">Límites de Rendimiento</a>
+<a class="hover:text-secondary transition-colors border-l-2 border-transparent hover:border-secondary pl-4" href="#multisig-governance">Gobernanza Multisig</a>
+<a class="hover:text-secondary transition-colors border-l-2 border-transparent hover:border-secondary pl-4" href="#data-privacy">Privacidad de Datos</a>
+<a class="hover:text-secondary transition-colors border-l-2 border-transparent hover:border-secondary pl-4" href="#dispute-resolution">Resolución de Disputas</a>
+</nav>
+</div>
+</aside>
+<!-- Content Area -->
+<div class="lg:col-span-9 space-y-24">
+<!-- Fund Separation Section -->
+<section class="scroll-mt-32" id="fund-separation">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-xl bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</div>
+<h2 class="text-3xl font-bold tracking-tight text-primary">01. Reglas de Separación de Fondos</h2>
+</div>
+<div class="prose prose-slate max-w-none text-on-surface-variant leading-relaxed space-y-6">
+<p class="text-lg">ImpactPool mantiene una política estricta de no mezcla de activos para todos los fondos mantenidos en los pools de liquidez del protocolo.</p>
+<div class="bg-surface-container-low p-8 rounded-xl space-y-4">
+<div class="flex gap-4">
+<span class="text-secondary font-bold">1.1</span>
+<p>Todas las contribuciones de los donantes se dirigen a contratos inteligentes aislados específicos para la vertical de impacto elegida (ej. Agua Limpia, Educación).</p>
+</div>
+<div class="flex gap-4">
+<span class="text-secondary font-bold">1.2</span>
+<p>El capital operativo para el mantenimiento de la plataforma ImpactPool se mantiene en una "Bóveda de Tesorería" distinta y nunca proviene de los fondos de impacto activos.</p>
+</div>
+<div class="flex gap-4">
+<span class="text-secondary font-bold">1.3</span>
+<p>Los activos permanecen en la cadena en cuentas de libro mayor transparentes, visibles para cualquier parte interesada en cualquier momento a través de la interfaz del Libro Público.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Yield Limitations Section -->
+<section class="scroll-mt-32" id="yield-limitations">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-xl bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">trending_up</span>
+</div>
+<h2 class="text-3xl font-bold tracking-tight text-primary">02. Limitaciones de Rendimiento para Sponsors</h2>
+</div>
+<div class="prose prose-slate max-w-none text-on-surface-variant leading-relaxed space-y-6">
+<p>ImpactPool utiliza protocolos de generación de rendimiento sostenibles para asegurar la longevidad de los fondos. Sin embargo, la participación del patrocinador está sujeta a restricciones de "Impacto Social Primero".</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="p-6 bg-surface-container-low rounded-xl">
+<h4 class="font-bold text-primary mb-2">Rendimientos Topados</h4>
+<p class="text-sm">Los patrocinadores solo pueden reclamar hasta el 2% del rendimiento anual generado como "Recompensas de Incentivo". El rendimiento restante se reinvierte automáticamente en el objetivo de impacto.</p>
+</div>
+<div class="p-6 bg-surface-container-low rounded-xl">
+<h4 class="font-bold text-primary mb-2">Bloqueo de Principal</h4>
+<p class="text-sm">El capital principal contribuido se bloquea durante la duración del ciclo de impacto. El retiro anticipado está sujeto a una "Tasa de Estabilización" del 15% dirigida al pool de beneficiarios.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Multisig Governance Section -->
+<section class="scroll-mt-32" id="multisig-governance">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-xl bg-tertiary-container flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined">verified_user</span>
+</div>
+<h2 class="text-3xl font-bold tracking-tight text-primary">03. Gobernanza Multisig</h2>
+</div>
+<div class="prose prose-slate max-w-none text-on-surface-variant leading-relaxed space-y-6">
+<p>Para prevenir fallos centralizados o malversación, todos los desembolsos de fondos significativos requieren firmas M-de-N.</p>
+<ul class="space-y-4 list-none p-0">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary mt-1">check_circle</span>
+<span>Un mínimo de 3 de los 5 "Guardianes de Impacto" designados deben aprobar cualquier transacción que supere el valor de 5,000 USD.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary mt-1">check_circle</span>
+<span>Los guardianes consisten en auditores independientes, líderes comunitarios y delegados electos de ImpactPool.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary mt-1">check_circle</span>
+<span>Todos los metadatos de las firmas, incluyendo la marca de tiempo y el origen de la billetera, se registran permanentemente en el libro mayor inmutable.</span>
+</li>
+</ul>
+<div class="mt-8 p-4 border-l-4 border-tertiary-container bg-tertiary-fixed/30 rounded-r-xl">
+<p class="text-sm font-medium text-on-tertiary-fixed-variant italic">Nota: En caso de un compromiso de seguridad, se impone un bloqueo temporal de 48 horas en todas las transacciones salientes para permitir una auditoría comunitaria.</p>
+</div>
+</div>
+</section>
+<!-- Data Privacy Section -->
+<section class="scroll-mt-32" id="data-privacy">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">visibility_off</span>
+</div>
+<h2 class="text-3xl font-bold tracking-tight text-primary">04. Privacidad de Datos para Beneficiarios</h2>
+</div>
+<div class="prose prose-slate max-w-none text-on-surface-variant leading-relaxed space-y-6">
+<p>Si bien los flujos financieros son públicos, la identidad personal de los beneficiarios individuales está protegida por la tecnología de Pruebas de Conocimiento Cero (ZKP).</p>
+<div class="bg-surface-container-low rounded-xl overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high">
+<th class="p-4 text-sm font-bold text-primary">Categoría de Datos</th>
+<th class="p-4 text-sm font-bold text-primary">Estado de Visibilidad</th>
+<th class="p-4 text-sm font-bold text-primary">Retención</th>
+</tr>
+</thead>
+<tbody class="text-sm">
+<tr class="border-b border-outline-variant/10">
+<td class="p-4">Monto de la Transacción</td>
+<td class="p-4"><span class="px-2 py-1 bg-secondary-container text-on-secondary-container text-xs font-bold rounded-full">PÚBLICO</span></td>
+<td class="p-4">Permanente (On-chain)</td>
+</tr>
+<tr class="border-b border-outline-variant/10">
+<td class="p-4">Nombre Real del Beneficiario</td>
+<td class="p-4"><span class="px-2 py-1 bg-tertiary-container text-on-tertiary-container text-xs font-bold rounded-full">ENCRIPTADO</span></td>
+<td class="p-4">90 Días (Off-chain)</td>
+</tr>
+<tr>
+<td class="p-4">Verificación Biométrica</td>
+<td class="p-4"><span class="px-2 py-1 bg-tertiary-container text-on-tertiary-container text-xs font-bold rounded-full">ENCRIPTADO</span></td>
+<td class="p-4">Descartado tras validación</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- Conclusion -->
+<section class="pt-12 border-t border-surface-container-high">
+<p class="text-sm text-outline mb-8 italic">ImpactPool se reserva el derecho de modificar estos términos tras un período de comentarios de la comunidad de 14 días y un voto mayoritario de Multisig.</p>
+<div class="flex gap-4">
+<button class="bg-primary text-on-primary px-8 py-3 rounded-md font-bold hover:bg-primary-container transition-all">Descargar PDF</button>
+<button class="text-primary font-bold px-8 py-3 hover:bg-surface-container-low rounded-md transition-all">Imprimir Términos</button>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-[#002045] dark:bg-slate-950 text-white dark:text-slate-300 w-full py-12 border-t border-white/10 mt-20">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto px-6 font-['Inter'] text-sm leading-6">
+<div>
+<div class="text-xl font-bold text-white mb-4">ImpactPool</div>
+<p class="text-slate-300 dark:text-slate-500 max-w-xs">
+                © 2024 ImpactPool. El Libro Mayor Transparente. Potenciando el impacto global a través de la confianza verificable.
+            </p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col gap-2">
+<a class="text-white font-bold hover:text-[#0a6c44] transition-all" href="#">Términos y Condiciones</a>
+<a class="text-slate-300 dark:text-slate-500 hover:text-[#0a6c44] transition-all" href="#">Política de Privacidad</a>
+</div>
+<div class="flex flex-col gap-2">
+<a class="text-slate-300 dark:text-slate-500 hover:text-[#0a6c44] transition-all" href="#">Contacto</a>
+<a class="text-slate-300 dark:text-slate-500 hover:text-[#0a6c44] transition-all" href="#">FAQ</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

@@ -96,6 +96,50 @@
       <h2>Mis Donaciones</h2>
       <div id="donations-list"></div>
     </section>
+
+    <!-- Transparencia (x402 protected) -->
+    <section id="transparency" class="section">
+      <h2>Transparencia</h2>
+      <p class="section-desc">Datos verificables de donaciones en blockchain. Este endpoint usa el protocolo <strong>x402</strong> — requiere un micro-pago de 0.01 USDC para acceder.</p>
+      <button id="btn-transparency" class="btn btn-primary">Ver Transparencia (x402 Payment)</button>
+      <button id="btn-premium" class="btn btn-secondary">Estadísticas Premium (x402)</button>
+      <div id="transparency-data" style="display:none;">
+        <h3>Datos de Transparencia</h3>
+        <pre id="transparency-json"></pre>
+      </div>
+    </section>
+
+    <!-- ERC-8004 Agent Info -->
+    <section id="agent-info" class="section">
+      <h2>Agente ImpactoPool (ERC-8004)</h2>
+      <p class="section-desc">Nuestro agente está registrado en la blockchain como un NFT (ERC-721) con identidad y reputación verificable.</p>
+      <div class="cards">
+        <div class="card">
+          <h3>Identity Registry</h3>
+          <p>El agente ImpactoPool está registrado con un URI que apunta a su archivo de registro JSON.</p>
+          <p id="agent-id">ID: —</p>
+          <p id="agent-uri">URI: —</p>
+        </div>
+        <div class="card">
+          <h3>Reputation</h3>
+          <p>Los donadores pueden dejar feedback on-chain que afecta la reputación del agente.</p>
+          <p id="agent-reputation">Score: —</p>
+          <p id="agent-feedback-count">Feedbacks: —</p>
+        </div>
+        <div class="card">
+          <h3>Dar Feedback</h3>
+          <p>Conectá tu wallet y dejá tu valoración del servicio.</p>
+          <select id="feedback-value">
+            <option value="100">Excelente (+100)</option>
+            <option value="50">Bueno (+50)</option>
+            <option value="0">Neutral (0)</option>
+            <option value="-50">Malo (-50)</option>
+            <option value="-100">Terrible (-100)</option>
+          </select>
+          <button id="btn-feedback" class="btn btn-primary">Enviar Feedback</button>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -104,6 +148,7 @@
 
   <div id="notification" class="notification" style="display:none;"></div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
   <script src="js/app.js"></script>
   <script src="js/blockchain-integration.js"></script>
   <script src="js/x402-client.js"></script>

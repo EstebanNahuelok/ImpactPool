@@ -1,0 +1,34 @@
+{
+  "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+  "name": "ImpactoPool Donation Agent",
+  "description": "Autonomous donation agent for ImpactoPool. Manages the 70/30 split between associations and the DonationVault, distributes rewards, and enables transparent donation tracking on Avalanche.",
+  "image": "",
+  "active": true,
+  "x402Support": true,
+  "services": [
+    {
+      "name": "web",
+      "endpoint": "https://impactopool.app/",
+      "version": "1.0.0"
+    },
+    {
+      "name": "donations-api",
+      "endpoint": "https://impactopool.app/api/donations",
+      "version": "1.0.0"
+    },
+    {
+      "name": "transparency",
+      "endpoint": "https://impactopool.app/api/donations/transparency",
+      "version": "1.0.0"
+    }
+  ],
+  "registrations": [
+    {
+      "agentId": 1,
+      "agentRegistry": "eip155:43113:CONTRACT_ADDRESS_HERE"
+    }
+  ],
+  "supportedTrust": [
+    "reputation"
+  ]
+}

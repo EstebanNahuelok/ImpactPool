@@ -1,78 +1,53 @@
-const { ethers } = require('ethers');
+/**
+ * x402 Payment Service
+ *
+ * With the official Coinbase x402 protocol, payment handling is done
+ * automatically by the paymentMiddleware in server.js.
+ *
+ * This service provides helper utilities for x402-related operations
+ * that aren't covered by the middleware (e.g., checking facilitator status).
+ *
+ * Protocol flow (handled by middleware):
+ *   1. Client sends request to x402-protected endpoint
+ *   2. Server responds 402 with PAYMENT-REQUIRED header (base64)
+ *   3. Client signs payment via wallet (permit2)
+ *   4. Client retries with PAYMENT-SIGNATURE header (base64)
+ *   5. Facilitator verifies + settles on-chain
+ *   6. Server returns 200 with data
+ */
 const x402Config = require('../../config/x402.config');
-const blockchainConfig = require('../../config/blockchain.config');
-
-const X402_HANDLER_ABI = [
-  'function processPayment(address payer, uint256 amount, bytes calldata payload) external returns (bool)',
-  'function verifyPayment(bytes32 paymentHash) view returns (bool)',
-  'event PaymentProcessed(address indexed payer, uint256 amount, bytes32 paymentHash)',
-];
 
 class X402PaymentService {
-  constructor() {
-    this.provider = null;
-    this.signer = null;
-  }
-
-  _getProvider() {
-    if (!this.provider) {
-      this.provider = new ethers.JsonRpcProvider(blockchainConfig.rpcUrl);
-    }
-    return this.provider;
-  }
-
-  _getSigner() {
-    if (!this.signer) {
-      const provider = this._getProvider();
-      this.signer = new ethers.Wallet(blockchainConfig.deployerPrivateKey, provider);
-    }
-    return this.signer;
-  }
-
   /**
-   * Genera un header x402 de pago requerido
-   * Protocolo: el servidor responde 402 con info de pago,
-   * el cliente paga on-chain y reintenta con proof
+   * Get the x402 configuration for the current environment
    */
-  generatePaymentRequired(amount, resource) {
+  getConfig() {
     return {
-      'X-Payment-Required': 'true',
-      'X-Payment-Amount': amount.toString(),
-      'X-Payment-Token': x402Config.paymentToken,
-      'X-Payment-Network': x402Config.network,
-      'X-Payment-Address': blockchainConfig.contracts.x402Handler,
-      'X-Payment-Resource': resource,
+      facilitatorUrl: x402Config.facilitatorUrl,
+      network: x402Config.network,
+      scheme: x402Config.scheme,
+      payTo: x402Config.payTo,
     };
   }
 
   /**
-   * Verifica que un pago x402 fue realizado on-chain
+   * Get the list of x402-protected endpoints and their prices
    */
-  async verifyPayment(paymentHash) {
-    const signer = this._getSigner();
-    const handler = new ethers.Contract(
-      blockchainConfig.contracts.x402Handler,
-      X402_HANDLER_ABI,
-      signer
-    );
-    return handler.verifyPayment(paymentHash);
-  }
-
-  /**
-   * Procesa un pago x402 on-chain
-   */
-  async processPayment(payerAddress, amount, payload) {
-    const signer = this._getSigner();
-    const handler = new ethers.Contract(
-      blockchainConfig.contracts.x402Handler,
-      X402_HANDLER_ABI,
-      signer
-    );
-
-    const amountWei = ethers.parseUnits(amount.toString(), 6);
-    const tx = await handler.processPayment(payerAddress, amountWei, payload);
-    const receipt = await tx.wait();
-    return receipt.hash;
+  getProtectedEndpoints() {
+    return [
+      {
+        method: 'GET',
+        path: '/api/premium-data',
+        price: x402Config.price,
+        description: 'Platform statistics',
+      },
+      {
+        method: 'GET',
+        path: '/api/donations/transparency',
+        price: x402Config.price,
+        description: 'Donation transparency data',
+      },
+    ];
   }
 }
 

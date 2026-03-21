@@ -2,55 +2,41 @@ const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../../server');
 
-describe('x402 Payment Protocol', () => {
-  let token;
-
-  beforeAll(async () => {
-    const regRes = await request(app)
-      .post('/api/users/register')
-      .send({
-        name: 'x402 Test User',
-        email: 'x402test@test.com',
-        password: 'test123456',
-      });
-    token = regRes.body.token;
-  });
+describe('x402 Payment Protocol (Coinbase Official)', () => {
 
   afterAll(async () => {
     await mongoose.connection.close();
   });
 
-  test('POST /api/pay sin paymentHash retorna 402', async () => {
+  test('GET /api/premium-data sin pago retorna 402 Payment Required', async () => {
     const res = await request(app)
-      .post('/api/pay')
-      .set('Authorization', `Bearer ${token}`)
-      .send({ amount: '1.00', resource: '/api/test' });
+      .get('/api/premium-data');
+
+    // x402 middleware should return 402 with PAYMENT-REQUIRED header
+    expect(res.status).toBe(402);
+  });
+
+  test('GET /api/donations/transparency sin pago retorna 402', async () => {
+    const res = await request(app)
+      .get('/api/donations/transparency');
 
     expect(res.status).toBe(402);
-    expect(res.body.error).toBe('Payment Required');
-    expect(res.body.payment).toBeDefined();
-    expect(res.body.payment['X-Payment-Token']).toBeDefined();
   });
 
-  test('POST /api/pay con paymentHash inválido falla verificación', async () => {
+  test('GET /api/x402/info retorna info de endpoints protegidos', async () => {
     const res = await request(app)
-      .post('/api/pay')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        paymentHash: '0xinvalidhash',
-        amount: '1.00',
-      });
+      .get('/api/x402/info');
 
-    // Debería fallar en verificación on-chain (no hay nodo conectado en tests)
-    expect(res.status).toBe(500);
+    expect(res.status).toBe(200);
+    expect(res.body.protocol).toBe('x402');
+    expect(res.body.network).toBe('eip155:43113');
+    expect(res.body.protectedEndpoints).toBeDefined();
+    expect(res.body.protectedEndpoints.length).toBe(2);
   });
 
-  test('GET /api/pay/status/:hash retorna estado', async () => {
-    const fakeHash = '0x' + '0'.repeat(64);
-    const res = await request(app)
-      .get(`/api/pay/status/${fakeHash}`);
-
-    // Puede fallar por falta de conexión blockchain, pero el endpoint responde
-    expect([200, 500]).toContain(res.status);
+  test('GET /api/health no está protegido por x402', async () => {
+    const res = await request(app).get('/api/health');
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe('ok');
   });
 });

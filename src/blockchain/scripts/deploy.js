@@ -4,51 +4,76 @@ async function main() {
   const [deployer] = await hre.ethers.getSigners();
   console.log('Deploying con cuenta:', deployer.address);
 
-  const usdcAddress = process.env.USDC_TOKEN_ADDRESS;
+  // 1. Deploy or use existing USDC
+  let usdcAddress = process.env.USDC_TOKEN_ADDRESS;
   if (!usdcAddress) {
-    throw new Error('USDC_TOKEN_ADDRESS no configurado en .env');
+    console.log('\n1. Deploying MockUSDC (no USDC_TOKEN_ADDRESS configured)...');
+    const MockUSDC = await hre.ethers.getContractFactory('MockUSDC');
+    const mockUsdc = await MockUSDC.deploy();
+    await mockUsdc.waitForDeployment();
+    usdcAddress = await mockUsdc.getAddress();
+    console.log('   MockUSDC:', usdcAddress);
+
+    // Mint 10,000 USDC to deployer for testing
+    const mintAmount = hre.ethers.parseUnits('10000', 6);
+    await mockUsdc.mint(deployer.address, mintAmount);
+    console.log('   Minted 10,000 USDC to deployer');
+  } else {
+    console.log('\n1. Using existing USDC:', usdcAddress);
   }
 
-  // 1. Deploy DonationVault
-  console.log('\n1. Deploying DonationVault...');
+  // 2. Deploy DonationVault
+  console.log('\n2. Deploying DonationVault...');
   const DonationVault = await hre.ethers.getContractFactory('DonationVault');
   const vault = await DonationVault.deploy(usdcAddress);
   await vault.waitForDeployment();
   const vaultAddress = await vault.getAddress();
   console.log('   DonationVault:', vaultAddress);
 
-  // 2. Deploy ImpactoPool (con vault address)
-  console.log('2. Deploying ImpactoPool...');
+  // 3. Deploy ImpactoPool (con vault address)
+  console.log('3. Deploying ImpactoPool...');
   const ImpactoPool = await hre.ethers.getContractFactory('ImpactoPool');
   const pool = await ImpactoPool.deploy(usdcAddress, vaultAddress);
   await pool.waitForDeployment();
   const poolAddress = await pool.getAddress();
   console.log('   ImpactoPool:', poolAddress);
 
-  // 3. Deploy AutonomousAgent (ERC-8004)
-  console.log('3. Deploying AutonomousAgent (ERC-8004)...');
-  const AutonomousAgent = await hre.ethers.getContractFactory('AutonomousAgent');
-  const agent = await AutonomousAgent.deploy('ImpactoPool Agent', '1.0.0');
-  await agent.waitForDeployment();
-  const agentAddress = await agent.getAddress();
-  console.log('   AutonomousAgent:', agentAddress);
+  // 4. Deploy AgentRegistry (ERC-8004 Identity Registry)
+  console.log('4. Deploying AgentRegistry (ERC-8004 Identity)...');
+  const AgentRegistry = await hre.ethers.getContractFactory('AgentRegistry');
+  const registry = await AgentRegistry.deploy();
+  await registry.waitForDeployment();
+  const registryAddress = await registry.getAddress();
+  console.log('   AgentRegistry:', registryAddress);
 
-  // 4. Deploy X402PaymentHandler
-  console.log('4. Deploying X402PaymentHandler...');
-  const X402Handler = await hre.ethers.getContractFactory('X402PaymentHandler');
-  const handler = await X402Handler.deploy(usdcAddress);
-  await handler.waitForDeployment();
-  const handlerAddress = await handler.getAddress();
-  console.log('   X402PaymentHandler:', handlerAddress);
+  // 5. Deploy ReputationRegistry (ERC-8004 Reputation)
+  console.log('5. Deploying ReputationRegistry (ERC-8004 Reputation)...');
+  const ReputationRegistry = await hre.ethers.getContractFactory('ReputationRegistry');
+  const reputation = await ReputationRegistry.deploy(registryAddress);
+  await reputation.waitForDeployment();
+  const reputationAddress = await reputation.getAddress();
+  console.log('   ReputationRegistry:', reputationAddress);
+
+  // 6. Register ImpactoPool as an agent (ERC-8004)
+  console.log('\n6. Registering ImpactoPool agent in AgentRegistry...');
+  const agentURI = 'https://impactopool.app/agent-registration.json';
+  const tx = await registry.register(agentURI);
+  const receipt = await tx.wait();
+  console.log('   Agent registered! TX:', receipt.hash);
+  console.log('   Agent ID: 1 (first agent)');
+  console.log(`   Global ID: eip155:${hre.network.config.chainId}:${registryAddress}#1`);
 
   // Resumen
   console.log('\n========================================');
   console.log('Deploy completado! Actualiza tu .env:');
   console.log('========================================');
+  if (!process.env.USDC_TOKEN_ADDRESS) {
+    console.log(`USDC_TOKEN_ADDRESS=${usdcAddress}`);
+  }
   console.log(`IMPACTOPOOL_CONTRACT_ADDRESS=${poolAddress}`);
   console.log(`DONATION_VAULT_CONTRACT_ADDRESS=${vaultAddress}`);
-  console.log(`AUTONOMOUS_AGENT_CONTRACT_ADDRESS=${agentAddress}`);
-  console.log(`X402_HANDLER_CONTRACT_ADDRESS=${handlerAddress}`);
+  console.log(`AGENT_REGISTRY_CONTRACT_ADDRESS=${registryAddress}`);
+  console.log(`REPUTATION_REGISTRY_CONTRACT_ADDRESS=${reputationAddress}`);
   console.log('========================================');
 }
 

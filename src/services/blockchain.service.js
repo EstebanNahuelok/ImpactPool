@@ -14,6 +14,28 @@ const DONATION_VAULT_ABI = [
   'event Deposited(address indexed donor, address indexed association, uint256 amount)',
 ];
 
+const AGENT_REGISTRY_ABI = [
+  'function register(string calldata agentURI) external returns (uint256)',
+  'function setAgentURI(uint256 agentId, string calldata newURI) external',
+  'function getMetadata(uint256 agentId, string memory key) view returns (bytes)',
+  'function setMetadata(uint256 agentId, string memory key, bytes memory value) external',
+  'function getAgentWallet(uint256 agentId) view returns (address)',
+  'function setAgentWallet(uint256 agentId, address newWallet) external',
+  'function tokenURI(uint256 tokenId) view returns (string)',
+  'function totalAgents() view returns (uint256)',
+  'function ownerOf(uint256 tokenId) view returns (address)',
+  'event Registered(uint256 indexed agentId, string agentURI, address indexed owner)',
+];
+
+const REPUTATION_REGISTRY_ABI = [
+  'function giveFeedback(uint256 agentId, int128 value, uint8 valueDecimals, string tag1, string tag2, string endpoint, string feedbackURI, bytes32 feedbackHash) external',
+  'function revokeFeedback(uint256 agentId, uint64 feedbackIndex) external',
+  'function getSummary(uint256 agentId, address[] clientAddresses, string tag1, string tag2) view returns (uint64 count, int128 summaryValue, uint8 summaryValueDecimals)',
+  'function readFeedback(uint256 agentId, address clientAddress, uint64 feedbackIndex) view returns (int128 value, uint8 valueDecimals, string tag1, string tag2, bool isRevoked)',
+  'function getClients(uint256 agentId) view returns (address[])',
+  'event NewFeedback(uint256 indexed agentId, address indexed clientAddress, uint64 feedbackIndex, int128 value, uint8 valueDecimals, string indexed indexedTag1, string tag1, string tag2, string endpoint, string feedbackURI, bytes32 feedbackHash)',
+];
+
 const ERC20_ABI = [
   'function transfer(address to, uint256 amount) external returns (bool)',
   'function approve(address spender, uint256 amount) external returns (bool)',
@@ -50,6 +72,10 @@ class BlockchainService {
     return this.contracts[name];
   }
 
+  // ================================
+  // Donation Operations
+  // ================================
+
   /**
    * Transfiere el 70% a la wallet de la asociación
    */
@@ -57,7 +83,7 @@ class BlockchainService {
     const signer = this._getSigner();
     const usdc = new ethers.Contract(blockchainConfig.usdcToken, ERC20_ABI, signer);
 
-    const amountWei = ethers.parseUnits(amount.toString(), 6); // USDC = 6 decimales
+    const amountWei = ethers.parseUnits(amount.toString(), 6);
     const tx = await usdc.transfer(associationWallet, amountWei);
     const receipt = await tx.wait();
     return receipt.hash;
@@ -65,8 +91,11 @@ class BlockchainService {
 
   /**
    * Deposita el 30% en el DonationVault
+   * @param donorWallet Wallet address of the donor
+   * @param associationWallet Wallet address of the association
+   * @param amount Amount in USDC (human readable)
    */
-  async depositToVault(donorId, associationId, amount) {
+  async depositToVault(donorWallet, associationWallet, amount) {
     const vault = this._getContract(
       'vault',
       blockchainConfig.contracts.donationVault,
@@ -74,7 +103,7 @@ class BlockchainService {
     );
 
     const amountWei = ethers.parseUnits(amount.toString(), 6);
-    const tx = await vault.deposit(donorId, associationId, amountWei);
+    const tx = await vault.deposit(donorWallet, associationWallet, amountWei);
     const receipt = await tx.wait();
     return receipt.hash;
   }
@@ -91,6 +120,119 @@ class BlockchainService {
     const balance = await vault.getBalance(donorAddress);
     return ethers.formatUnits(balance, 6);
   }
+
+  // ================================
+  // ERC-8004: Agent Registry
+  // ================================
+
+  /**
+   * Register a new agent in the AgentRegistry (mints an NFT)
+   */
+  async registerAgent(agentURI) {
+    const registry = this._getContract(
+      'agentRegistry',
+      blockchainConfig.contracts.agentRegistry,
+      AGENT_REGISTRY_ABI
+    );
+    const tx = await registry.register(agentURI);
+    const receipt = await tx.wait();
+
+    // Parse the Registered event to get the agentId
+    const iface = new ethers.Interface(AGENT_REGISTRY_ABI);
+    for (const log of receipt.logs) {
+      try {
+        const parsed = iface.parseLog(log);
+        if (parsed && parsed.name === 'Registered') {
+          return {
+            txHash: receipt.hash,
+            agentId: parsed.args.agentId.toString(),
+            agentURI: parsed.args.agentURI,
+          };
+        }
+      } catch {
+        // skip non-matching logs
+      }
+    }
+    return { txHash: receipt.hash };
+  }
+
+  /**
+   * Get agent URI (the JSON registration file URL)
+   */
+  async getAgentURI(agentId) {
+    const registry = this._getContract(
+      'agentRegistry',
+      blockchainConfig.contracts.agentRegistry,
+      AGENT_REGISTRY_ABI
+    );
+    return registry.tokenURI(agentId);
+  }
+
+  /**
+   * Get total number of registered agents
+   */
+  async getTotalAgents() {
+    const registry = this._getContract(
+      'agentRegistry',
+      blockchainConfig.contracts.agentRegistry,
+      AGENT_REGISTRY_ABI
+    );
+    const total = await registry.totalAgents();
+    return total.toString();
+  }
+
+  // ================================
+  // ERC-8004: Reputation Registry
+  // ================================
+
+  /**
+   * Give feedback to an agent
+   */
+  async giveFeedback(agentId, value, tag1 = '', tag2 = '') {
+    const reputation = this._getContract(
+      'reputationRegistry',
+      blockchainConfig.contracts.reputationRegistry,
+      REPUTATION_REGISTRY_ABI
+    );
+    const tx = await reputation.giveFeedback(
+      agentId,
+      value,
+      0,       // valueDecimals
+      tag1,
+      tag2,
+      '',      // endpoint
+      '',      // feedbackURI
+      ethers.ZeroHash // feedbackHash
+    );
+    const receipt = await tx.wait();
+    return receipt.hash;
+  }
+
+  /**
+   * Get reputation summary for an agent
+   */
+  async getReputationSummary(agentId, tag1 = '', tag2 = '') {
+    const reputation = this._getContract(
+      'reputationRegistry',
+      blockchainConfig.contracts.reputationRegistry,
+      REPUTATION_REGISTRY_ABI
+    );
+    const [count, summaryValue, summaryValueDecimals] = await reputation.getSummary(
+      agentId,
+      [], // all clients
+      tag1,
+      tag2
+    );
+    return {
+      count: count.toString(),
+      summaryValue: summaryValue.toString(),
+      summaryValueDecimals: summaryValueDecimals.toString(),
+    };
+  }
+
+  // ================================
+  // Network
+  // ================================
 
   /**
    * Verifica conexión con la red Avalanche

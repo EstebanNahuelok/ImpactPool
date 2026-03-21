@@ -173,6 +173,13 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('donation-amount').addEventListener('input', updateSplitPreview);
   document.getElementById('btn-donate').addEventListener('click', makeDonation);
 
+  // Transparency (x402)
+  document.getElementById('btn-transparency').addEventListener('click', loadTransparency);
+  document.getElementById('btn-premium').addEventListener('click', loadPremiumData);
+
+  // ERC-8004 Feedback
+  document.getElementById('btn-feedback').addEventListener('click', sendFeedback);
+
   // Si hay token guardado, verificar sesión
   if (authToken) {
     apiRequest('/users/me')
@@ -185,3 +192,62 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 });
+
+// =====================
+// Transparencia (x402)
+// =====================
+
+async function loadTransparency() {
+  try {
+    showNotification('Solicitando datos de transparencia via x402...');
+    const res = await X402Client.fetchWithPayment('/api/donations/transparency');
+    const data = await res.json();
+    document.getElementById('transparency-data').style.display = 'block';
+    document.getElementById('transparency-json').textContent = JSON.stringify(data, null, 2);
+    showNotification('Datos de transparencia cargados!');
+  } catch (err) {
+    showNotification(err.message, 'error');
+  }
+}
+
+async function loadPremiumData() {
+  try {
+    showNotification('Solicitando estadísticas premium via x402...');
+    const res = await X402Client.fetchWithPayment('/api/premium-data');
+    const data = await res.json();
+    document.getElementById('transparency-data').style.display = 'block';
+    document.getElementById('transparency-json').textContent = JSON.stringify(data, null, 2);
+    showNotification('Estadísticas premium cargadas!');
+  } catch (err) {
+    showNotification(err.message, 'error');
+  }
+}
+
+// =====================
+// ERC-8004 Feedback
+// =====================
+
+async function sendFeedback() {
+  try {
+    if (!BlockchainIntegration.isConnected()) {
+      return showNotification('Conectá tu wallet primero', 'error');
+    }
+    const value = parseInt(document.getElementById('feedback-value').value);
+    showNotification('Enviando feedback on-chain...');
+    const receipt = await BlockchainIntegration.giveFeedback(1, value); // agentId = 1 (ImpactoPool agent)
+    showNotification('Feedback enviado! TX: ' + receipt.hash);
+    loadAgentReputation();
+  } catch (err) {
+    showNotification(err.message, 'error');
+  }
+}
+
+async function loadAgentReputation() {
+  try {
+    const summary = await BlockchainIntegration.getReputationSummary(1);
+    document.getElementById('agent-reputation').textContent = 'Score: ' + summary.summaryValue;
+    document.getElementById('agent-feedback-count').textContent = 'Feedbacks: ' + summary.count;
+  } catch {
+    // Agent not deployed yet — silently skip
+  }
+}

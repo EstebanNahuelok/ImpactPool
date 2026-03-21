@@ -1,5 +1,6 @@
 const Donation = require('../models/Donation.model');
 const Association = require('../models/Association.model');
+const User = require('../models/User.model');
 const blockchainService = require('./blockchain.service');
 const { SPLIT, DONATION_STATUS } = require('../../config/constants');
 
@@ -11,6 +12,11 @@ class DonationService {
     const association = await Association.findById(associationId);
     if (!association) {
       throw new Error('Asociación no encontrada');
+    }
+
+    const donor = await User.findById(donorId);
+    if (!donor) {
+      throw new Error('Donador no encontrado');
     }
 
     const associationAmount = (totalAmount * SPLIT.ASSOCIATION_PERCENT) / 100;
@@ -33,10 +39,10 @@ class DonationService {
       );
       donation.txHash = txHash;
 
-      // Enviar 30% al vault on-chain
+      // Enviar 30% al vault on-chain (use wallet addresses, not MongoDB IDs)
       const vaultTxHash = await blockchainService.depositToVault(
-        donorId,
-        associationId,
+        donor.walletAddress,
+        association.walletAddress,
         vaultAmount
       );
       donation.vaultTxHash = vaultTxHash;

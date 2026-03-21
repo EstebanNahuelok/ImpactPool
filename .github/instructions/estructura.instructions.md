@@ -58,26 +58,26 @@ impactopool/
 │   └── scripts/
 │       └── deploy.js                     # Deploy a Avalanche
 │
-├── fiserv/                               # Track Fiserv + Clover POS
-│   ├── build.gradle                      # Configuración Gradle (Kotlin)
-│   ├── settings.gradle
-│   │
-│   ├── app/
-│   │   ├── src/main/kotlin/
-│   │   │   └── com/impactopool/
-│   │   │       ├── MainActivity.kt       # Interfaz principal Clover
-│   │   │       ├── DonationActivity.kt   # Actividad recibir donación
-│   │   │       ├── FiservPayment.kt      # Integración Fiserv Payment Rails
-│   │   │       └── SyncToBlockchain.kt   # Sincroniza con Avalanche
-│   │   │
-│   │   └── src/main/res/
-│   │       ├── layout/
-│   │       ├── values/
-│   │       └── AndroidManifest.xml
-│   │
-│   └── Tests/
-│       └── clover-integration.test.kt    # Tests Kotlin
-│
+# ├── fiserv/                               # Track Fiserv + Clover POS [COMENTADO - PENDIENTE]
+# │   ├── build.gradle                      # Configuración Gradle (Kotlin)
+# │   ├── settings.gradle
+# │   │
+# │   ├── app/
+# │   │   ├── src/main/kotlin/
+# │   │   │   └── com/impactopool/
+# │   │   │       ├── MainActivity.kt       # Interfaz principal Clover
+# │   │   │       ├── DonationActivity.kt   # Actividad recibir donación
+# │   │   │       ├── FiservPayment.kt      # Integración Fiserv Payment Rails
+# │   │   │       └── SyncToBlockchain.kt   # Sincroniza con Avalanche
+# │   │   │
+# │   │   └── src/main/res/
+# │   │       ├── layout/
+# │   │       ├── values/
+# │   │       └── AndroidManifest.xml
+# │   │
+# │   └── Tests/
+# │       └── clover-integration.test.kt    # Tests Kotlin
+#
 └── Tests/
     └── integration/
         ├── donation-flow.test.js         # Test flujo Avalanche
@@ -92,10 +92,10 @@ impactopool/
 - ERC-8004: `/src/blockchain/contracts/AutonomousAgent.sol`
 - x402 HTTP Payment Protocol: `/src/blockchain/contracts/X402PaymentHandler.sol` + `x402-payment.service.js`
 
-### Track Fiserv ✅
-- Clover POS: `/fiserv/app/` (Android Kotlin)
-- Fiserv Payment Rails: `FiservPayment.kt`
-- Integración: `SyncToBlockchain.kt` conecta Clover con Avalanche
+# ### Track Fiserv ✅ [PENDIENTE - COMENTADO]
+# - Clover POS: `/fiserv/app/` (Android Kotlin)
+# - Fiserv Payment Rails: `FiservPayment.kt`
+# - Integración: `SyncToBlockchain.kt` conecta Clover con Avalanche
 
 ### Track Best Projects (PL_Genesis) ✅
 - Categoría: **Crypto**
@@ -111,18 +111,18 @@ Cuando necesites escalar, agrega:
 - `src/utils/`: `validators.js`, `helpers.js`, `logger.js`
 - `src/blockchain/contracts/`: `RewardToken.sol`, `AssociationRegistry.sol`
 - `src/blockchain/test/`: Tests unitarios de smart contracts (Hardhat/Truffle)
-- `fiserv/app/src/main/kotlin/`: Más actividades y servicios
+# - `fiserv/app/src/main/kotlin/`: Más actividades y servicios [PENDIENTE]
 - `Tests/`: `unit/`, `e2e/`, más cobertura
 
 ## Reglas Importantes
 
 1. **Enfoque Hackathon:** Mantén SOLO lo esencial. Agrega features después del MVP.
-2. **3 Tracks simultáneamente:**
+2. **3 Tracks simultáneamente:** [Por ahora solo Avalanche]
    - **Avalanche:** Node.js backend + Solidity contracts
-   - **Fiserv:** Kotlin + Gradle + Android manifest
-   - **Sincronización:** `SyncToBlockchain.kt` conecta Clover → Avalanche
+   # - **Fiserv:** Kotlin + Gradle + Android manifest [PENDIENTE]
+   # - **Sincronización:** `SyncToBlockchain.kt` conecta Clover → Avalanche [PENDIENTE]
 3. **Smart Contracts:** Solidity en `/src/blockchain/contracts/`
-4. **Apps Android:** Kotlin en `/fiserv/app/src/main/kotlin/`
+# 4. **Apps Android:** Kotlin en `/fiserv/app/src/main/kotlin/` [PENDIENTE]
 5. **Configuración sensible:** APIs, RPC URLs, credenciales Clover/Fiserv en `.env` (nunca hardcodeados ni en archivos de configuración)
 6. **Tests:** 
    - Flujo Avalanche: `/Tests/integration/donation-flow.test.js`

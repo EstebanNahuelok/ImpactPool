@@ -5,6 +5,7 @@ const Voucher = require('../models/Voucher.model');
 const Beneficiary = require('../models/Beneficiary.model');
 const Campaign = require('../models/Campaign.model');
 const Association = require('../models/Association.model');
+const blockchainService = require('../services/blockchain.service');
 
 // GET /api/vouchers?campaign=ID — listar vouchers de una campaña
 router.get('/', authMiddleware, async (req, res) => {
@@ -71,6 +72,22 @@ router.post('/', authMiddleware, async (req, res) => {
       amount: campaign.voucherCost,
     });
 
+    // Mint VoucherToken NFT on-chain
+    try {
+      const associationWallet = association.walletAddress || '0x0000000000000000000000000000000000000000';
+      const mintResult = await blockchainService.mintVoucherToken(
+        code,
+        associationWallet,
+        campaign.voucherCost
+      );
+      voucher.tokenId = parseInt(mintResult.tokenId);
+      voucher.mintTxHash = mintResult.txHash;
+      await voucher.save();
+      console.log(`[VOUCHER] Minted token #${mintResult.tokenId} for ${code} — TX: ${mintResult.txHash}`);
+    } catch (mintError) {
+      console.warn(`[VOUCHER] Mint failed for ${code}: ${mintError.message} (voucher created without token)`);
+    }
+
     const populated = await Voucher.findById(voucher._id)
       .populate('beneficiary', 'dni name')
       .populate('campaign', 'code name');
@@ -107,6 +124,18 @@ router.patch('/:id/cancel', authMiddleware, async (req, res) => {
 
     voucher.status = 'cancelled';
     await voucher.save();
+
+    // Burn VoucherToken NFT on-chain if it was minted
+    if (voucher.tokenId) {
+      try {
+        const burnTxHash = await blockchainService.burnVoucherToken(voucher.tokenId);
+        voucher.burnTxHash = burnTxHash;
+        await voucher.save();
+        console.log(`[VOUCHER] Burned token #${voucher.tokenId} for ${voucher.code} — TX: ${burnTxHash}`);
+      } catch (burnError) {
+        console.warn(`[VOUCHER] Burn failed for token #${voucher.tokenId}: ${burnError.message}`);
+      }
+    }
 
     const populated = await Voucher.findById(voucher._id)
       .populate('beneficiary', 'dni name')

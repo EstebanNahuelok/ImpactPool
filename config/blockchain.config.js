@@ -6,6 +6,7 @@ const blockchainConfig = {
     donationVault: process.env.DONATION_VAULT_CONTRACT_ADDRESS,
     agentRegistry: process.env.AGENT_REGISTRY_CONTRACT_ADDRESS,
     reputationRegistry: process.env.REPUTATION_REGISTRY_CONTRACT_ADDRESS,
+    voucherToken: process.env.VOUCHER_TOKEN_CONTRACT_ADDRESS,
   },
   usdcToken: process.env.USDC_TOKEN_ADDRESS,
   deployerPrivateKey: process.env.DEPLOYER_PRIVATE_KEY,

@@ -42,6 +42,18 @@ const ERC20_ABI = [
   'function balanceOf(address account) view returns (uint256)',
 ];
 
+const VOUCHER_TOKEN_ABI = [
+  'function mintVoucher(address to, string calldata code, address association, uint256 amount, string calldata tokenURI_) external returns (uint256)',
+  'function burnVoucher(uint256 tokenId) external',
+  'function getVoucher(uint256 tokenId) view returns (string code, address association, uint256 amount, uint64 issuedAt, bool burned)',
+  'function getTokenByCode(string calldata code) view returns (uint256)',
+  'function totalVouchers() view returns (uint256)',
+  'function tokenURI(uint256 tokenId) view returns (string)',
+  'function ownerOf(uint256 tokenId) view returns (address)',
+  'event VoucherMinted(uint256 indexed tokenId, string code, address indexed association, uint256 amount)',
+  'event VoucherBurned(uint256 indexed tokenId, string code, address indexed burnedBy)',
+];
+
 class BlockchainService {
   constructor() {
     this.provider = null;
@@ -273,6 +285,79 @@ class BlockchainService {
       chainId: network.chainId.toString(),
       name: network.name,
     };
+  }
+
+  // ================================
+  // Voucher Token Operations
+  // ================================
+
+  /**
+   * Mint a new VoucherToken NFT on-chain
+   * @param {string} code Off-chain voucher code (e.g., IP-1234-AB)
+   * @param {string} associationWallet Wallet of the issuing association
+   * @param {number} amount Voucher value in USDC (human readable)
+   * @returns {{ txHash: string, tokenId: string }}
+   */
+  async mintVoucherToken(code, associationWallet, amount) {
+    return this._withRetry(async () => {
+      const voucherToken = this._getContract(
+        'voucherToken',
+        blockchainConfig.contracts.voucherToken,
+        VOUCHER_TOKEN_ABI
+      );
+
+      const amountWei = ethers.parseUnits(amount.toString(), 6);
+      const signer = this._getSigner();
+      const signerAddress = await signer.getAddress();
+
+      // tokenURI: simple JSON metadata URI based on code
+      const tokenURI = `https://impactopool.app/voucher/${code}.json`;
+
+      const tx = await voucherToken.mintVoucher(
+        signerAddress, // mint to deployer (platform custody)
+        code,
+        associationWallet,
+        amountWei,
+        tokenURI
+      );
+      const receipt = await tx.wait();
+
+      // Parse VoucherMinted event to get tokenId
+      const iface = new ethers.Interface(VOUCHER_TOKEN_ABI);
+      for (const log of receipt.logs) {
+        try {
+          const parsed = iface.parseLog(log);
+          if (parsed && parsed.name === 'VoucherMinted') {
+            return {
+              txHash: receipt.hash,
+              tokenId: parsed.args.tokenId.toString(),
+            };
+          }
+        } catch {
+          // skip non-matching logs
+        }
+      }
+      return { txHash: receipt.hash, tokenId: null };
+    }, 'mintVoucherToken');
+  }
+
+  /**
+   * Burn (destroy) a VoucherToken NFT on-chain
+   * @param {number|string} tokenId The on-chain token ID to burn
+   * @returns {string} Transaction hash
+   */
+  async burnVoucherToken(tokenId) {
+    return this._withRetry(async () => {
+      const voucherToken = this._getContract(
+        'voucherToken',
+        blockchainConfig.contracts.voucherToken,
+        VOUCHER_TOKEN_ABI
+      );
+
+      const tx = await voucherToken.burnVoucher(tokenId);
+      const receipt = await tx.wait();
+      return receipt.hash;
+    }, 'burnVoucherToken');
   }
 }
 

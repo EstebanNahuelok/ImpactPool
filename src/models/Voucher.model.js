@@ -26,6 +26,18 @@ const voucherSchema = new mongoose.Schema({
     enum: ['active', 'redeemed', 'expired', 'cancelled'],
     default: 'active',
   },
+  tokenId: {
+    type: Number,
+    default: null,
+  },
+  mintTxHash: {
+    type: String,
+    default: null,
+  },
+  burnTxHash: {
+    type: String,
+    default: null,
+  },
 }, { timestamps: true });
 
 // Genera código único tipo IP-XXXX-YY

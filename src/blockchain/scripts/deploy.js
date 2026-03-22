@@ -54,8 +54,16 @@ async function main() {
   const reputationAddress = await reputation.getAddress();
   console.log('   ReputationRegistry:', reputationAddress);
 
-  // 6. Register ImpactoPool as an agent (ERC-8004)
-  console.log('\n6. Registering ImpactoPool agent in AgentRegistry...');
+  // 6. Deploy VoucherToken (ERC-721 for vouchers)
+  console.log('6. Deploying VoucherToken (ERC-721)...');
+  const VoucherToken = await hre.ethers.getContractFactory('VoucherToken');
+  const voucherToken = await VoucherToken.deploy();
+  await voucherToken.waitForDeployment();
+  const voucherTokenAddress = await voucherToken.getAddress();
+  console.log('   VoucherToken:', voucherTokenAddress);
+
+  // 7. Register ImpactoPool as an agent (ERC-8004)
+  console.log('\n7. Registering ImpactoPool agent in AgentRegistry...');
   const agentURI = 'https://impactopool.app/agent-registration.json';
   const tx = await registry.register(agentURI);
   const receipt = await tx.wait();
@@ -74,6 +82,7 @@ async function main() {
   console.log(`DONATION_VAULT_CONTRACT_ADDRESS=${vaultAddress}`);
   console.log(`AGENT_REGISTRY_CONTRACT_ADDRESS=${registryAddress}`);
   console.log(`REPUTATION_REGISTRY_CONTRACT_ADDRESS=${reputationAddress}`);
+  console.log(`VOUCHER_TOKEN_CONTRACT_ADDRESS=${voucherTokenAddress}`);
   console.log('========================================');
 }
 

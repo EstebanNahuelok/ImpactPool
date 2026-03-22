@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Dashboard solo para organizaciones
   if (!Session.isOrganization()) {
-    window.location.href = 'donar.html';
+    window.location.href = 'vouchers.html';
     return;
   }
 
@@ -121,13 +121,10 @@ async function loadCampaignView(campaignId) {
 
 function renderCampaignDashboard(campaign, vouchers, donations = []) {
   // Header
-  const header = document.querySelector('header');
-  if (header) {
-    const h2 = header.querySelector('h2');
-    const p = header.querySelector('p');
-    if (h2) h2.textContent = campaign.name;
-    if (p) p.textContent = `Campaign #${campaign.code} — ${campaign.benefit}`;
-  }
+  const titleEl = document.getElementById('dashboard-title');
+  const subtitleEl = document.getElementById('dashboard-subtitle');
+  if (titleEl) titleEl.textContent = campaign.name;
+  if (subtitleEl) subtitleEl.textContent = `Campaign #${campaign.code} — ${campaign.benefit}`;
 
   // Stats
   const activeVouchers = vouchers.filter(v => v.status === 'active');
@@ -142,6 +139,17 @@ function renderCampaignDashboard(campaign, vouchers, donations = []) {
   document.getElementById('stat-value-2').textContent = `${vouchers.length} / ${campaign.totalVouchers}`;
   document.getElementById('stat-label-3').textContent = 'ACTIVE VOUCHERS';
   document.getElementById('stat-value-3').textContent = activeVouchers.length;
+  document.getElementById('stat-label-4').textContent = 'SUGGESTED VOUCHERS';
+  document.getElementById('stat-value-4').textContent = suggestedVouchers;
+
+  // Hide overview section, show voucher grid
+  const overviewSection = document.getElementById('overview-section');
+  if (overviewSection) overviewSection.classList.add('hidden');
+  document.getElementById('vouchers-grid').classList.remove('hidden');
+
+  // Show "Issue Voucher" quick action if it exists
+  const issueAction = document.getElementById('quick-action-issue');
+  if (issueAction) issueAction.classList.remove('hidden');
 
   // Donation info panel
   let donationPanel = document.getElementById('donation-info-panel');
@@ -156,25 +164,28 @@ function renderCampaignDashboard(campaign, vouchers, donations = []) {
       if (grid) grid.parentNode.insertBefore(donationPanel, grid);
     }
   }
-  donationPanel.className = 'mt-6 mb-6 p-6 bg-surface-container-low rounded-2xl';
+  donationPanel.className = 'mb-8 p-6 bg-surface-container-lowest rounded-2xl border border-surface-variant/20';
   donationPanel.innerHTML = `
-    <div class="flex flex-wrap items-center gap-6">
-      <div>
+    <h3 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-lg">account_balance</span> Funding Summary
+    </h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="p-4 bg-surface-container-low rounded-xl">
         <span class="text-[10px] font-bold text-outline uppercase block mb-1">TOTAL DONATED</span>
-        <span class="text-2xl font-black text-secondary">$${totalDonated.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+        <span class="text-xl font-black text-secondary">$${totalDonated.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
       </div>
-      <div>
-        <span class="text-[10px] font-bold text-outline uppercase block mb-1">AVAILABLE FOR VOUCHERS (70%)</span>
-        <span class="text-2xl font-black text-primary">$${assocReceived.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+      <div class="p-4 bg-surface-container-low rounded-xl">
+        <span class="text-[10px] font-bold text-outline uppercase block mb-1">FOR VOUCHERS (70%)</span>
+        <span class="text-xl font-black text-primary">$${assocReceived.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
       </div>
-      <div>
-        <span class="text-[10px] font-bold text-outline uppercase block mb-1">SUGGESTED VOUCHERS</span>
-        <span class="text-2xl font-black text-on-tertiary-container">${suggestedVouchers}</span>
-        <span class="text-xs text-on-surface-variant"> ($${campaign.voucherCost}/each)</span>
+      <div class="p-4 bg-surface-container-low rounded-xl">
+        <span class="text-[10px] font-bold text-outline uppercase block mb-1">SUGGESTED</span>
+        <span class="text-xl font-black text-on-tertiary-container">${suggestedVouchers}</span>
+        <span class="text-xs text-on-surface-variant"> ($${campaign.voucherCost}/ea)</span>
       </div>
-      <div>
+      <div class="p-4 bg-surface-container-low rounded-xl">
         <span class="text-[10px] font-bold text-outline uppercase block mb-1">ALREADY ISSUED</span>
-        <span class="text-2xl font-black text-primary">${vouchers.length}</span>
+        <span class="text-xl font-black text-primary">${vouchers.length}</span>
       </div>
     </div>
   `;
@@ -276,14 +287,14 @@ function renderCampaignDashboard(campaign, vouchers, donations = []) {
     });
   }
 
-  // Botón volver
-  const main = document.querySelector('main');
-  if (main && !document.getElementById('back-btn')) {
+  // Back button
+  const header = document.getElementById('dashboard-header');
+  if (header && !document.getElementById('back-btn')) {
     const backBtn = document.createElement('div');
     backBtn.id = 'back-btn';
-    backBtn.className = 'mb-6';
+    backBtn.className = 'mb-4';
     backBtn.innerHTML = `<a href="vouchers.html" class="inline-flex items-center gap-2 text-primary font-bold text-sm hover:underline"><span class="material-symbols-outlined text-sm">arrow_back</span> Back to Campaigns</a>`;
-    main.insertBefore(backBtn, main.firstChild);
+    header.parentNode.insertBefore(backBtn, header);
   }
 }
 
@@ -291,36 +302,82 @@ function renderCampaignDashboard(campaign, vouchers, donations = []) {
 
 async function loadOrgView() {
   try {
-    const donations = await Session.apiRequest('/donations/org/me');
-    renderOrgDashboard(donations);
+    const [donations, campaigns] = await Promise.all([
+      Session.apiRequest('/donations/org/me'),
+      Session.apiRequest('/campaigns'),
+    ]);
+    renderOrgDashboard(donations, campaigns);
   } catch (err) {
-    console.error('Error loading org donations:', err);
+    console.error('Error loading org dashboard:', err);
   }
 }
 
-function renderOrgDashboard(donations) {
+function renderOrgDashboard(donations, campaigns = []) {
   const completedDonations = donations.filter(d => d.status === 'completed');
   const totalReceived = completedDonations.reduce((sum, d) => sum + (d.associationAmount || 0), 0);
+  const totalVouchersIssued = campaigns.reduce((sum, c) => sum + (c.emittedVouchers || 0), 0);
+  const totalVouchersActive = campaigns.reduce((sum, c) => sum + (c.activeVouchers || 0), 0);
 
-  document.getElementById('stat-label-1').textContent = 'TOTAL RECEIVED VALUE';
+  // Stats
+  document.getElementById('stat-label-1').textContent = 'TOTAL RECEIVED';
   document.getElementById('stat-value-1').textContent = `$${totalReceived.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
-  document.getElementById('stat-label-2').textContent = 'DONATIONS RECEIVED';
-  document.getElementById('stat-value-2').textContent = completedDonations.length.toLocaleString();
-  document.getElementById('stat-label-3').textContent = 'TOTAL DONATIONS';
-  document.getElementById('stat-value-3').textContent = donations.length;
+  document.getElementById('stat-label-2').textContent = 'VOUCHERS ISSUED';
+  document.getElementById('stat-value-2').textContent = totalVouchersIssued;
+  document.getElementById('stat-label-3').textContent = 'ACTIVE VOUCHERS';
+  document.getElementById('stat-value-3').textContent = totalVouchersActive;
+  document.getElementById('stat-label-4').textContent = 'TOTAL DONATIONS';
+  document.getElementById('stat-value-4').textContent = donations.length;
 
-  // Ocultar grid de vouchers en vista general
+  // Hide voucher grid and show overview section in general view
   document.getElementById('vouchers-grid').classList.add('hidden');
+  const overviewSection = document.getElementById('overview-section');
+  if (overviewSection) overviewSection.classList.remove('hidden');
 
-  // Tabla de donaciones
+  // Campaign mini-cards
+  const miniGrid = document.getElementById('campaigns-mini-grid');
+  if (miniGrid) {
+    if (campaigns.length === 0) {
+      miniGrid.innerHTML = `
+        <div class="col-span-full text-center py-6">
+          <p class="text-on-surface-variant text-sm mb-3">No campaigns yet</p>
+          <a href="vouchers.html" class="text-primary font-bold text-sm hover:underline">Create your first campaign →</a>
+        </div>`;
+    } else {
+      miniGrid.innerHTML = campaigns.slice(0, 4).map(c => {
+        const emitted = c.emittedVouchers || 0;
+        const total = c.totalVouchers || 0;
+        const percent = total > 0 ? Math.round((emitted / total) * 100) : 0;
+        const statusColor = c.status === 'active' ? 'text-secondary' : c.status === 'paused' ? 'text-on-tertiary-container' : 'text-outline';
+        return `
+          <a href="dashboard.html?campaign=${c._id}" class="p-4 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors group">
+            <div class="flex justify-between items-start mb-2">
+              <h4 class="font-bold text-sm text-primary group-hover:underline truncate mr-2">${c.name}</h4>
+              <span class="text-[10px] font-black uppercase ${statusColor} shrink-0">${c.status || 'active'}</span>
+            </div>
+            <div class="flex justify-between items-end">
+              <div>
+                <span class="text-xs text-on-surface-variant">${emitted}/${total} vouchers</span>
+              </div>
+              <span class="text-lg font-black text-primary">${percent}%</span>
+            </div>
+            <div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden mt-2">
+              <div class="h-full bg-secondary rounded-full" style="width: ${percent}%"></div>
+            </div>
+          </a>
+        `;
+      }).join('');
+    }
+  }
+
+  // Donations table
   const thead = document.querySelector('table thead tr');
   if (thead) {
     thead.innerHTML = `
-      <th class="px-8 py-4">ID</th>
-      <th class="px-8 py-4">DONOR</th>
-      <th class="px-8 py-4">AMOUNT</th>
-      <th class="px-8 py-4">METHOD</th>
-      <th class="px-8 py-4 text-right">STATUS</th>
+      <th class="px-6 py-4">ID</th>
+      <th class="px-6 py-4">DONOR</th>
+      <th class="px-6 py-4">AMOUNT</th>
+      <th class="px-6 py-4">METHOD</th>
+      <th class="px-6 py-4 text-right">STATUS</th>
     `;
   }
 
@@ -329,7 +386,7 @@ function renderOrgDashboard(donations) {
   tbody.innerHTML = '';
 
   if (donations.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" class="px-8 py-8 text-center text-on-surface-variant">You haven\'t received any donations yet</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-on-surface-variant">You haven\'t received any donations yet</td></tr>';
     return;
   }
 
@@ -337,11 +394,11 @@ function renderOrgDashboard(donations) {
     const row = document.createElement('tr');
     row.className = 'hover:bg-surface-container-lowest transition-colors border-t border-surface-variant/10';
     row.innerHTML = `
-      <td class="px-8 py-5 font-mono text-xs text-on-surface-variant">#${(d._id || '').slice(-8)}</td>
-      <td class="px-8 py-5 font-bold">${d.donor?.name || 'Anonymous donor'}</td>
-      <td class="px-8 py-5 font-black text-secondary">$${(d.totalAmount || 0).toFixed(2)}</td>
-      <td class="px-8 py-5 text-on-surface-variant">${d.paymentMethod === 'crypto' ? 'USDC' : 'USD'}</td>
-      <td class="px-8 py-5 text-right">
+      <td class="px-6 py-5 font-mono text-xs text-on-surface-variant">#${(d._id || '').slice(-8)}</td>
+      <td class="px-6 py-5 font-bold">${d.donor?.name || 'Anonymous donor'}</td>
+      <td class="px-6 py-5 font-black text-secondary">$${(d.totalAmount || 0).toFixed(2)}</td>
+      <td class="px-6 py-5 text-on-surface-variant">${d.paymentMethod === 'crypto' ? 'USDC' : 'USD'}</td>
+      <td class="px-6 py-5 text-right">
         <span class="text-[10px] font-black uppercase ${d.status === 'completed' ? 'text-secondary' : d.status === 'failed' ? 'text-error' : 'text-on-surface-variant'}">${d.status === 'completed' ? 'VERIFIED' : d.status === 'failed' ? 'FAILED' : 'PENDING'}</span>
       </td>
     `;

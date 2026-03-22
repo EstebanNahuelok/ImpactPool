@@ -192,6 +192,90 @@
 </div>
 </footer>
 
+<!-- Campaign Create/Edit Modal (org only) -->
+<div id="campaign-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/40 backdrop-blur-sm">
+<div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 p-8 max-h-[90vh] overflow-y-auto">
+  <div class="flex justify-between items-center mb-6">
+    <h3 id="campaign-modal-title" class="text-xl font-bold text-primary">New Campaign</h3>
+    <button onclick="closeCampaignModal()" class="text-on-surface-variant hover:text-primary transition-colors">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </div>
+  <form id="campaign-form" class="flex flex-col gap-5">
+    <input type="hidden" id="campaign-edit-id" value="">
+    <div>
+      <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Campaign Code *</label>
+      <input id="campaign-code" type="text" required maxlength="30" class="w-full border border-surface-variant rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" placeholder="E.g.: FOOD-2025-001">
+    </div>
+    <div>
+      <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Campaign Name *</label>
+      <input id="campaign-name" type="text" required class="w-full border border-surface-variant rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" placeholder="E.g.: Basic Food Baskets">
+    </div>
+    <div>
+      <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Description</label>
+      <textarea id="campaign-description" rows="3" class="w-full border border-surface-variant rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none resize-none" placeholder="Brief description of the campaign..."></textarea>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Category *</label>
+        <select id="campaign-category" required class="w-full border border-surface-variant rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none">
+          <option value="canastas">Basic Baskets</option>
+          <option value="salud">Health</option>
+          <option value="educacion">Education</option>
+          <option value="vivienda">Housing</option>
+          <option value="otro">Other</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Status</label>
+        <select id="campaign-status" class="w-full border border-surface-variant rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none">
+          <option value="active">Active</option>
+          <option value="paused">Paused</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Benefit / Good *</label>
+      <input id="campaign-benefit" type="text" required class="w-full border border-surface-variant rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" placeholder="E.g.: Food basket for 1 family">
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Voucher Cost (USDC) *</label>
+        <input id="campaign-voucherCost" type="number" required min="1" step="0.01" class="w-full border border-surface-variant rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" placeholder="50">
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Total Vouchers *</label>
+        <input id="campaign-totalVouchers" type="number" required min="1" class="w-full border border-surface-variant rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" placeholder="100">
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <input id="campaign-urgent" type="checkbox" class="w-5 h-5 rounded border-surface-variant text-primary focus:ring-primary/20">
+      <label for="campaign-urgent" class="text-sm font-medium text-on-surface-variant">Mark as Urgent</label>
+    </div>
+    <div id="campaign-error" class="text-error text-sm font-medium hidden"></div>
+    <button type="submit" id="campaign-submit" class="w-full bg-primary text-white font-bold py-3 rounded-xl hover:opacity-90 transition-opacity">
+      CREATE CAMPAIGN
+    </button>
+  </form>
+</div>
+</div>
+
+<!-- Delete Campaign Confirmation Modal -->
+<div id="delete-campaign-modal" class="fixed inset-0 z-[110] hidden items-center justify-center bg-black/40 backdrop-blur-sm">
+<div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 p-8">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="material-symbols-outlined text-error text-3xl">warning</span>
+    <h3 class="text-xl font-bold text-primary">Delete Campaign</h3>
+  </div>
+  <p id="delete-campaign-msg" class="text-on-surface-variant mb-6">Are you sure you want to delete this campaign?</p>
+  <div class="flex gap-3">
+    <button onclick="closeDeleteModal()" class="flex-1 py-3 rounded-xl border border-surface-variant text-on-surface-variant font-bold hover:bg-surface-container transition-colors">Cancel</button>
+    <button id="delete-campaign-confirm" class="flex-1 py-3 rounded-xl bg-error text-on-error font-bold hover:opacity-90 transition-opacity">Delete</button>
+  </div>
+</div>
+</div>
+
 <script src="js/session.js"></script>
 <script src="js/campaigns.js"></script>
 </body></html>

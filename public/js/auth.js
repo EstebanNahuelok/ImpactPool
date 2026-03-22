@@ -8,7 +8,7 @@ function redirectByRole(user) {
   if (user.role === 'association') {
     window.location.href = 'dashboard.html';
   } else {
-    window.location.href = 'donar.html';
+    window.location.href = 'vouchers.html';
   }
 }
 

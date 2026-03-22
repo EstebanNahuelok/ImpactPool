@@ -1,10 +1,9 @@
 <!DOCTYPE html><html class="light" lang="en"><head>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>ImpactPool | Voucher Management</title>
+<title>ImpactPool | Organization Dashboard</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 <script id="tailwind-config">
         tailwind.config = {
@@ -74,12 +73,7 @@
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(12px);
-        }
     </style>
-  <!-- Favicon Links -->
   <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="shortcut icon" href="/favicon.ico" />
@@ -93,9 +87,9 @@
 <div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
 <div class="text-2xl font-bold tracking-tighter text-blue-900 dark:text-blue-50">ImpactPool</div>
 <div class="hidden md:flex gap-8 items-center">
-<a data-role="organization" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="dashboard.html">Dashboard</a>
-<a data-role="donor" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="donar.html">Donate</a>
+<a data-role="organization" class="font-inter tracking-tight font-bold text-sm text-blue-900 dark:text-white border-b-2 border-blue-900 pb-1" href="dashboard.html">Dashboard</a>
 <a data-role="organization" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="vouchers.html">Campaigns</a>
+<a data-role="donor" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="donar.html">Donate</a>
 <a data-role="donor" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="terminos_condiciones.html">Terms & Conditions</a>
 </div>
 <button data-action="logout" class="bg-primary text-on-primary px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-all" onclick="Session.logout()">
@@ -103,64 +97,131 @@
      </button>
 </div>
 </nav>
-<!-- Main Content Canvas -->
-<main class="ml-64 min-h-screen p-8 lg:p-12">
-<!-- Top Navigation Anchor (Desktop Integration) -->
-<header class="flex justify-between items-center mb-12">
-<div>
-<h2 class="text-3xl font-extrabold text-primary tracking-tighter" style="">Vouchers</h2>
-<p class="text-on-surface-variant font-medium mt-1" style="">Manage and track active aid distributions</p>
-</div>
-<div class="flex items-center gap-4">
-<div class="relative">
-<input class="bg-surface-container-low border-none rounded-xl px-10 py-2.5 text-sm w-64 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="Search voucher ID..." type="text">
-<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-lg" data-icon="search" style="">search</span>
-</div>
-<button class="p-2.5 rounded-full hover:bg-surface-container transition-colors relative" style="">
-<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications" style="">notifications</span>
-<span class="absolute top-2 right-2 w-2 h-2 bg-on-tertiary-container rounded-full"></span>
-</button>
-<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center overflow-hidden">
-<img alt="Admin" class="w-full h-full object-cover" data-alt="Professional portrait of a male organization administrator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVyNqy3TRYsXzdM1TDo2hYXD7PoQU3A59ehwToXh6OzSpypC7T0j98Y_KGmNV5u-2xt3s7bdCynJ2nhmzt1ZdQYVVDYVupSn0NCe5SCwaDSIw1ABNbqQnb7BvSNJrmAkzES4ulIljXJm50Co2nyzqAAjPtDXK8PALpmAsHP694tNzIyp2yOhN8Z-Wc504_Vjqdfci_t_52Aj-nEmlgg1nPgOGiukGKWXvAZDUufOElvINhNWoihCA_Ntdm-NYzDlzI_zU7WzElwFM" style="">
-</div>
-</div>
+
+<!-- Main Content -->
+<main class="min-h-screen pt-24 pb-12 px-6 lg:px-12 max-w-7xl mx-auto">
+
+<!-- Welcome Banner -->
+<header id="dashboard-header" class="mb-10">
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div>
+      <h1 id="dashboard-title" class="text-4xl font-extrabold text-primary tracking-tight">Organization Dashboard</h1>
+      <p id="dashboard-subtitle" class="text-on-surface-variant font-medium mt-1">Overview of your campaigns, donations and vouchers</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="vouchers.html" class="flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary font-bold text-sm rounded-xl hover:opacity-90 transition-all">
+        <span class="material-symbols-outlined text-lg">campaign</span> Campaigns
+      </a>
+    </div>
+  </div>
 </header>
-<!-- Stats Overview -->
-<div id="stats-overview" class="grid grid-cols-12 gap-6 mb-12">
-<div class="col-span-12 md:col-span-8 bg-surface-container-lowest p-8 rounded-full border border-surface-variant/15 flex justify-between items-center">
-<div class="flex flex-col">
-<span id="stat-label-1" class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1">TOTAL IMPACT VALUE</span>
-<span id="stat-value-1" class="text-5xl font-black text-primary tracking-tighter">$0.00</span>
-</div>
-<div class="h-12 w-px bg-surface-variant"></div>
-<div class="flex flex-col text-right">
-<span id="stat-label-2" class="text-xs font-bold uppercase tracking-widest text-secondary mb-1">VOUCHERS ISSUED</span>
-<span id="stat-value-2" class="text-3xl font-bold text-primary tracking-tight">0</span>
-</div>
-</div>
-<div class="col-span-12 md:col-span-4 bg-primary text-white p-8 rounded-full flex flex-col justify-center">
-<span id="stat-label-3" class="text-xs font-bold uppercase tracking-widest text-on-primary-container mb-1">ACTIVE VOUCHERS</span>
-<span id="stat-value-3" class="text-4xl font-black">0</span>
-</div>
+
+<!-- Stats Overview Grid -->
+<div id="stats-overview" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+  <div class="bg-primary text-on-primary p-6 rounded-2xl">
+    <div class="flex items-center gap-3 mb-3">
+      <span class="material-symbols-outlined text-2xl opacity-80">payments</span>
+      <span id="stat-label-1" class="text-xs font-bold uppercase tracking-widest opacity-80">TOTAL RECEIVED</span>
+    </div>
+    <span id="stat-value-1" class="text-3xl font-black tracking-tight">$0.00</span>
+  </div>
+  <div class="bg-surface-container-lowest p-6 rounded-2xl border border-surface-variant/20">
+    <div class="flex items-center gap-3 mb-3">
+      <span class="material-symbols-outlined text-2xl text-secondary">confirmation_number</span>
+      <span id="stat-label-2" class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">VOUCHERS ISSUED</span>
+    </div>
+    <span id="stat-value-2" class="text-3xl font-black text-primary tracking-tight">0</span>
+  </div>
+  <div class="bg-surface-container-lowest p-6 rounded-2xl border border-surface-variant/20">
+    <div class="flex items-center gap-3 mb-3">
+      <span class="material-symbols-outlined text-2xl text-on-tertiary-container">verified</span>
+      <span id="stat-label-3" class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">ACTIVE VOUCHERS</span>
+    </div>
+    <span id="stat-value-3" class="text-3xl font-black text-primary tracking-tight">0</span>
+  </div>
+  <div class="bg-surface-container-lowest p-6 rounded-2xl border border-surface-variant/20">
+    <div class="flex items-center gap-3 mb-3">
+      <span class="material-symbols-outlined text-2xl text-primary-fixed-dim">groups</span>
+      <span id="stat-label-4" class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">TOTAL DONATIONS</span>
+    </div>
+    <span id="stat-value-4" class="text-3xl font-black text-primary tracking-tight">0</span>
+  </div>
 </div>
 
-<!-- Voucher Grid (dinámico) -->
-<div id="vouchers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-  <!-- Se llena dinámicamente desde dashboard.js -->
+<!-- Donation Info Panel (injected by JS for campaign view) -->
+
+<!-- Quick Actions + Campaign Mini-cards Row -->
+<div id="overview-section" class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+  <!-- Quick Actions -->
+  <div class="bg-surface-container-lowest p-6 rounded-2xl border border-surface-variant/20">
+    <h3 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant mb-5 flex items-center gap-2">
+      <span class="material-symbols-outlined text-lg">bolt</span> Quick Actions
+    </h3>
+    <div class="flex flex-col gap-3">
+      <a href="vouchers.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-container transition-colors group">
+        <div class="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center">
+          <span class="material-symbols-outlined text-primary text-lg">campaign</span>
+        </div>
+        <div>
+          <p class="font-bold text-sm text-primary group-hover:underline">My Campaigns</p>
+          <p class="text-xs text-on-surface-variant">View, create & manage campaigns</p>
+        </div>
+      </a>
+      <div id="quick-action-issue" class="hidden">
+        <button onclick="openModal()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-container transition-colors group w-full text-left">
+          <div class="w-10 h-10 rounded-xl bg-secondary-container flex items-center justify-center">
+            <span class="material-symbols-outlined text-on-secondary-container text-lg">add_card</span>
+          </div>
+          <div>
+            <p class="font-bold text-sm text-primary group-hover:underline">Issue Voucher</p>
+            <p class="text-xs text-on-surface-variant">Assign voucher to a beneficiary</p>
+          </div>
+        </button>
+      </div>
+      <a href="#activity-section" class="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-container transition-colors group">
+        <div class="w-10 h-10 rounded-xl bg-tertiary-fixed flex items-center justify-center">
+          <span class="material-symbols-outlined text-on-tertiary-fixed text-lg">history</span>
+        </div>
+        <div>
+          <p class="font-bold text-sm text-primary group-hover:underline">Activity Log</p>
+          <p class="text-xs text-on-surface-variant">View recent donations & vouchers</p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Campaign Mini-cards (org view) / Info panel (campaign view) -->
+  <div id="campaigns-overview" class="lg:col-span-2 bg-surface-container-lowest p-6 rounded-2xl border border-surface-variant/20">
+    <div class="flex justify-between items-center mb-5">
+      <h3 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant flex items-center gap-2">
+        <span class="material-symbols-outlined text-lg">grid_view</span> Campaign Overview
+      </h3>
+      <a href="vouchers.html" class="text-xs font-bold text-primary hover:underline">View all →</a>
+    </div>
+    <div id="campaigns-mini-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <p class="col-span-full text-sm text-on-surface-variant text-center py-6">Loading campaigns...</p>
+    </div>
+  </div>
 </div>
 
-<!-- Tabla de donaciones / actividad -->
-<section class="mt-16">
-<h4 id="table-title" class="text-xl font-bold text-primary mb-6 flex items-center gap-2"><span class="material-symbols-outlined">history</span> Activity Log</h4>
-<div class="bg-surface-container-low rounded-2xl overflow-hidden">
+<!-- Voucher Grid (campaign view only, hidden in general view) -->
+<div id="vouchers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
+</div>
+
+<!-- Activity / Table Section -->
+<section id="activity-section" class="mb-10">
+<div class="flex justify-between items-center mb-6">
+  <h4 id="table-title" class="text-lg font-bold text-primary flex items-center gap-2"><span class="material-symbols-outlined">history</span> Activity Log</h4>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden border border-surface-variant/20">
 <table class="w-full text-left">
 <thead>
 <tr class="text-[10px] font-black uppercase tracking-widest text-outline border-b border-surface-variant/20">
-<th class="px-8 py-4">CODE</th>
-<th class="px-8 py-4">BENEFICIARY</th>
-<th class="px-8 py-4">DNI</th>
-<th class="px-8 py-4">AMOUNT</th>
-<th class="px-8 py-4 text-right">STATUS</th>
+<th class="px-6 py-4">CODE</th>
+<th class="px-6 py-4">BENEFICIARY</th>
+<th class="px-6 py-4">DNI</th>
+<th class="px-6 py-4">AMOUNT</th>
+<th class="px-6 py-4 text-right">STATUS</th>
 </tr>
 </thead>
 <tbody id="activity-tbody" class="text-sm">
@@ -169,7 +230,7 @@
 </div>
 </section>
 
-<!-- Modal: Emitir Nuevo Voucher -->
+<!-- Modal: Issue New Voucher -->
 <div id="voucher-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/40 backdrop-blur-sm">
 <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8">
 <div class="flex justify-between items-center mb-6">
@@ -199,12 +260,14 @@ ISSUE VOUCHER
 </div>
 </div>
 </main>
-<!-- Floating Action for Mobile / Quick Action -->
-<div class="fixed bottom-8 right-8 z-50 md:hidden">
-<button class="w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center active:scale-95 transition-transform" style="">
-<span class="material-symbols-outlined" data-icon="add" style="">add</span>
-</button>
+
+<footer class="w-full mt-auto bg-slate-50 border-t border-slate-200">
+<div class="flex flex-col md:flex-row justify-between items-center px-8 py-8 max-w-7xl mx-auto gap-4">
+    <div class="font-bold text-blue-900">ImpactPool</div>
+    <p class="text-sm text-slate-600">© 2024 ImpactPool. All rights reserved.</p>
 </div>
+</footer>
+
 <script src="js/session.js"></script>
 <script src="js/dashboard.js"></script>
 </body></html>

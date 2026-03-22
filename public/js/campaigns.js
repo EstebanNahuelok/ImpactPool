@@ -2,6 +2,7 @@
  * ImpactoPool — Campaigns Script
  * Incluir en vouchers.html (campañas)
  * Carga campañas desde la API y renderiza cards con botón según rol.
+ * Org puede crear, editar y eliminar campañas.
  */
 
 let allCampaigns = [];
@@ -27,6 +28,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Filtros de categoría
   setupCategoryFilters();
+
+  // Setup campaign form for org
+  if (Session.isOrganization()) {
+    setupCampaignForm();
+  }
 });
 
 // Recargar campañas al volver con navegación back/forward (bfcache)
@@ -72,15 +78,27 @@ function renderCampaigns(campaigns) {
   const grid = document.getElementById('campaigns-grid');
   if (!grid) return;
 
+  const isOrg = Session.isOrganization();
+
+  // Org: show a small "Create New Campaign" button above the grid
+  const existingBtn = document.getElementById('create-campaign-btn');
+  if (isOrg && !existingBtn) {
+    const btn = document.createElement('button');
+    btn.id = 'create-campaign-btn';
+    btn.onclick = () => openCampaignModal();
+    btn.className = 'mb-6 inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary font-bold text-sm rounded-xl hover:opacity-90 transition-all shadow-sm';
+    btn.innerHTML = '<span class="material-symbols-outlined text-lg">add_circle</span> New Campaign';
+    grid.parentNode.insertBefore(btn, grid);
+  }
+
   if (campaigns.length === 0) {
     grid.innerHTML = '<div class="col-span-full text-center py-12 text-on-surface-variant">No campaigns available in this category.</div>';
     return;
   }
 
-  const isOrg = Session.isOrganization();
   const buttonText = isOrg ? 'Campaign Details' : 'Fund Campaign';
 
-  grid.innerHTML = campaigns.map(c => {
+  const cardsHtml = campaigns.map(c => {
     const emitted = c.emittedVouchers || 0;
     const active = c.activeVouchers || 0;
     const total = c.totalVouchers || 0;
@@ -95,6 +113,18 @@ function renderCampaigns(campaigns) {
     const buttonAction = isOrg
       ? `onclick="window.location.href='dashboard.html?campaign=${c._id}'"`
       : `onclick="window.location.href='donar.html?campaign=${c._id}&association=${c.association?._id || ''}'"`; 
+
+    // Org edit/delete buttons
+    const orgActions = isOrg ? `
+      <div class="flex gap-2 mt-3">
+        <button onclick="event.stopPropagation(); openCampaignModal('${c._id}')" class="flex-1 py-2 rounded-lg bg-surface-container text-primary text-xs font-bold uppercase tracking-widest hover:bg-surface-container-high transition-colors flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-sm">edit</span> Edit
+        </button>
+        <button onclick="event.stopPropagation(); confirmDeleteCampaign('${c._id}', '${c.name.replace(/'/g, "\\'")}')" class="flex-1 py-2 rounded-lg bg-error/10 text-error text-xs font-bold uppercase tracking-widest hover:bg-error/20 transition-colors flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-sm">delete</span> Delete
+        </button>
+      </div>
+    ` : '';
 
     // Sección de vouchers: datos reales de la API para ambos roles
     const emittedPercent = total > 0 ? Math.round((emitted / total) * 100) : 0;
@@ -147,10 +177,171 @@ function renderCampaigns(campaigns) {
         <button ${buttonAction} class="w-full py-4 bg-primary text-on-primary font-bold rounded-md hover:bg-primary-container transition-all active:scale-95 shadow-md">
           ${buttonText}
         </button>
+        ${orgActions}
       </div>
     `;
   }).join('');
+
+  grid.innerHTML = cardsHtml;
 }
+
+// ==================== CAMPAIGN CRUD (ORG) ====================
+
+function setupCampaignForm() {
+  const form = document.getElementById('campaign-form');
+  if (form) {
+    form.addEventListener('submit', handleCampaignSubmit);
+  }
+}
+
+function openCampaignModal(editId) {
+  const modal = document.getElementById('campaign-modal');
+  if (!modal) return;
+
+  const title = document.getElementById('campaign-modal-title');
+  const submitBtn = document.getElementById('campaign-submit');
+  const codeInput = document.getElementById('campaign-code');
+  const editIdInput = document.getElementById('campaign-edit-id');
+  document.getElementById('campaign-error').classList.add('hidden');
+
+  // Reset form
+  document.getElementById('campaign-form').reset();
+  editIdInput.value = '';
+
+  if (editId) {
+    // Edit mode: fill with existing data
+    const campaign = allCampaigns.find(c => c._id === editId);
+    if (!campaign) return;
+
+    title.textContent = 'Edit Campaign';
+    submitBtn.textContent = 'SAVE CHANGES';
+    editIdInput.value = editId;
+    codeInput.value = campaign.code;
+    codeInput.readOnly = true;
+    codeInput.classList.add('bg-surface-container-low', 'cursor-not-allowed');
+    document.getElementById('campaign-name').value = campaign.name;
+    document.getElementById('campaign-description').value = campaign.description || '';
+    document.getElementById('campaign-category').value = campaign.category || 'otro';
+    document.getElementById('campaign-status').value = campaign.status || 'active';
+    document.getElementById('campaign-benefit').value = campaign.benefit;
+    document.getElementById('campaign-voucherCost').value = campaign.voucherCost;
+    document.getElementById('campaign-totalVouchers').value = campaign.totalVouchers;
+    document.getElementById('campaign-urgent').checked = campaign.urgent || false;
+  } else {
+    // Create mode
+    title.textContent = 'New Campaign';
+    submitBtn.textContent = 'CREATE CAMPAIGN';
+    codeInput.readOnly = false;
+    codeInput.classList.remove('bg-surface-container-low', 'cursor-not-allowed');
+  }
+
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+function closeCampaignModal() {
+  const modal = document.getElementById('campaign-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+}
+
+async function handleCampaignSubmit(e) {
+  e.preventDefault();
+  const errorEl = document.getElementById('campaign-error');
+  const submitBtn = document.getElementById('campaign-submit');
+  errorEl.classList.add('hidden');
+
+  const editId = document.getElementById('campaign-edit-id').value;
+  const isEdit = !!editId;
+
+  const body = {
+    code: document.getElementById('campaign-code').value.trim(),
+    name: document.getElementById('campaign-name').value.trim(),
+    description: document.getElementById('campaign-description').value.trim(),
+    category: document.getElementById('campaign-category').value,
+    status: document.getElementById('campaign-status').value,
+    benefit: document.getElementById('campaign-benefit').value.trim(),
+    voucherCost: parseFloat(document.getElementById('campaign-voucherCost').value),
+    totalVouchers: parseInt(document.getElementById('campaign-totalVouchers').value),
+    urgent: document.getElementById('campaign-urgent').checked,
+  };
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = isEdit ? 'SAVING...' : 'CREATING...';
+
+  try {
+    const url = isEdit ? `/campaigns/${editId}` : '/campaigns';
+    const method = isEdit ? 'PUT' : 'POST';
+
+    await Session.apiRequest(url, {
+      method,
+      body: JSON.stringify(body),
+    });
+
+    closeCampaignModal();
+    await loadCampaigns();
+  } catch (err) {
+    errorEl.textContent = err.message || 'Error saving campaign';
+    errorEl.classList.remove('hidden');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = isEdit ? 'SAVE CHANGES' : 'CREATE CAMPAIGN';
+  }
+}
+
+// ==================== DELETE CAMPAIGN ====================
+
+let pendingDeleteId = null;
+
+function confirmDeleteCampaign(campaignId, campaignName) {
+  pendingDeleteId = campaignId;
+  const modal = document.getElementById('delete-campaign-modal');
+  const msg = document.getElementById('delete-campaign-msg');
+  const confirmBtn = document.getElementById('delete-campaign-confirm');
+
+  if (msg) msg.innerHTML = `Are you sure you want to delete <strong class="text-primary">${campaignName}</strong>? This action cannot be undone.`;
+
+  if (confirmBtn) {
+    confirmBtn.onclick = () => deleteCampaign();
+  }
+
+  if (modal) {
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+}
+
+function closeDeleteModal() {
+  const modal = document.getElementById('delete-campaign-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+  pendingDeleteId = null;
+}
+
+async function deleteCampaign() {
+  if (!pendingDeleteId) return;
+
+  const confirmBtn = document.getElementById('delete-campaign-confirm');
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = 'Deleting...';
+
+  try {
+    await Session.apiRequest(`/campaigns/${pendingDeleteId}`, { method: 'DELETE' });
+    closeDeleteModal();
+    await loadCampaigns();
+  } catch (err) {
+    alert(err.message || 'Error deleting campaign');
+  } finally {
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = 'Delete';
+  }
+}
+
+// ==================== USER IMPACT ====================
 
 async function loadUserImpact() {
   try {

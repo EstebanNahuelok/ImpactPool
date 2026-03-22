@@ -50,7 +50,7 @@ const BlockchainIntegration = (() => {
    */
   async function connectWallet() {
     if (!window.ethereum) {
-      throw new Error('Necesitás MetaMask o Core Wallet instalado');
+      throw new Error('You need MetaMask or Core Wallet installed');
     }
 
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });

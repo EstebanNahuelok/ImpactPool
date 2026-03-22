@@ -3,6 +3,7 @@ const router = express.Router();
 const authMiddleware = require('../middleware/auth.middleware');
 const Campaign = require('../models/Campaign.model');
 const Donation = require('../models/Donation.model');
+const Voucher = require('../models/Voucher.model');
 
 // GET /api/campaigns — Listar campañas activas (público con auth)
 router.get('/', authMiddleware, async (req, res) => {
@@ -17,7 +18,25 @@ router.get('/', authMiddleware, async (req, res) => {
     const campaigns = await Campaign.find(filter)
       .populate('association', 'name category verified')
       .sort({ urgent: -1, createdAt: -1 });
-    res.json(campaigns);
+
+    // Agregar conteo real de vouchers emitidos por campaña
+    const campaignIds = campaigns.map(c => c._id);
+    const voucherCounts = await Voucher.aggregate([
+      { $match: { campaign: { $in: campaignIds } } },
+      { $group: { _id: '$campaign', emittedCount: { $sum: 1 }, activeCount: { $sum: { $cond: [{ $eq: ['$status', 'active'] }, 1, 0] } } } },
+    ]);
+    const countMap = {};
+    voucherCounts.forEach(vc => { countMap[vc._id.toString()] = vc; });
+
+    const result = campaigns.map(c => {
+      const obj = c.toJSON();
+      const counts = countMap[c._id.toString()] || { emittedCount: 0, activeCount: 0 };
+      obj.emittedVouchers = counts.emittedCount;
+      obj.activeVouchers = counts.activeCount;
+      return obj;
+    });
+
+    res.json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -31,7 +50,17 @@ router.get('/:id', authMiddleware, async (req, res) => {
     if (!campaign) {
       return res.status(404).json({ error: 'Campaña no encontrada' });
     }
-    res.json(campaign);
+
+    const voucherStats = await Voucher.aggregate([
+      { $match: { campaign: campaign._id } },
+      { $group: { _id: null, emittedCount: { $sum: 1 }, activeCount: { $sum: { $cond: [{ $eq: ['$status', 'active'] }, 1, 0] } } } },
+    ]);
+    const obj = campaign.toJSON();
+    const counts = voucherStats[0] || { emittedCount: 0, activeCount: 0 };
+    obj.emittedVouchers = counts.emittedCount;
+    obj.activeVouchers = counts.activeCount;
+
+    res.json(obj);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

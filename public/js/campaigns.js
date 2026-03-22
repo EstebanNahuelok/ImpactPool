@@ -6,24 +6,34 @@
 
 let allCampaigns = [];
 
-document.addEventListener('DOMContentLoaded', async () => {
-  if (!Session.requireAuth()) return;
-
-  // Cargar campañas
+async function loadCampaigns() {
   try {
     allCampaigns = await Session.apiRequest('/campaigns');
     renderCampaigns(allCampaigns);
   } catch (err) {
-    console.error('Error cargando campañas:', err);
+    console.error('Error loading campaigns:', err);
     document.getElementById('campaigns-grid').innerHTML =
-      '<div class="col-span-full text-center py-12 text-error">Error cargando campañas</div>';
+      '<div class="col-span-full text-center py-12 text-error">Error loading campaigns</div>';
   }
+}
 
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!Session.requireAuth()) return;
+
+  // Cargar campañas
+  await loadCampaigns();
   // Cargar stats del usuario
   loadUserImpact();
 
   // Filtros de categoría
   setupCategoryFilters();
+});
+
+// Recargar campañas al volver con navegación back/forward (bfcache)
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted) {
+    loadCampaigns();
+  }
 });
 
 function setupCategoryFilters() {
@@ -63,26 +73,64 @@ function renderCampaigns(campaigns) {
   if (!grid) return;
 
   if (campaigns.length === 0) {
-    grid.innerHTML = '<div class="col-span-full text-center py-12 text-on-surface-variant">No hay campañas disponibles en esta categoría.</div>';
+    grid.innerHTML = '<div class="col-span-full text-center py-12 text-on-surface-variant">No campaigns available in this category.</div>';
     return;
   }
 
   const isOrg = Session.isOrganization();
-  const buttonText = isOrg ? 'Detalle de la campaña' : 'Financiar campaña';
+  const buttonText = isOrg ? 'Campaign Details' : 'Fund Campaign';
 
   grid.innerHTML = campaigns.map(c => {
+    const emitted = c.emittedVouchers || 0;
+    const active = c.activeVouchers || 0;
+    const funded = c.fundedVouchers || 0;
+    const total = c.totalVouchers || 0;
     const percent = c.fundedPercent || 0;
     const urgentBorder = c.urgent ? 'border-l-4 border-tertiary-container' : 'border border-outline-variant/30';
     const urgentLabel = c.urgent
-      ? '<span class="text-xs font-black tracking-widest text-on-tertiary-container uppercase mb-1 block">URGENTE</span>'
-      : `<span class="text-xs font-black tracking-widest text-primary-fixed-variant uppercase mb-1 block">CAMPAÑA ID: #${c.code}</span>`;
+      ? '<span class="text-xs font-black tracking-widest text-on-tertiary-container uppercase mb-1 block">URGENT</span>'
+      : `<span class="text-xs font-black tracking-widest text-primary-fixed-variant uppercase mb-1 block">CAMPAIGN ID: #${c.code}</span>`;
     const statusBadge = c.urgent
-      ? '<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs font-bold tracking-tight">VALIDADO</span>'
-      : '<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs font-bold tracking-tight">ACTIVA</span>';
+      ? '<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs font-bold tracking-tight">VALIDATED</span>'
+      : '<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs font-bold tracking-tight">ACTIVE</span>';
 
     const buttonAction = isOrg
       ? `onclick="window.location.href='dashboard.html?campaign=${c._id}'"`
       : `onclick="window.location.href='donar.html?campaign=${c._id}&association=${c.association?._id || ''}'"`; 
+
+    // Sección de vouchers: info real para org, info de financiamiento para donantes
+    const voucherInfoSection = isOrg
+      ? `
+          <div class="mb-4 grid grid-cols-2 gap-3">
+            <div class="p-3 bg-surface-container rounded-lg text-center">
+              <span class="text-[10px] font-bold text-outline uppercase block mb-1">Issued</span>
+              <span class="text-xl font-black text-primary">${emitted}</span>
+              <span class="text-xs text-on-surface-variant"> / ${total}</span>
+            </div>
+            <div class="p-3 bg-surface-container rounded-lg text-center">
+              <span class="text-[10px] font-bold text-outline uppercase block mb-1">Active</span>
+              <span class="text-xl font-black text-secondary">${active}</span>
+            </div>
+          </div>
+          <div class="mb-8">
+            <div class="flex justify-between text-sm font-bold mb-2">
+              <span class="text-primary">${emitted} of ${total} Vouchers issued</span>
+              <span class="text-outline">${total > 0 ? Math.round((emitted / total) * 100) : 0}%</span>
+            </div>
+            <div class="h-3 w-full bg-surface-container-highest rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-secondary-fixed-dim to-secondary shadow-[0_0_8px_rgba(10,108,68,0.3)]" style="width: ${total > 0 ? Math.round((emitted / total) * 100) : 0}%"></div>
+            </div>
+          </div>`
+      : `
+          <div class="mb-8">
+            <div class="flex justify-between text-sm font-bold mb-2">
+              <span class="text-primary">${funded} of ${total} Vouchers funded</span>
+              <span class="text-outline">${percent}%</span>
+            </div>
+            <div class="h-3 w-full bg-surface-container-highest rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-secondary-fixed-dim to-secondary shadow-[0_0_8px_rgba(10,108,68,0.3)]" style="width: ${percent}%"></div>
+            </div>
+          </div>`;
 
     return `
       <div class="bg-surface-container-lowest rounded-xl p-8 flex flex-col justify-between transition-all hover:translate-y-[-4px] ${urgentBorder} shadow-sm">
@@ -95,26 +143,18 @@ function renderCampaigns(campaigns) {
             ${statusBadge}
           </div>
           <div class="mb-4">
-            <p class="text-xs font-bold text-outline uppercase mb-1">Bien / Beneficio</p>
+            <p class="text-xs font-bold text-outline uppercase mb-1">Good / Benefit</p>
             <p class="text-on-surface-variant font-medium text-lg">${c.benefit}</p>
           </div>
           <div class="flex items-center gap-2 text-sm text-outline mb-6">
             <span class="material-symbols-outlined text-base">${c.icon || 'verified'}</span>
-            <span>ONG: ${c.association?.name || 'Sin asociación'}</span>
+            <span>NGO: ${c.association?.name || 'No association'}</span>
           </div>
           <div class="mb-4 p-4 bg-surface-container rounded-lg flex justify-between items-center">
-            <span class="text-sm font-bold text-primary">Costo Individual</span>
+            <span class="text-sm font-bold text-primary">Individual Cost</span>
             <span class="text-lg font-black text-secondary">${c.voucherCost} USDC <span class="text-xs font-medium">/ Voucher</span></span>
           </div>
-          <div class="mb-8">
-            <div class="flex justify-between text-sm font-bold mb-2">
-              <span class="text-primary">${c.fundedVouchers} de ${c.totalVouchers} Vouchers financiados</span>
-              <span class="text-outline">${percent}%</span>
-            </div>
-            <div class="h-3 w-full bg-surface-container-highest rounded-full overflow-hidden">
-              <div class="h-full bg-gradient-to-r from-secondary-fixed-dim to-secondary shadow-[0_0_8px_rgba(10,108,68,0.3)]" style="width: ${percent}%"></div>
-            </div>
-          </div>
+          ${voucherInfoSection}
         </div>
         <button ${buttonAction} class="w-full py-4 bg-primary text-on-primary font-bold rounded-md hover:bg-primary-container transition-all active:scale-95 shadow-md">
           ${buttonText}
@@ -138,7 +178,7 @@ async function loadUserImpact() {
     if (totalEl) totalEl.innerHTML = `${totalDonated.toFixed(0)} <span class="text-xs font-normal">USDC</span>`;
     if (countEl) countEl.textContent = voucherCount;
     if (msgEl && voucherCount > 0) {
-      msgEl.textContent = `Has contribuido a ${voucherCount} donaciones.`;
+      msgEl.textContent = `You have contributed to ${voucherCount} donations.`;
     }
   } catch (err) {
     // Silencioso si falla (org no tiene /donor/me)

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="es"><head>
+<html lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -91,15 +91,15 @@
 <div class="text-2xl font-black text-[#002045] dark:text-blue-500 tracking-tighter">ImpactPool</div>
 <div class="hidden md:flex items-center gap-8 font-['Inter'] font-medium tracking-tight">
 <a data-role="organization" class="text-slate-600 dark:text-slate-400 hover:text-[#002045] transition-colors duration-200 ease-in-out" href="dashboard.html">Dashboard</a>
-<a data-role="donor" class="text-slate-600 dark:text-slate-400 hover:text-[#002045] transition-colors duration-200 ease-in-out" href="donar.html">Donar</a>
+<a data-role="donor" class="text-slate-600 dark:text-slate-400 hover:text-[#002045] transition-colors duration-200 ease-in-out" href="donar.html">Donate</a>
 <a data-role="organization" class="text-slate-600 dark:text-slate-400 hover:text-[#002045] transition-colors duration-200 ease-in-out" href="vouchers.html">Vouchers</a>
-<a data-role="donor" class="text-slate-600 dark:text-slate-400 hover:text-[#002045] transition-colors duration-200 ease-in-out" href="terminos_condiciones.html">Términos y condiciones</a>
+<a data-role="donor" class="text-slate-600 dark:text-slate-400 hover:text-[#002045] transition-colors duration-200 ease-in-out" href="terminos_condiciones.html">Terms & Conditions</a>
 </div>
 <button data-action="logout" class="bg-primary text-on-primary px-6 py-2 rounded-md font-medium transition-colors duration-200 ease-in-out hover:bg-primary-container" onclick="Session.logout()">
-            Cerrar Sesión
+            Log Out
         </button>
 <button data-action="login" style="display:none;" class="bg-primary text-on-primary px-6 py-2 rounded-md font-medium transition-colors duration-200 ease-in-out hover:bg-primary-container" onclick="location.href='login.html'">
-            Iniciar Sesión
+            Sign In
         </button>
 </div>
 </nav>
@@ -108,10 +108,10 @@
 <div class="max-w-7xl mx-auto px-6">
 <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
 <div class="max-w-2xl">
-<span class="text-secondary font-bold tracking-widest text-xs uppercase mb-4 block">Marco Legal</span>
-<h1 class="text-[3.5rem] font-black leading-none tracking-tighter text-primary mb-6">Términos y Condiciones</h1>
+<span class="text-secondary font-bold tracking-widest text-xs uppercase mb-4 block">Legal Framework</span>
+<h1 class="text-[3.5rem] font-black leading-none tracking-tighter text-primary mb-6">Terms & Conditions</h1>
 <p class="text-body-md text-on-surface-variant leading-relaxed opacity-80">
-                    Fecha de vigencia: 24 de octubre de 2024. Estos términos rigen la gobernanza, los protocolos financieros y los estándares éticos que regulan el ecosistema ImpactPool.
+                    Effective date: October 24, 2024. These terms govern the governance, financial protocols, and ethical standards that regulate the ImpactPool ecosystem.
                 </p>
 </div>
 <div class="flex flex-col items-end">
@@ -126,13 +126,13 @@
 <!-- Table of Contents (Sticky) -->
 <aside class="lg:col-span-3 hidden lg:block">
 <div class="sticky top-32 space-y-6">
-<h3 class="font-bold text-primary tracking-tight">Secciones</h3>
+<h3 class="font-bold text-primary tracking-tight">Sections</h3>
 <nav class="flex flex-col gap-4 text-sm text-on-surface-variant">
-<a class="hover:text-secondary transition-colors border-l-2 border-transparent hover:border-secondary pl-4" href="#fund-separation">Reglas de Separación</a>
-<a class="hover:text-secondary transition-colors border-l-2 border-transparent hover:border-secondary pl-4" href="#yield-limitations">Límites de Rendimiento</a>
-<a class="hover:text-secondary transition-colors border-l-2 border-transparent hover:border-secondary pl-4" href="#multisig-governance">Gobernanza Multisig</a>
-<a class="hover:text-secondary transition-colors border-l-2 border-transparent hover:border-secondary pl-4" href="#data-privacy">Privacidad de Datos</a>
-<a class="hover:text-secondary transition-colors border-l-2 border-transparent hover:border-secondary pl-4" href="#dispute-resolution">Resolución de Disputas</a>
+<a class="hover:text-secondary transition-colors border-l-2 border-transparent hover:border-secondary pl-4" href="#fund-separation">Separation Rules</a>
+<a class="hover:text-secondary transition-colors border-l-2 border-transparent hover:border-secondary pl-4" href="#yield-limitations">Yield Limitations</a>
+<a class="hover:text-secondary transition-colors border-l-2 border-transparent hover:border-secondary pl-4" href="#multisig-governance">Multisig Governance</a>
+<a class="hover:text-secondary transition-colors border-l-2 border-transparent hover:border-secondary pl-4" href="#data-privacy">Data Privacy</a>
+<a class="hover:text-secondary transition-colors border-l-2 border-transparent hover:border-secondary pl-4" href="#dispute-resolution">Dispute Resolution</a>
 </nav>
 </div>
 </aside>
@@ -144,22 +144,22 @@
 <div class="w-12 h-12 rounded-xl bg-primary-container flex items-center justify-center text-on-primary">
 <span class="material-symbols-outlined">account_balance_wallet</span>
 </div>
-<h2 class="text-3xl font-bold tracking-tight text-primary">01. Reglas de Separación de Fondos</h2>
+<h2 class="text-3xl font-bold tracking-tight text-primary">01. Fund Separation Rules</h2>
 </div>
 <div class="prose prose-slate max-w-none text-on-surface-variant leading-relaxed space-y-6">
-<p class="text-lg">ImpactPool mantiene una política estricta de no mezcla de activos para todos los fondos mantenidos en los pools de liquidez del protocolo.</p>
+<p class="text-lg">ImpactPool maintains a strict non-commingling policy for all funds held in the protocol's liquidity pools.</p>
 <div class="bg-surface-container-low p-8 rounded-xl space-y-4">
 <div class="flex gap-4">
 <span class="text-secondary font-bold">1.1</span>
-<p>Todas las contribuciones de los donantes se dirigen a contratos inteligentes aislados específicos para la vertical de impacto elegida (ej. Agua Limpia, Educación).</p>
+<p>All donor contributions are directed to isolated smart contracts specific to the chosen impact vertical (e.g., Clean Water, Education).</p>
 </div>
 <div class="flex gap-4">
 <span class="text-secondary font-bold">1.2</span>
-<p>El capital operativo para el mantenimiento de la plataforma ImpactPool se mantiene en una "Bóveda de Tesorería" distinta y nunca proviene de los fondos de impacto activos.</p>
+<p>Operational capital for ImpactPool platform maintenance is held in a separate "Treasury Vault" and never sourced from active impact funds.</p>
 </div>
 <div class="flex gap-4">
 <span class="text-secondary font-bold">1.3</span>
-<p>Los activos permanecen en la cadena en cuentas de libro mayor transparentes, visibles para cualquier parte interesada en cualquier momento a través de la interfaz del Libro Público.</p>
+<p>Assets remain on-chain in transparent ledger accounts, visible to any stakeholder at any time through the Public Ledger interface.</p>
 </div>
 </div>
 </div>
@@ -170,18 +170,18 @@
 <div class="w-12 h-12 rounded-xl bg-secondary-container flex items-center justify-center text-on-secondary-container">
 <span class="material-symbols-outlined">trending_up</span>
 </div>
-<h2 class="text-3xl font-bold tracking-tight text-primary">02. Limitaciones de Rendimiento para Sponsors</h2>
+<h2 class="text-3xl font-bold tracking-tight text-primary">02. Yield Limitations for Sponsors</h2>
 </div>
 <div class="prose prose-slate max-w-none text-on-surface-variant leading-relaxed space-y-6">
-<p>ImpactPool utiliza protocolos de generación de rendimiento sostenibles para asegurar la longevidad de los fondos. Sin embargo, la participación del patrocinador está sujeta a restricciones de "Impacto Social Primero".</p>
+<p>ImpactPool uses sustainable yield-generation protocols to ensure fund longevity. However, sponsor participation is subject to "Social Impact First" restrictions.</p>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 <div class="p-6 bg-surface-container-low rounded-xl">
-<h4 class="font-bold text-primary mb-2">Rendimientos Topados</h4>
-<p class="text-sm">Los patrocinadores solo pueden reclamar hasta el 2% del rendimiento anual generado como "Recompensas de Incentivo". El rendimiento restante se reinvierte automáticamente en el objetivo de impacto.</p>
+<h4 class="font-bold text-primary mb-2">Capped Yields</h4>
+<p class="text-sm">Sponsors may only claim up to 2% of the annual yield generated as "Incentive Rewards". The remaining yield is automatically reinvested into the impact objective.</p>
 </div>
 <div class="p-6 bg-surface-container-low rounded-xl">
-<h4 class="font-bold text-primary mb-2">Bloqueo de Principal</h4>
-<p class="text-sm">El capital principal contribuido se bloquea durante la duración del ciclo de impacto. El retiro anticipado está sujeto a una "Tasa de Estabilización" del 15% dirigida al pool de beneficiarios.</p>
+<h4 class="font-bold text-primary mb-2">Principal Lock</h4>
+<p class="text-sm">Contributed principal capital is locked for the duration of the impact cycle. Early withdrawal is subject to a 15% "Stabilization Fee" directed to the beneficiary pool.</p>
 </div>
 </div>
 </div>
@@ -192,26 +192,26 @@
 <div class="w-12 h-12 rounded-xl bg-tertiary-container flex items-center justify-center text-on-tertiary-container">
 <span class="material-symbols-outlined">verified_user</span>
 </div>
-<h2 class="text-3xl font-bold tracking-tight text-primary">03. Gobernanza Multisig</h2>
+<h2 class="text-3xl font-bold tracking-tight text-primary">03. Multisig Governance</h2>
 </div>
 <div class="prose prose-slate max-w-none text-on-surface-variant leading-relaxed space-y-6">
-<p>Para prevenir fallos centralizados o malversación, todos los desembolsos de fondos significativos requieren firmas M-de-N.</p>
+<p>To prevent centralized failures or misappropriation, all significant fund disbursements require M-of-N signatures.</p>
 <ul class="space-y-4 list-none p-0">
 <li class="flex items-start gap-3">
 <span class="material-symbols-outlined text-secondary mt-1">check_circle</span>
-<span>Un mínimo de 3 de los 5 "Guardianes de Impacto" designados deben aprobar cualquier transacción que supere el valor de 5,000 USD.</span>
+<span>A minimum of 3 out of 5 designated "Impact Guardians" must approve any transaction exceeding 5,000 USD in value.</span>
 </li>
 <li class="flex items-start gap-3">
 <span class="material-symbols-outlined text-secondary mt-1">check_circle</span>
-<span>Los guardianes consisten en auditores independientes, líderes comunitarios y delegados electos de ImpactPool.</span>
+<span>Guardians consist of independent auditors, community leaders, and elected ImpactPool delegates.</span>
 </li>
 <li class="flex items-start gap-3">
 <span class="material-symbols-outlined text-secondary mt-1">check_circle</span>
-<span>Todos los metadatos de las firmas, incluyendo la marca de tiempo y el origen de la billetera, se registran permanentemente en el libro mayor inmutable.</span>
+<span>All signature metadata, including timestamp and wallet origin, is permanently recorded on the immutable ledger.</span>
 </li>
 </ul>
 <div class="mt-8 p-4 border-l-4 border-tertiary-container bg-tertiary-fixed/30 rounded-r-xl">
-<p class="text-sm font-medium text-on-tertiary-fixed-variant italic">Nota: En caso de un compromiso de seguridad, se impone un bloqueo temporal de 48 horas en todas las transacciones salientes para permitir una auditoría comunitaria.</p>
+<p class="text-sm font-medium text-on-tertiary-fixed-variant italic">Note: In the event of a security compromise, a temporary 48-hour lock is imposed on all outgoing transactions to allow for a community audit.</p>
 </div>
 </div>
 </section>
@@ -221,34 +221,34 @@
 <div class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-primary">
 <span class="material-symbols-outlined">visibility_off</span>
 </div>
-<h2 class="text-3xl font-bold tracking-tight text-primary">04. Privacidad de Datos para Beneficiarios</h2>
+<h2 class="text-3xl font-bold tracking-tight text-primary">04. Beneficiary Data Privacy</h2>
 </div>
 <div class="prose prose-slate max-w-none text-on-surface-variant leading-relaxed space-y-6">
-<p>Si bien los flujos financieros son públicos, la identidad personal de los beneficiarios individuales está protegida por la tecnología de Pruebas de Conocimiento Cero (ZKP).</p>
+<p>While financial flows are public, the personal identity of individual beneficiaries is protected by Zero-Knowledge Proof (ZKP) technology.</p>
 <div class="bg-surface-container-low rounded-xl overflow-hidden">
 <table class="w-full text-left border-collapse">
 <thead>
 <tr class="bg-surface-container-high">
-<th class="p-4 text-sm font-bold text-primary">Categoría de Datos</th>
-<th class="p-4 text-sm font-bold text-primary">Estado de Visibilidad</th>
-<th class="p-4 text-sm font-bold text-primary">Retención</th>
+<th class="p-4 text-sm font-bold text-primary">Data Category</th>
+<th class="p-4 text-sm font-bold text-primary">Visibility Status</th>
+<th class="p-4 text-sm font-bold text-primary">Retention</th>
 </tr>
 </thead>
 <tbody class="text-sm">
 <tr class="border-b border-outline-variant/10">
-<td class="p-4">Monto de la Transacción</td>
-<td class="p-4"><span class="px-2 py-1 bg-secondary-container text-on-secondary-container text-xs font-bold rounded-full">PÚBLICO</span></td>
-<td class="p-4">Permanente (On-chain)</td>
+<td class="p-4">Transaction Amount</td>
+<td class="p-4"><span class="px-2 py-1 bg-secondary-container text-on-secondary-container text-xs font-bold rounded-full">PUBLIC</span></td>
+<td class="p-4">Permanent (On-chain)</td>
 </tr>
 <tr class="border-b border-outline-variant/10">
-<td class="p-4">Nombre Real del Beneficiario</td>
-<td class="p-4"><span class="px-2 py-1 bg-tertiary-container text-on-tertiary-container text-xs font-bold rounded-full">ENCRIPTADO</span></td>
-<td class="p-4">90 Días (Off-chain)</td>
+<td class="p-4">Beneficiary Real Name</td>
+<td class="p-4"><span class="px-2 py-1 bg-tertiary-container text-on-tertiary-container text-xs font-bold rounded-full">ENCRYPTED</span></td>
+<td class="p-4">90 Days (Off-chain)</td>
 </tr>
 <tr>
-<td class="p-4">Verificación Biométrica</td>
-<td class="p-4"><span class="px-2 py-1 bg-tertiary-container text-on-tertiary-container text-xs font-bold rounded-full">ENCRIPTADO</span></td>
-<td class="p-4">Descartado tras validación</td>
+<td class="p-4">Biometric Verification</td>
+<td class="p-4"><span class="px-2 py-1 bg-tertiary-container text-on-tertiary-container text-xs font-bold rounded-full">ENCRYPTED</span></td>
+<td class="p-4">Discarded after validation</td>
 </tr>
 </tbody>
 </table>
@@ -257,10 +257,10 @@
 </section>
 <!-- Conclusion -->
 <section class="pt-12 border-t border-surface-container-high">
-<p class="text-sm text-outline mb-8 italic">ImpactPool se reserva el derecho de modificar estos términos tras un período de comentarios de la comunidad de 14 días y un voto mayoritario de Multisig.</p>
+<p class="text-sm text-outline mb-8 italic">ImpactPool reserves the right to modify these terms following a 14-day community comment period and a Multisig majority vote.</p>
 <div class="flex gap-4">
-<button class="bg-primary text-on-primary px-8 py-3 rounded-md font-bold hover:bg-primary-container transition-all">Descargar PDF</button>
-<button class="text-primary font-bold px-8 py-3 hover:bg-surface-container-low rounded-md transition-all">Imprimir Términos</button>
+<button class="bg-primary text-on-primary px-8 py-3 rounded-md font-bold hover:bg-primary-container transition-all">Download PDF</button>
+<button class="text-primary font-bold px-8 py-3 hover:bg-surface-container-low rounded-md transition-all">Print Terms</button>
 </div>
 </section>
 </div>
@@ -272,16 +272,16 @@
 <div>
 <div class="text-xl font-bold text-white mb-4">ImpactPool</div>
 <p class="text-slate-300 dark:text-slate-500 max-w-xs">
-                © 2024 ImpactPool. El Libro Mayor Transparente. Potenciando el impacto global a través de la confianza verificable.
+                © 2024 ImpactPool. The Transparent Ledger. Empowering global impact through verifiable trust.
             </p>
 </div>
 <div class="grid grid-cols-2 gap-4">
 <div class="flex flex-col gap-2">
-<a class="text-white font-bold hover:text-[#0a6c44] transition-all" href="#">Términos y Condiciones</a>
-<a class="text-slate-300 dark:text-slate-500 hover:text-[#0a6c44] transition-all" href="#">Política de Privacidad</a>
+<a class="text-white font-bold hover:text-[#0a6c44] transition-all" href="#">Terms & Conditions</a>
+<a class="text-slate-300 dark:text-slate-500 hover:text-[#0a6c44] transition-all" href="#">Privacy Policy</a>
 </div>
 <div class="flex flex-col gap-2">
-<a class="text-slate-300 dark:text-slate-500 hover:text-[#0a6c44] transition-all" href="#">Contacto</a>
+<a class="text-slate-300 dark:text-slate-500 hover:text-[#0a6c44] transition-all" href="#">Contact</a>
 <a class="text-slate-300 dark:text-slate-500 hover:text-[#0a6c44] transition-all" href="#">FAQ</a>
 </div>
 </div>

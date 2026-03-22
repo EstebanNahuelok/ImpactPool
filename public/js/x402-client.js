@@ -44,7 +44,7 @@ const X402Client = (() => {
 
     // Step 3: Ensure wallet is connected
     if (!BlockchainIntegration.isConnected()) {
-      throw new Error('Conectá tu wallet para realizar el pago x402');
+      throw new Error('Connect your wallet to make the x402 payment');
     }
 
     // Step 4: Sign the payment using the connected wallet

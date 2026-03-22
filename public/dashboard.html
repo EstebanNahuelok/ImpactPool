@@ -94,12 +94,12 @@
 <div class="text-2xl font-bold tracking-tighter text-blue-900 dark:text-blue-50">ImpactPool</div>
 <div class="hidden md:flex gap-8 items-center">
 <a data-role="organization" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="dashboard.html">Dashboard</a>
-<a data-role="donor" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="donar.html">Donar</a>
-<a data-role="organization" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="vouchers.html">Vouchers</a>
-<a data-role="donor" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="terminos_condiciones.html">Terminos y condiciones</a>
+<a data-role="donor" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="donar.html">Donate</a>
+<a data-role="organization" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="vouchers.html">Campaigns</a>
+<a data-role="donor" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="terminos_condiciones.html">Terms & Conditions</a>
 </div>
 <button data-action="logout" class="bg-primary text-on-primary px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-all" onclick="Session.logout()">
-                Cerrar sesion
+                Log out
      </button>
 </div>
 </nav>
@@ -109,11 +109,11 @@
 <header class="flex justify-between items-center mb-12">
 <div>
 <h2 class="text-3xl font-extrabold text-primary tracking-tighter" style="">Vouchers</h2>
-<p class="text-on-surface-variant font-medium mt-1" style="">Gestiona y rastrea las distribuciones de ayuda activas</p>
+<p class="text-on-surface-variant font-medium mt-1" style="">Manage and track active aid distributions</p>
 </div>
 <div class="flex items-center gap-4">
 <div class="relative">
-<input class="bg-surface-container-low border-none rounded-xl px-10 py-2.5 text-sm w-64 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="Buscar ID de voucher..." type="text">
+<input class="bg-surface-container-low border-none rounded-xl px-10 py-2.5 text-sm w-64 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="Search voucher ID..." type="text">
 <span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-lg" data-icon="search" style="">search</span>
 </div>
 <button class="p-2.5 rounded-full hover:bg-surface-container transition-colors relative" style="">
@@ -129,17 +129,17 @@
 <div id="stats-overview" class="grid grid-cols-12 gap-6 mb-12">
 <div class="col-span-12 md:col-span-8 bg-surface-container-lowest p-8 rounded-full border border-surface-variant/15 flex justify-between items-center">
 <div class="flex flex-col">
-<span id="stat-label-1" class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1">VALOR TOTAL DE IMPACTO</span>
+<span id="stat-label-1" class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1">TOTAL IMPACT VALUE</span>
 <span id="stat-value-1" class="text-5xl font-black text-primary tracking-tighter">$0.00</span>
 </div>
 <div class="h-12 w-px bg-surface-variant"></div>
 <div class="flex flex-col text-right">
-<span id="stat-label-2" class="text-xs font-bold uppercase tracking-widest text-secondary mb-1">VOUCHERS EMITIDOS</span>
+<span id="stat-label-2" class="text-xs font-bold uppercase tracking-widest text-secondary mb-1">VOUCHERS ISSUED</span>
 <span id="stat-value-2" class="text-3xl font-bold text-primary tracking-tight">0</span>
 </div>
 </div>
 <div class="col-span-12 md:col-span-4 bg-primary text-white p-8 rounded-full flex flex-col justify-center">
-<span id="stat-label-3" class="text-xs font-bold uppercase tracking-widest text-on-primary-container mb-1">VOUCHERS ACTIVOS</span>
+<span id="stat-label-3" class="text-xs font-bold uppercase tracking-widest text-on-primary-container mb-1">ACTIVE VOUCHERS</span>
 <span id="stat-value-3" class="text-4xl font-black">0</span>
 </div>
 </div>
@@ -151,16 +151,16 @@
 
 <!-- Tabla de donaciones / actividad -->
 <section class="mt-16">
-<h4 id="table-title" class="text-xl font-bold text-primary mb-6 flex items-center gap-2"><span class="material-symbols-outlined">history</span> Registro de Actividad</h4>
+<h4 id="table-title" class="text-xl font-bold text-primary mb-6 flex items-center gap-2"><span class="material-symbols-outlined">history</span> Activity Log</h4>
 <div class="bg-surface-container-low rounded-2xl overflow-hidden">
 <table class="w-full text-left">
 <thead>
 <tr class="text-[10px] font-black uppercase tracking-widest text-outline border-b border-surface-variant/20">
-<th class="px-8 py-4">CÓDIGO</th>
-<th class="px-8 py-4">BENEFICIARIO</th>
+<th class="px-8 py-4">CODE</th>
+<th class="px-8 py-4">BENEFICIARY</th>
 <th class="px-8 py-4">DNI</th>
-<th class="px-8 py-4">MONTO</th>
-<th class="px-8 py-4 text-right">ESTADO</th>
+<th class="px-8 py-4">AMOUNT</th>
+<th class="px-8 py-4 text-right">STATUS</th>
 </tr>
 </thead>
 <tbody id="activity-tbody" class="text-sm">
@@ -173,27 +173,27 @@
 <div id="voucher-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/40 backdrop-blur-sm">
 <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8">
 <div class="flex justify-between items-center mb-6">
-<h3 class="text-xl font-bold text-primary">Emitir Nuevo Voucher</h3>
+<h3 class="text-xl font-bold text-primary">Issue New Voucher</h3>
 <button id="modal-close" class="text-on-surface-variant hover:text-primary transition-colors">
 <span class="material-symbols-outlined">close</span>
 </button>
 </div>
 <form id="voucher-form" class="flex flex-col gap-5">
 <div>
-<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">DNI del Beneficiario</label>
-<input id="voucher-dni" type="text" required maxlength="20" class="w-full border border-surface-variant rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" placeholder="Ej: 12345678">
+<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Beneficiary DNI</label>
+<input id="voucher-dni" type="text" required maxlength="20" class="w-full border border-surface-variant rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" placeholder="E.g.: 12345678">
 </div>
 <div>
-<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Nombre del Beneficiario</label>
-<input id="voucher-name" type="text" required class="w-full border border-surface-variant rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" placeholder="Nombre completo">
+<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Beneficiary Name</label>
+<input id="voucher-name" type="text" required class="w-full border border-surface-variant rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" placeholder="Full name">
 </div>
 <div class="bg-surface-container-low rounded-xl p-4">
-<span class="text-xs font-bold text-on-surface-variant">Monto del voucher:</span>
+<span class="text-xs font-bold text-on-surface-variant">Voucher amount:</span>
 <span id="voucher-amount-preview" class="text-lg font-black text-secondary ml-2">$0</span>
 </div>
 <div id="voucher-error" class="text-error text-sm font-medium hidden"></div>
 <button type="submit" id="voucher-submit" class="w-full bg-primary text-white font-bold py-3 rounded-xl hover:opacity-90 transition-opacity">
-EMITIR VOUCHER
+ISSUE VOUCHER
 </button>
 </form>
 </div>

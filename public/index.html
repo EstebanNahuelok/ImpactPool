@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ImpactoPool - Donaciones Descentralizadas</title>
+  <title>ImpactPool - Decentralized Donations</title>
   <link rel="stylesheet" href="css/style.css">
   
   <!-- Favicon Links -->
@@ -17,12 +17,12 @@
 <body>
   <header>
     <nav>
-      <div class="logo">ImpactoPool</div>
+      <div class="logo">ImpactPool</div>
       <div class="nav-links">
-        <a href="#how-it-works">Cómo Funciona</a>
-        <a href="#donate">Donar</a>
-        <a href="#associations">Asociaciones</a>
-        <button id="btn-connect-wallet" class="btn btn-primary">Conectar Wallet</button>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#donate">Donate</a>
+        <a href="#associations">Associations</a>
+        <button id="btn-connect-wallet" class="btn btn-primary">Connect Wallet</button>
       </div>
     </nav>
   </header>
@@ -30,70 +30,70 @@
   <main>
     <!-- Hero -->
     <section class="hero">
-      <h1>Donaciones Transparentes en Blockchain</h1>
-      <p>Tu donación, protegida y verificable en Avalanche. 70% directo a la causa, 30% generando impacto a largo plazo.</p>
-      <a href="#donate" class="btn btn-primary btn-large">Donar Ahora</a>
+      <h1>Transparent Donations on Blockchain</h1>
+      <p>Your donation, protected and verifiable on Avalanche. 70% direct to the cause, 30% generating long-term impact.</p>
+      <a href="#donate" class="btn btn-primary btn-large">Donate Now</a>
     </section>
 
     <!-- Cómo funciona -->
     <section id="how-it-works" class="section">
-      <h2>Cómo Funciona</h2>
+      <h2>How It Works</h2>
       <div class="cards">
         <div class="card">
-          <h3>1. Doná</h3>
-          <p>Elegí una asociación verificada y el monto a donar en USDC.</p>
+          <h3>1. Donate</h3>
+          <p>Choose a verified association and the amount to donate in USDC.</p>
         </div>
         <div class="card">
           <h3>2. Split 70/30</h3>
-          <p>70% va directo a la asociación. 30% se invierte en blockchain.</p>
+          <p>70% goes directly to the association. 30% is invested on the blockchain.</p>
         </div>
         <div class="card">
           <h3>3. Rewards</h3>
-          <p>5% de las ganancias del vault vuelven a vos como incentivo.</p>
+          <p>5% of vault earnings return to you as an incentive.</p>
         </div>
       </div>
     </section>
 
     <!-- Formulario de donación -->
     <section id="donate" class="section">
-      <h2>Hacer una Donación</h2>
+      <h2>Make a Donation</h2>
       <div id="auth-section" class="form-container">
         <div id="login-form">
-          <h3>Iniciar Sesión</h3>
+          <h3>Sign In</h3>
           <input type="email" id="login-email" placeholder="Email" required>
-          <input type="password" id="login-password" placeholder="Contraseña" required>
-          <button id="btn-login" class="btn btn-primary">Entrar</button>
-          <p>¿No tenés cuenta? <a href="#" id="show-register">Registrate</a></p>
+          <input type="password" id="login-password" placeholder="Password" required>
+          <button id="btn-login" class="btn btn-primary">Sign In</button>
+          <p>Don't have an account? <a href="#" id="show-register">Register</a></p>
         </div>
 
         <div id="register-form" style="display:none;">
-          <h3>Registrarse</h3>
-          <input type="text" id="reg-name" placeholder="Nombre" required>
+          <h3>Register</h3>
+          <input type="text" id="reg-name" placeholder="Name" required>
           <input type="email" id="reg-email" placeholder="Email" required>
-          <input type="password" id="reg-password" placeholder="Contraseña" required>
-          <input type="text" id="reg-wallet" placeholder="Wallet Address (opcional)">
-          <button id="btn-register" class="btn btn-primary">Registrarse</button>
-          <p>¿Ya tenés cuenta? <a href="#" id="show-login">Iniciar Sesión</a></p>
+          <input type="password" id="reg-password" placeholder="Password" required>
+          <input type="text" id="reg-wallet" placeholder="Wallet Address (optional)">
+          <button id="btn-register" class="btn btn-primary">Register</button>
+          <p>Already have an account? <a href="#" id="show-login">Sign In</a></p>
         </div>
       </div>
 
       <div id="donation-form" class="form-container" style="display:none;">
-        <h3>Nueva Donación</h3>
+        <h3>New Donation</h3>
         <select id="select-association">
-          <option value="">Seleccioná una asociación...</option>
+          <option value="">Select an association...</option>
         </select>
-        <input type="number" id="donation-amount" placeholder="Monto en USDC" min="0.01" step="0.01" required>
+        <input type="number" id="donation-amount" placeholder="Amount in USDC" min="0.01" step="0.01" required>
         <div class="split-preview">
-          <p>Asociación (70%): <span id="preview-association">0.00</span> USDC</p>
-          <p>Vault blockchain (30%): <span id="preview-vault">0.00</span> USDC</p>
+          <p>Association (70%): <span id="preview-association">0.00</span> USDC</p>
+          <p>Blockchain vault (30%): <span id="preview-vault">0.00</span> USDC</p>
         </div>
-        <button id="btn-donate" class="btn btn-primary btn-large">Confirmar Donación</button>
+        <button id="btn-donate" class="btn btn-primary btn-large">Confirm Donation</button>
       </div>
     </section>
 
     <!-- Asociaciones -->
     <section id="associations" class="section">
-      <h2>Asociaciones Verificadas</h2>
+      <h2>Verified Associations</h2>
       <div id="associations-list" class="cards">
         <!-- Se llenan dinámicamente -->
       </div>
@@ -101,57 +101,57 @@
 
     <!-- Mis donaciones -->
     <section id="my-donations" class="section" style="display:none;">
-      <h2>Mis Donaciones</h2>
+      <h2>My Donations</h2>
       <div id="donations-list"></div>
     </section>
 
     <!-- Transparencia (x402 protected) -->
     <section id="transparency" class="section">
-      <h2>Transparencia</h2>
-      <p class="section-desc">Datos verificables de donaciones en blockchain. Este endpoint usa el protocolo <strong>x402</strong> — requiere un micro-pago de 0.01 USDC para acceder.</p>
-      <button id="btn-transparency" class="btn btn-primary">Ver Transparencia (x402 Payment)</button>
-      <button id="btn-premium" class="btn btn-secondary">Estadísticas Premium (x402)</button>
+      <h2>Transparency</h2>
+      <p class="section-desc">Verifiable blockchain donation data. This endpoint uses the <strong>x402</strong> protocol — requires a 0.01 USDC micro-payment to access.</p>
+      <button id="btn-transparency" class="btn btn-primary">View Transparency (x402 Payment)</button>
+      <button id="btn-premium" class="btn btn-secondary">Premium Stats (x402)</button>
       <div id="transparency-data" style="display:none;">
-        <h3>Datos de Transparencia</h3>
+        <h3>Transparency Data</h3>
         <pre id="transparency-json"></pre>
       </div>
     </section>
 
     <!-- ERC-8004 Agent Info -->
     <section id="agent-info" class="section">
-      <h2>Agente ImpactoPool (ERC-8004)</h2>
-      <p class="section-desc">Nuestro agente está registrado en la blockchain como un NFT (ERC-721) con identidad y reputación verificable.</p>
+      <h2>ImpactPool Agent (ERC-8004)</h2>
+      <p class="section-desc">Our agent is registered on the blockchain as an NFT (ERC-721) with verifiable identity and reputation.</p>
       <div class="cards">
         <div class="card">
           <h3>Identity Registry</h3>
-          <p>El agente ImpactoPool está registrado con un URI que apunta a su archivo de registro JSON.</p>
+          <p>The ImpactPool agent is registered with a URI pointing to its JSON registration file.</p>
           <p id="agent-id">ID: —</p>
           <p id="agent-uri">URI: —</p>
         </div>
         <div class="card">
           <h3>Reputation</h3>
-          <p>Los donadores pueden dejar feedback on-chain que afecta la reputación del agente.</p>
+          <p>Donors can leave on-chain feedback that affects the agent's reputation.</p>
           <p id="agent-reputation">Score: —</p>
           <p id="agent-feedback-count">Feedbacks: —</p>
         </div>
         <div class="card">
-          <h3>Dar Feedback</h3>
-          <p>Conectá tu wallet y dejá tu valoración del servicio.</p>
+          <h3>Give Feedback</h3>
+          <p>Connect your wallet and leave your service rating.</p>
           <select id="feedback-value">
-            <option value="100">Excelente (+100)</option>
-            <option value="50">Bueno (+50)</option>
+            <option value="100">Excellent (+100)</option>
+            <option value="50">Good (+50)</option>
             <option value="0">Neutral (0)</option>
-            <option value="-50">Malo (-50)</option>
+            <option value="-50">Bad (-50)</option>
             <option value="-100">Terrible (-100)</option>
           </select>
-          <button id="btn-feedback" class="btn btn-primary">Enviar Feedback</button>
+          <button id="btn-feedback" class="btn btn-primary">Submit Feedback</button>
         </div>
       </div>
     </section>
   </main>
 
   <footer>
-    <p>ImpactoPool &copy; 2026 — Donaciones protegidas por Avalanche Blockchain</p>
+    <p>ImpactPool &copy; 2026 — Donations protected by Avalanche Blockchain</p>
   </footer>
 
   <div id="notification" class="notification" style="display:none;"></div>

@@ -25,7 +25,7 @@ async function apiRequest(path, options = {}) {
   }
   const res = await fetch(`${API_URL}${path}`, { ...options, headers });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error en la solicitud');
+  if (!res.ok) throw new Error(data.error || 'Request error');
   return data;
 }
 
@@ -49,7 +49,7 @@ function onLoggedIn(data) {
   document.getElementById('auth-section').style.display = 'none';
   document.getElementById('donation-form').style.display = 'block';
   document.getElementById('my-donations').style.display = 'block';
-  showNotification(`Bienvenido, ${data.user.name}!`);
+  showNotification(`Welcome, ${data.user.name}!`);
   loadMyDonations();
 }
 
@@ -99,10 +99,10 @@ async function makeDonation() {
     const amount = parseFloat(document.getElementById('donation-amount').value);
 
     if (!associationId) {
-      return showNotification('Seleccioná una asociación', 'error');
+      return showNotification('Select an association', 'error');
     }
     if (!amount || amount <= 0) {
-      return showNotification('Ingresá un monto válido', 'error');
+      return showNotification('Enter a valid amount', 'error');
     }
 
     const donation = await apiRequest('/donations', {
@@ -110,7 +110,7 @@ async function makeDonation() {
       body: JSON.stringify({ associationId, amount }),
     });
 
-    showNotification(`Donación de ${amount} USDC exitosa!`);
+    showNotification(`Donation of ${amount} USDC successful!`);
     document.getElementById('donation-amount').value = '';
     updateSplitPreview();
     loadMyDonations();
@@ -126,7 +126,7 @@ async function loadMyDonations() {
     container.innerHTML = '';
 
     if (donations.length === 0) {
-      container.innerHTML = '<p style="text-align:center;color:var(--text-muted)">No tenés donaciones aún.</p>';
+      container.innerHTML = '<p style="text-align:center;color:var(--text-muted)">You don\'t have any donations yet.</p>';
       return;
     }
 
@@ -135,7 +135,7 @@ async function loadMyDonations() {
       item.className = 'donation-item';
       item.innerHTML = `
         <div>
-          <strong>${d.association?.name || 'Asociación'}</strong>
+          <strong>${d.association?.name || 'Association'}</strong>
           <p style="color:var(--text-muted);font-size:0.85rem">${new Date(d.createdAt).toLocaleDateString()}</p>
         </div>
         <div style="text-align:right">
@@ -199,12 +199,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loadTransparency() {
   try {
-    showNotification('Solicitando datos de transparencia via x402...');
+    showNotification('Requesting transparency data via x402...');
     const res = await X402Client.fetchWithPayment('/api/donations/transparency');
     const data = await res.json();
     document.getElementById('transparency-data').style.display = 'block';
     document.getElementById('transparency-json').textContent = JSON.stringify(data, null, 2);
-    showNotification('Datos de transparencia cargados!');
+    showNotification('Transparency data loaded!');
   } catch (err) {
     showNotification(err.message, 'error');
   }
@@ -212,12 +212,12 @@ async function loadTransparency() {
 
 async function loadPremiumData() {
   try {
-    showNotification('Solicitando estadísticas premium via x402...');
+    showNotification('Requesting premium statistics via x402...');
     const res = await X402Client.fetchWithPayment('/api/premium-data');
     const data = await res.json();
     document.getElementById('transparency-data').style.display = 'block';
     document.getElementById('transparency-json').textContent = JSON.stringify(data, null, 2);
-    showNotification('Estadísticas premium cargadas!');
+    showNotification('Premium statistics loaded!');
   } catch (err) {
     showNotification(err.message, 'error');
   }
@@ -230,12 +230,12 @@ async function loadPremiumData() {
 async function sendFeedback() {
   try {
     if (!BlockchainIntegration.isConnected()) {
-      return showNotification('Conectá tu wallet primero', 'error');
+      return showNotification('Connect your wallet first', 'error');
     }
     const value = parseInt(document.getElementById('feedback-value').value);
-    showNotification('Enviando feedback on-chain...');
+    showNotification('Sending feedback on-chain...');
     const receipt = await BlockchainIntegration.giveFeedback(1, value); // agentId = 1 (ImpactoPool agent)
-    showNotification('Feedback enviado! TX: ' + receipt.hash);
+    showNotification('Feedback sent! TX: ' + receipt.hash);
     loadAgentReputation();
   } catch (err) {
     showNotification(err.message, 'error');

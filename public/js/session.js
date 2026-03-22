@@ -75,9 +75,9 @@ const Session = {
     if (res.status === 401) {
       this.clear();
       window.location.href = 'login.html';
-      throw new Error('Sesión expirada');
+      throw new Error('Session expired');
     }
-    if (!res.ok) throw new Error(data.error || 'Error en la solicitud');
+    if (!res.ok) throw new Error(data.error || 'Request error');
     return data;
   },
 

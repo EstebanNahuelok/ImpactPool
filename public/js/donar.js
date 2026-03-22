@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const allButtons = document.querySelectorAll('button');
   let donateBtn = null;
   allButtons.forEach(btn => {
-    if (btn.textContent.includes('Confirmar Contribución')) {
+    if (btn.textContent.includes('Confirm Contribution')) {
       donateBtn = btn;
     }
   });
@@ -102,9 +102,9 @@ function populateAssociations(associations) {
     const wrapper = document.createElement('div');
     wrapper.className = 'mb-6';
     wrapper.innerHTML = `
-      <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2 ml-1">ASOCIACIÓN DESTINO</label>
+      <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2 ml-1">TARGET ASSOCIATION</label>
       <select id="association-select" class="w-full px-4 py-3 rounded-xl bg-surface-container-low border-none focus:ring-1 focus:ring-primary/20 text-on-surface">
-        <option value="">Seleccioná una asociación...</option>
+        <option value="">Select an association...</option>
       </select>
     `;
     amountLabel.parentElement.insertBefore(wrapper, amountLabel.parentElement.firstChild);
@@ -140,24 +140,24 @@ async function handleDonate() {
   const amount = parseFloat(amountInput ? amountInput.value : 0);
 
   if (!selectedAssociationId) {
-    showDonateMessage('Seleccioná una asociación', 'error');
+    showDonateMessage('Select an association', 'error');
     return;
   }
   if (!amount || amount <= 0) {
-    showDonateMessage('Ingresá un monto válido', 'error');
+    showDonateMessage('Enter a valid amount', 'error');
     return;
   }
 
   // Si eligió cripto, verificar wallet
   if (selectedPaymentMethod === 'crypto') {
     if (typeof window.ethereum === 'undefined') {
-      showDonateMessage('MetaMask no detectado. Instalá la extensión para pagar con USDC.', 'error');
+      showDonateMessage('MetaMask not detected. Install the extension to pay with USDC.', 'error');
       return;
     }
     try {
       await window.ethereum.request({ method: 'eth_requestAccounts' });
     } catch {
-      showDonateMessage('Conectá tu wallet para pagar con USDC', 'error');
+      showDonateMessage('Connect your wallet to pay with USDC', 'error');
       return;
     }
   }
@@ -173,9 +173,9 @@ async function handleDonate() {
       }),
     });
     if (result.status === 'completed') {
-      showDonateMessage(`¡Donación exitosa! ID: ${result.txHash || result._id}`, 'success');
+      showDonateMessage(`Donation successful! ID: ${result.txHash || result._id}`, 'success');
     } else {
-      showDonateMessage(`Donación registrada pero estado: ${result.status}. La transacción blockchain puede estar pendiente.`, 'error');
+      showDonateMessage(`Donation registered but status: ${result.status}. The blockchain transaction may be pending.`, 'error');
     }
     if (amountInput) amountInput.value = '';
   } catch (err) {

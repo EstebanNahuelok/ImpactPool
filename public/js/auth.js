@@ -35,12 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const password = passwordInput ? passwordInput.value.trim() : '';
 
       if (!email || !password) {
-        showAuthError('Ingresá tu correo y contraseña');
+        showAuthError('Enter your email and password');
         return;
       }
 
       loginBtn.disabled = true;
-      loginBtn.textContent = 'INGRESANDO...';
+      loginBtn.textContent = 'SIGNING IN...';
 
       try {
         const res = await fetch(`${API_BASE}/users/login`, {
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await res.json();
 
         if (!res.ok) {
-          throw new Error(data.error || 'Credenciales inválidas');
+          throw new Error(data.error || 'Invalid credentials');
         }
 
         Session.save(data.token, data.user);
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (err) {
         showAuthError(err.message);
         loginBtn.disabled = false;
-        loginBtn.textContent = 'INGRESAR';
+        loginBtn.textContent = 'SIGN IN';
       }
     });
   }
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (metamaskParent) {
     metamaskParent.addEventListener('click', async () => {
       if (typeof window.ethereum === 'undefined') {
-        showAuthError('MetaMask no detectado. Instalá la extensión.');
+        showAuthError('MetaMask not detected. Install the extension.');
         return;
       }
       try {
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }),
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Error al registrar wallet');
+        if (!res.ok) throw new Error(data.error || 'Error registering wallet');
 
         Session.save(data.token, data.user);
         redirectByRole(data.user);

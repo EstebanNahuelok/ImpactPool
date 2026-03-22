@@ -71,29 +71,36 @@ async function handleVoucherSubmit(e) {
   const beneficiaryName = document.getElementById('voucher-name').value.trim();
 
   if (!dni || !beneficiaryName) {
-    errorEl.textContent = 'Todos los campos son obligatorios';
+    errorEl.textContent = 'All fields are required';
     errorEl.classList.remove('hidden');
     return;
   }
 
   submitBtn.disabled = true;
-  submitBtn.textContent = 'EMITIENDO...';
+  submitBtn.textContent = 'ISSUING...';
 
   try {
     const voucher = await Session.apiRequest('/vouchers', {
       method: 'POST',
       body: JSON.stringify({ campaignId: currentCampaignId, dni, beneficiaryName }),
     });
+    console.log('Voucher creado:', voucher.code);
 
     // Cerrar modal y recargar vouchers
     document.getElementById('voucher-modal').classList.add('hidden');
-    await loadCampaignView(currentCampaignId);
   } catch (err) {
-    errorEl.textContent = err.message || 'Error al emitir voucher';
+    errorEl.textContent = err.message || 'Error issuing voucher';
     errorEl.classList.remove('hidden');
   } finally {
     submitBtn.disabled = false;
-    submitBtn.textContent = 'EMITIR VOUCHER';
+    submitBtn.textContent = 'ISSUE VOUCHER';
+  }
+
+  // Siempre recargar datos de la campaña después del intento
+  try {
+    await loadCampaignView(currentCampaignId);
+  } catch (err) {
+    console.error('Error reloading campaign view:', err);
   }
 }
 
@@ -107,7 +114,7 @@ async function loadCampaignView(campaignId) {
     ]);
     renderCampaignDashboard(campaign, vouchers);
   } catch (err) {
-    console.error('Error cargando campaña:', err);
+    console.error('Error loading campaign:', err);
   }
 }
 
@@ -118,18 +125,18 @@ function renderCampaignDashboard(campaign, vouchers) {
     const h2 = header.querySelector('h2');
     const p = header.querySelector('p');
     if (h2) h2.textContent = campaign.name;
-    if (p) p.textContent = `Campaña #${campaign.code} — ${campaign.benefit}`;
+    if (p) p.textContent = `Campaign #${campaign.code} — ${campaign.benefit}`;
   }
 
   // Stats
   const activeVouchers = vouchers.filter(v => v.status === 'active');
   const totalAmount = vouchers.reduce((sum, v) => sum + (v.amount || 0), 0);
 
-  document.getElementById('stat-label-1').textContent = 'VALOR TOTAL EMITIDO';
+  document.getElementById('stat-label-1').textContent = 'TOTAL ISSUED VALUE';
   document.getElementById('stat-value-1').textContent = `$${totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
-  document.getElementById('stat-label-2').textContent = 'VOUCHERS EMITIDOS';
+  document.getElementById('stat-label-2').textContent = 'VOUCHERS ISSUED';
   document.getElementById('stat-value-2').textContent = `${vouchers.length} / ${campaign.totalVouchers}`;
-  document.getElementById('stat-label-3').textContent = 'VOUCHERS ACTIVOS';
+  document.getElementById('stat-label-3').textContent = 'ACTIVE VOUCHERS';
   document.getElementById('stat-value-3').textContent = activeVouchers.length;
 
   // Preview amount en modal
@@ -142,9 +149,9 @@ function renderCampaignDashboard(campaign, vouchers) {
 
   vouchers.forEach(v => {
     const statusConfig = {
-      active: { label: 'Activo', bg: 'bg-secondary-container', text: 'text-on-secondary-container' },
-      redeemed: { label: 'Canjeado', bg: 'bg-surface-container-highest', text: 'text-on-surface-variant' },
-      expired: { label: 'Vencido', bg: 'bg-tertiary-fixed', text: 'text-on-tertiary-fixed-variant' },
+      active: { label: 'Active', bg: 'bg-secondary-container', text: 'text-on-secondary-container' },
+      redeemed: { label: 'Redeemed', bg: 'bg-surface-container-highest', text: 'text-on-surface-variant' },
+      expired: { label: 'Expired', bg: 'bg-tertiary-fixed', text: 'text-on-tertiary-fixed-variant' },
     };
     const st = statusConfig[v.status] || statusConfig.active;
     const date = new Date(v.createdAt).toLocaleDateString('es-AR');
@@ -154,14 +161,14 @@ function renderCampaignDashboard(campaign, vouchers) {
     card.innerHTML = `
       <div class="flex justify-between items-start mb-4">
         <div class="flex flex-col">
-          <span class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant mb-1">NÚMERO DE SERIE</span>
+          <span class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant mb-1">SERIAL NUMBER</span>
           <code class="text-lg font-bold text-primary tracking-widest">${v.code}</code>
         </div>
         <span class="px-3 py-1 ${st.bg} ${st.text} text-[10px] font-black rounded-full tracking-widest uppercase">${st.label}</span>
       </div>
       <div class="flex flex-col gap-3 mb-4">
         <div>
-          <span class="text-[10px] font-bold text-outline uppercase block">BENEFICIARIO</span>
+          <span class="text-[10px] font-bold text-outline uppercase block">BENEFICIARY</span>
           <span class="text-sm font-semibold">${v.beneficiary?.name || '—'}</span>
         </div>
         <div>
@@ -170,11 +177,11 @@ function renderCampaignDashboard(campaign, vouchers) {
         </div>
         <div class="flex justify-between">
           <div>
-            <span class="text-[10px] font-bold text-outline uppercase block">MONTO</span>
+            <span class="text-[10px] font-bold text-outline uppercase block">AMOUNT</span>
             <span class="text-sm font-black text-secondary">$${(v.amount || 0).toFixed(2)}</span>
           </div>
           <div class="text-right">
-            <span class="text-[10px] font-bold text-outline uppercase block">EMITIDO</span>
+            <span class="text-[10px] font-bold text-outline uppercase block">ISSUED</span>
             <span class="text-sm">${date}</span>
           </div>
         </div>
@@ -190,25 +197,25 @@ function renderCampaignDashboard(campaign, vouchers) {
     <div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center mb-4 transition-transform group-hover:scale-110">
       <span class="material-symbols-outlined text-3xl text-primary">add_circle</span>
     </div>
-    <h3 class="text-lg font-bold text-primary">Emitir Nuevo Voucher</h3>
-    <p class="text-xs text-on-surface-variant mt-2 max-w-[180px]">Asignar un voucher a un beneficiario de esta campaña</p>
+    <h3 class="text-lg font-bold text-primary">Issue New Voucher</h3>
+    <p class="text-xs text-on-surface-variant mt-2 max-w-[180px]">Assign a voucher to a beneficiary of this campaign</p>
   `;
   addCard.addEventListener('click', openModal);
   grid.appendChild(addCard);
 
   // Tabla con listado de vouchers
-  document.getElementById('table-title').innerHTML = '<span class="material-symbols-outlined">receipt_long</span> Vouchers Emitidos';
+  document.getElementById('table-title').innerHTML = '<span class="material-symbols-outlined">receipt_long</span> Vouchers Issued';
   const tbody = document.getElementById('activity-tbody');
   tbody.innerHTML = '';
 
   if (vouchers.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" class="px-8 py-8 text-center text-on-surface-variant">Esta campaña aún no tiene vouchers emitidos</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5" class="px-8 py-8 text-center text-on-surface-variant">This campaign has no issued vouchers yet</td></tr>';
   } else {
     vouchers.forEach(v => {
       const row = document.createElement('tr');
       row.className = 'hover:bg-surface-container-lowest transition-colors border-t border-surface-variant/10';
       const stClass = v.status === 'active' ? 'text-secondary' : v.status === 'redeemed' ? 'text-primary' : 'text-error';
-      const stLabel = v.status === 'active' ? 'ACTIVO' : v.status === 'redeemed' ? 'CANJEADO' : 'VENCIDO';
+      const stLabel = v.status === 'active' ? 'ACTIVE' : v.status === 'redeemed' ? 'REDEEMED' : 'EXPIRED';
       row.innerHTML = `
         <td class="px-8 py-5 font-mono text-xs">${v.code}</td>
         <td class="px-8 py-5 font-bold">${v.beneficiary?.name || '—'}</td>
@@ -226,7 +233,7 @@ function renderCampaignDashboard(campaign, vouchers) {
     const backBtn = document.createElement('div');
     backBtn.id = 'back-btn';
     backBtn.className = 'mb-6';
-    backBtn.innerHTML = `<a href="vouchers.html" class="inline-flex items-center gap-2 text-primary font-bold text-sm hover:underline"><span class="material-symbols-outlined text-sm">arrow_back</span> Volver a Campañas</a>`;
+    backBtn.innerHTML = `<a href="vouchers.html" class="inline-flex items-center gap-2 text-primary font-bold text-sm hover:underline"><span class="material-symbols-outlined text-sm">arrow_back</span> Back to Campaigns</a>`;
     main.insertBefore(backBtn, main.firstChild);
   }
 }
@@ -238,7 +245,7 @@ async function loadOrgView() {
     const donations = await Session.apiRequest('/donations/org/me');
     renderOrgDashboard(donations);
   } catch (err) {
-    console.error('Error cargando donaciones de org:', err);
+    console.error('Error loading org donations:', err);
   }
 }
 
@@ -246,11 +253,11 @@ function renderOrgDashboard(donations) {
   const completedDonations = donations.filter(d => d.status === 'completed');
   const totalReceived = completedDonations.reduce((sum, d) => sum + (d.associationAmount || 0), 0);
 
-  document.getElementById('stat-label-1').textContent = 'VALOR TOTAL RECIBIDO';
+  document.getElementById('stat-label-1').textContent = 'TOTAL RECEIVED VALUE';
   document.getElementById('stat-value-1').textContent = `$${totalReceived.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
-  document.getElementById('stat-label-2').textContent = 'DONACIONES RECIBIDAS';
+  document.getElementById('stat-label-2').textContent = 'DONATIONS RECEIVED';
   document.getElementById('stat-value-2').textContent = completedDonations.length.toLocaleString();
-  document.getElementById('stat-label-3').textContent = 'TOTAL DONACIONES';
+  document.getElementById('stat-label-3').textContent = 'TOTAL DONATIONS';
   document.getElementById('stat-value-3').textContent = donations.length;
 
   // Ocultar grid de vouchers en vista general
@@ -261,19 +268,19 @@ function renderOrgDashboard(donations) {
   if (thead) {
     thead.innerHTML = `
       <th class="px-8 py-4">ID</th>
-      <th class="px-8 py-4">DONANTE</th>
-      <th class="px-8 py-4">MONTO</th>
-      <th class="px-8 py-4">MÉTODO</th>
-      <th class="px-8 py-4 text-right">ESTADO</th>
+      <th class="px-8 py-4">DONOR</th>
+      <th class="px-8 py-4">AMOUNT</th>
+      <th class="px-8 py-4">METHOD</th>
+      <th class="px-8 py-4 text-right">STATUS</th>
     `;
   }
 
-  document.getElementById('table-title').innerHTML = '<span class="material-symbols-outlined">history</span> Donaciones Recibidas';
+  document.getElementById('table-title').innerHTML = '<span class="material-symbols-outlined">history</span> Donations Received';
   const tbody = document.getElementById('activity-tbody');
   tbody.innerHTML = '';
 
   if (donations.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" class="px-8 py-8 text-center text-on-surface-variant">Aún no has recibido donaciones</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5" class="px-8 py-8 text-center text-on-surface-variant">You haven\'t received any donations yet</td></tr>';
     return;
   }
 
@@ -282,11 +289,11 @@ function renderOrgDashboard(donations) {
     row.className = 'hover:bg-surface-container-lowest transition-colors border-t border-surface-variant/10';
     row.innerHTML = `
       <td class="px-8 py-5 font-mono text-xs text-on-surface-variant">#${(d._id || '').slice(-8)}</td>
-      <td class="px-8 py-5 font-bold">${d.donor?.name || 'Donante anónimo'}</td>
+      <td class="px-8 py-5 font-bold">${d.donor?.name || 'Anonymous donor'}</td>
       <td class="px-8 py-5 font-black text-secondary">$${(d.totalAmount || 0).toFixed(2)}</td>
       <td class="px-8 py-5 text-on-surface-variant">${d.paymentMethod === 'crypto' ? 'USDC' : 'USD'}</td>
       <td class="px-8 py-5 text-right">
-        <span class="text-[10px] font-black uppercase ${d.status === 'completed' ? 'text-secondary' : d.status === 'failed' ? 'text-error' : 'text-on-surface-variant'}">${d.status === 'completed' ? 'VERIFICADO' : d.status === 'failed' ? 'FALLIDO' : 'PENDIENTE'}</span>
+        <span class="text-[10px] font-black uppercase ${d.status === 'completed' ? 'text-secondary' : d.status === 'failed' ? 'text-error' : 'text-on-surface-variant'}">${d.status === 'completed' ? 'VERIFIED' : d.status === 'failed' ? 'FAILED' : 'PENDING'}</span>
       </td>
     `;
     tbody.appendChild(row);

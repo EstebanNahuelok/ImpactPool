@@ -328,12 +328,12 @@ ImpactPool/
 
 ## Equipo
 
-|           Nombre               |          Rol            |
-|--------------------------------|-------------------------|
-| Emanuel Coletti                | Backend Developer       |
-| Leoner Tomas Ezequiel Morales  | Frontend                |
-| Christian Damian Bauer Abraham | Head of Pitch / Ideator |
-| Esteban Ardaya                 | Backend Developer       |
+|           Nombre               |          Rol                                    |
+|--------------------------------|-------------------------------------------------|
+| Emanuel Coletti                | Backend / Blockchain-Smart Contracts Developer  |
+| Leoner Tomas Ezequiel Morales  | Frontend Developer                              |
+| Christian Damian Bauer Abraham | Head of Pitch / Ideator                         |
+| Esteban Ardaya                 | Backend Developer                               |
 
 ---
 

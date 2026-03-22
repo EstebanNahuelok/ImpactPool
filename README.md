@@ -6,6 +6,17 @@
 
 ---
 
+## Demo Credentials
+
+The app seeds two test accounts on startup. Use them to explore both roles:
+
+| Role | Email | Password |
+|------|-------|----------|
+| **Donor** | `user@gmail.com` | `user123` |
+| **Organization** | `organizacion@gmail.com` | `organizacion123` |
+
+---
+
 ## ¿Qué es ImpactoPool?
 
 ImpactoPool es una plataforma que actúa como intermediario transparente entre donadores y asociaciones benéficas. A diferencia de los sistemas tradicionales donde no sabés a dónde fue tu plata, ImpactoPool registra cada donación en la blockchain de Avalanche, garantizando trazabilidad total.

@@ -118,219 +118,79 @@
 </div>
 </div>
 </header>
-<!-- Stats Overview (Asymmetric Layout) -->
-<div class="grid grid-cols-12 gap-6 mb-12">
+<!-- Stats Overview -->
+<div id="stats-overview" class="grid grid-cols-12 gap-6 mb-12">
 <div class="col-span-12 md:col-span-8 bg-surface-container-lowest p-8 rounded-full border border-surface-variant/15 flex justify-between items-center">
 <div class="flex flex-col">
-<span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1" style="">VALOR TOTAL DE IMPACTO</span>
-<span class="text-5xl font-black text-primary tracking-tighter" style="">$142,850.00</span>
+<span id="stat-label-1" class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1">VALOR TOTAL DE IMPACTO</span>
+<span id="stat-value-1" class="text-5xl font-black text-primary tracking-tighter">$0.00</span>
 </div>
 <div class="h-12 w-px bg-surface-variant"></div>
 <div class="flex flex-col text-right">
-<span class="text-xs font-bold uppercase tracking-widest text-secondary mb-1" style="">VOUCHERS ACTIVOS</span>
-<span class="text-3xl font-bold text-primary tracking-tight" style="">1,204</span>
+<span id="stat-label-2" class="text-xs font-bold uppercase tracking-widest text-secondary mb-1">VOUCHERS EMITIDOS</span>
+<span id="stat-value-2" class="text-3xl font-bold text-primary tracking-tight">0</span>
 </div>
 </div>
 <div class="col-span-12 md:col-span-4 bg-primary text-white p-8 rounded-full flex flex-col justify-center">
-<span class="text-xs font-bold uppercase tracking-widest text-on-primary-container mb-1" style="">TASA DE REDENCIÓN</span>
-<div class="flex items-baseline gap-2">
-<span class="text-4xl font-black" style="">84%</span>
-<span class="text-secondary-fixed text-sm font-medium" style="">+2.4% vs mes anterior</span>
+<span id="stat-label-3" class="text-xs font-bold uppercase tracking-widest text-on-primary-container mb-1">VOUCHERS ACTIVOS</span>
+<span id="stat-value-3" class="text-4xl font-black">0</span>
 </div>
 </div>
+
+<!-- Voucher Grid (dinámico) -->
+<div id="vouchers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  <!-- Se llena dinámicamente desde dashboard.js -->
 </div>
-<!-- Voucher Grid (Bento Style & Tonal Layers) -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-<!-- Voucher Card 1: Active -->
-<div class="group relative bg-surface-container-lowest rounded-full p-6 transition-all duration-300 hover:translate-y-[-4px]">
-<div class="flex justify-between items-start mb-6">
-<div class="flex flex-col">
-<span class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant mb-1" style="">NÚMERO DE SERIE</span>
-<code class="text-lg font-bold text-primary tracking-widest">IP-9283-XK</code>
-</div>
-<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-black rounded-full tracking-widest uppercase" style="">Activo</span>
-</div>
-<div class="flex items-center gap-6 mb-8">
-<div class="bg-white p-3 rounded-xl shadow-sm border border-surface-variant/30 transition-transform group-hover:scale-105">
-<img alt="QR Code" class="w-20 h-20 opacity-90" data-alt="A clean high-contrast QR code for digital voucher redemption" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLBRwGkqtwC66hGRs4KW9mhLZE5G6kUvfm-ZCfA4azxBYqYkx-kjTAe7DpRtQ4FRcM8ZCcwDEhG3PuWjgnZf4ZHUGU8BcKd7HL3mYEOWtQjsZF0sN7AAtQGzmaEu3SyhJXpsTTSVdoEJQHogt_BsGBAOLZEH-84nHozmGxS0W-OpY43SMi39axFHJQLQB3ejOA46LCcaaXt4v5kTw6OckT-oEsJmZqWA2t042cSAJHDHGuwcuFUmGgBEjACSI0YvL4VtWkmXb4FDk" style="">
-</div>
-<div class="flex flex-col gap-3">
-<div>
-<span class="text-[10px] font-bold text-outline uppercase block" style="">BENEFICIARIO</span>
-<span class="text-sm font-semibold" style="">Sarah Jenkins</span>
-</div>
-<div>
-<span class="text-[10px] font-bold text-outline uppercase block" style="">VENCE</span>
-<span class="text-sm font-bold text-tertiary-container" style="">Oct 24, 2024</span>
-</div>
-</div>
-</div>
-<div class="flex gap-2">
-<button class="flex-1 text-[10px] font-bold uppercase tracking-widest py-3 rounded-lg bg-surface-container-high hover:bg-surface-container-highest transition-colors" style="">DETALLES</button>
-<button class="flex-1 text-[10px] font-bold uppercase tracking-widest py-3 rounded-lg bg-primary text-white hover:opacity-90 transition-opacity" style="">DESACTIVAR</button>
-</div>
-</div>
-<!-- Voucher Card 2: Redeemed -->
-<div class="group relative bg-surface-container-low rounded-full p-6 opacity-75">
-<div class="flex justify-between items-start mb-6">
-<div class="flex flex-col">
-<span class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant mb-1" style="">NÚMERO DE SERIE</span>
-<code class="text-lg font-bold text-primary tracking-widest">IP-1102-AQ</code>
-</div>
-<span class="px-3 py-1 bg-surface-container-highest text-on-surface-variant text-[10px] font-black rounded-full tracking-widest uppercase" style="">Canjeado</span>
-</div>
-<div class="flex items-center gap-6 mb-8">
-<div class="bg-white/50 p-3 rounded-xl border border-surface-variant/30 grayscale">
-<img alt="QR Code" class="w-20 h-20 opacity-40" data-alt="A faded QR code indicating a used or redeemed status" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZoT_3RJsMdRr_iy4RU7xqYNufwTjTvq5qOW03kIUpybp0_HjoMZU1sVHB6yf00FePqkfQ_cYU8Mx3tqoZtd4yHRpbDrDGUs9w6CSlY89Lx0G9EIahyAUG07cRAtAsTVC4S80qtO62zvESoINWSUJv3N20amujWu9bY2Yj6UzQ-odyQkQ07xcw57bh9ZufnNHb8x41lJ0zb1kpI2EF9U7jy2jw7KxyBQncHDOqrIFiiInF1HPTbHGPfNYzsJVWrwf-443PfVJs_WE" style="">
-</div>
-<div class="flex flex-col gap-3">
-<div>
-<span class="text-[10px] font-bold text-outline uppercase block" style="">BENEFICIARIO</span>
-<span class="text-sm font-semibold" style="">Marcus Thorne</span>
-</div>
-<div>
-<span class="text-[10px] font-bold text-outline uppercase block" style="">CANJEADO EL</span>
-<span class="text-sm font-bold text-primary" style="">Sep 12, 2024</span>
-</div>
-</div>
-</div>
-<div class="flex gap-2">
-<button class="w-full text-[10px] font-bold uppercase tracking-widest py-3 rounded-lg bg-surface-container-high cursor-not-allowed" style="">VER RECIBO DE TRANSACCIÓN</button>
-</div>
-</div>
-<!-- Voucher Card 3: Expired (Urgency Alert) -->
-<div class="group relative bg-surface-container-lowest rounded-full p-6 border-l-4 border-tertiary-container shadow-sm">
-<div class="flex justify-between items-start mb-6">
-<div class="flex flex-col">
-<span class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant mb-1" style="">NÚMERO DE SERIE</span>
-<code class="text-lg font-bold text-primary tracking-widest">IP-5541-ZZ</code>
-</div>
-<span class="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-black rounded-full tracking-widest uppercase" style="">Vencido</span>
-</div>
-<div class="flex items-center gap-6 mb-8">
-<div class="bg-white p-3 rounded-xl border border-tertiary-fixed/30">
-<img alt="QR Code" class="w-20 h-20 opacity-50" data-alt="A QR code with a subtle orange tint signaling expiration" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_0pYCL3adjpKOOCjJUqDxoeLIXOIx_fLXNDsl9mmYPwB_cqkzyj9S2SV-L67UhDTkqgDJCmPRcDMqSeCn1SEIPpw-3GBi0Js4AP2t3L3IwAfQCOML0_YXleiIiA6zyTppnPYdzxP54wlmAu2oN7lGOG3H2CHGFDPRlBmmZLZzv7LRYbdcKx94rjbAmFDe1FaypDGSYc4pcZrDUr6ljMPJmgaxbf0etDmpxg2TZWlEnk9T6w4R-qm43fReZHrw46l7OGiG7v2_dTc" style="">
-</div>
-<div class="flex flex-col gap-3">
-<div>
-<span class="text-[10px] font-bold text-outline uppercase block" style="">BENEFICIARIO</span>
-<span class="text-sm font-semibold" style="">Elena Rodriguez</span>
-</div>
-<div>
-<span class="text-[10px] font-bold text-outline uppercase block" style="">VENCIDO DESDE</span>
-<span class="text-sm font-bold text-tertiary-container" style="">Aug 30, 2024</span>
-</div>
-</div>
-</div>
-<div class="flex gap-2">
-<button class="flex-1 text-[10px] font-bold uppercase tracking-widest py-3 rounded-lg bg-tertiary-fixed text-on-tertiary-fixed-variant hover:opacity-90" style="">REEMITIR</button>
-<button class="flex-1 text-[10px] font-bold uppercase tracking-widest py-3 rounded-lg bg-surface-container-high" style="">ARCHIVAR</button>
-</div>
-</div>
-<!-- Voucher Card 4: Active -->
-<div class="group relative bg-surface-container-lowest rounded-full p-6 transition-all duration-300 hover:translate-y-[-4px]">
-<div class="flex justify-between items-start mb-6">
-<div class="flex flex-col">
-<span class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant mb-1" style="">NÚMERO DE SERIE</span>
-<code class="text-lg font-bold text-primary tracking-widest">IP-7729-LY</code>
-</div>
-<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-black rounded-full tracking-widest uppercase" style="">Activo</span>
-</div>
-<div class="flex items-center gap-6 mb-8">
-<div class="bg-white p-3 rounded-xl shadow-sm border border-surface-variant/30 transition-transform group-hover:scale-105">
-<img alt="QR Code" class="w-20 h-20 opacity-90" data-alt="A clean high-contrast QR code for digital voucher redemption" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0a4Rz77QcyPfxNBRji4mptrBBPSaRmchlLFn8mdFFxHywJa6JWObj7mSLkArR06rKydzhskRQVsvZ48TOC6jtwprd6QFJP3iUNZ13tiXTPFaYU5rOX9ID3TcdrgAPLLj1Mt97hwu_4f4WQ3mqqR0xXJsC3TIDWOsL9eohCIIvCkEskWeP2YJwVVqtQW20m13CNjhMYdeB9A8mNJBX807vSDJ5i5aTja_ZsWNLkDVRosxwv4j8-G7uIFfIesTj9KiisC_-auoM5Ow" style="">
-</div>
-<div class="flex flex-col gap-3">
-<div>
-<span class="text-[10px] font-bold text-outline uppercase block" style="">BENEFICIARIO</span>
-<span class="text-sm font-semibold" style="">David Wu</span>
-</div>
-<div>
-<span class="text-[10px] font-bold text-outline uppercase block" style="">VENCE</span>
-<span class="text-sm font-bold text-tertiary-container" style="">Dec 01, 2024</span>
-</div>
-</div>
-</div>
-<div class="flex gap-2">
-<button class="flex-1 text-[10px] font-bold uppercase tracking-widest py-3 rounded-lg bg-surface-container-high hover:bg-surface-container-highest transition-colors" style="">DETALLES</button>
-<button class="flex-1 text-[10px] font-bold uppercase tracking-widest py-3 rounded-lg bg-primary text-white hover:opacity-90 transition-opacity" style="">DESACTIVAR</button>
-</div>
-</div>
-<!-- Voucher Card 5: Active -->
-<div class="group relative bg-surface-container-lowest rounded-full p-6 transition-all duration-300 hover:translate-y-[-4px]">
-<div class="flex justify-between items-start mb-6">
-<div class="flex flex-col">
-<span class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant mb-1" style="">NÚMERO DE SERIE</span>
-<code class="text-lg font-bold text-primary tracking-widest">IP-3304-MK</code>
-</div>
-<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-black rounded-full tracking-widest uppercase" style="">Activo</span>
-</div>
-<div class="flex items-center gap-6 mb-8">
-<div class="bg-white p-3 rounded-xl shadow-sm border border-surface-variant/30 transition-transform group-hover:scale-105">
-<img alt="QR Code" class="w-20 h-20 opacity-90" data-alt="A clean high-contrast QR code for digital voucher redemption" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAENFtw9heitJ24J-WhZQEWd-C3Ry4RScIboJ3Mlz_4RX4_lL6maQMY37h6H6Er810xxDb8DKekUN-z4fya2sygb6sjQ7Vi2pmmliU4p950s4V8VYswiuBHqu-6kxnRGr1sVSWzN_lb0DNfCq_L2O7IKZdlrb3PsAn0GgkrUiDD9_yFJqqUX-di1H-LrEdz9c29Rw6tpq6LTbe1jKDDC-zNuvp4jwbOSUmFmijVbq2YAU8CEvEXTsZ-8UDXE7LWYBa4GRbI5qWmSw" style="">
-</div>
-<div class="flex flex-col gap-3">
-<div>
-<span class="text-[10px] font-bold text-outline uppercase block" style="">BENEFICIARIO</span>
-<span class="text-sm font-semibold" style="">Fatima Zahra</span>
-</div>
-<div>
-<span class="text-[10px] font-bold text-outline uppercase block" style="">VENCE</span>
-<span class="text-sm font-bold text-tertiary-container" style="">Nov 15, 2024</span>
-</div>
-</div>
-</div>
-<div class="flex gap-2">
-<button class="flex-1 text-[10px] font-bold uppercase tracking-widest py-3 rounded-lg bg-surface-container-high hover:bg-surface-container-highest transition-colors" style="">DETALLES</button>
-<button class="flex-1 text-[10px] font-bold uppercase tracking-widest py-3 rounded-lg bg-primary text-white hover:opacity-90 transition-opacity" style="">DESACTIVAR</button>
-</div>
-</div>
-<!-- Action Card: Issue New -->
-<div class="group relative bg-surface-container-high rounded-full p-6 border-2 border-dashed border-outline-variant flex flex-col items-center justify-center text-center cursor-pointer hover:bg-surface-container-highest transition-all">
-<div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center mb-4 transition-transform group-hover:scale-110">
-<span class="material-symbols-outlined text-3xl text-primary" data-icon="add_circle" style="">add_circle</span>
-</div>
-<h3 class="text-lg font-bold text-primary" style="">Emitir Nuevo Voucher</h3>
-<p class="text-xs text-on-surface-variant mt-2 max-w-[180px]" style="">Asignar nuevos fondos a un beneficiario verificado de la comunidad</p>
-</div>
-</div>
-<!-- Recent Activity Feed (Glassmorphism Modal-like section) -->
+
+<!-- Tabla de donaciones / actividad -->
 <section class="mt-16">
-<h4 class="text-xl font-bold text-primary mb-6 flex items-center gap-2" style=""><span class="material-symbols-outlined" data-icon="history" style="">history</span> Registro de Auditoría</h4>
-<div class="bg-surface-container-low rounded-full overflow-hidden">
+<h4 id="table-title" class="text-xl font-bold text-primary mb-6 flex items-center gap-2"><span class="material-symbols-outlined">history</span> Registro de Actividad</h4>
+<div class="bg-surface-container-low rounded-2xl overflow-hidden">
 <table class="w-full text-left">
 <thead>
 <tr class="text-[10px] font-black uppercase tracking-widest text-outline border-b border-surface-variant/20">
-<th class="px-8 py-4" style="">ID DE TRANSACCIÓN</th>
-<th class="px-8 py-4" style="">BENEFICIARIO</th>
-<th class="px-8 py-4" style="">MONTO</th>
-<th class="px-8 py-4" style="">UBICACIÓN</th>
-<th class="px-8 py-4 text-right" style="">ESTADO</th>
+<th class="px-8 py-4">CÓDIGO</th>
+<th class="px-8 py-4">BENEFICIARIO</th>
+<th class="px-8 py-4">DNI</th>
+<th class="px-8 py-4">MONTO</th>
+<th class="px-8 py-4 text-right">ESTADO</th>
 </tr>
 </thead>
-<tbody class="text-sm">
-<tr class="hover:bg-surface-container-lowest transition-colors">
-<td class="px-8 py-5 font-mono text-xs text-on-surface-variant" style="">#TX-882190-POOL</td>
-<td class="px-8 py-5 font-bold" style="">Samuel Adeyemi</td>
-<td class="px-8 py-5 font-black text-secondary" style="">$50.00</td>
-<td class="px-8 py-5 text-on-surface-variant" style="">Lagos Central Hub</td>
-<td class="px-8 py-5 text-right" style="">
-<span class="text-[10px] font-black uppercase text-secondary" style="">VERIFICADO</span>
-</td>
-</tr>
-<tr class="hover:bg-surface-container-lowest transition-colors border-t border-surface-variant/10">
-<td class="px-8 py-5 font-mono text-xs text-on-surface-variant" style="">#TX-882191-POOL</td>
-<td class="px-8 py-5 font-bold" style="">Linda Chen</td>
-<td class="px-8 py-5 font-black text-secondary" style="">$75.00</td>
-<td class="px-8 py-5 text-on-surface-variant" style="">Riverside Relief</td>
-<td class="px-8 py-5 text-right" style="">
-<span class="text-[10px] font-black uppercase text-secondary" style="">VERIFICADO</span>
-</td>
-</tr>
+<tbody id="activity-tbody" class="text-sm">
 </tbody>
 </table>
 </div>
 </section>
+
+<!-- Modal: Emitir Nuevo Voucher -->
+<div id="voucher-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/40 backdrop-blur-sm">
+<div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-bold text-primary">Emitir Nuevo Voucher</h3>
+<button id="modal-close" class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<form id="voucher-form" class="flex flex-col gap-5">
+<div>
+<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">DNI del Beneficiario</label>
+<input id="voucher-dni" type="text" required maxlength="20" class="w-full border border-surface-variant rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" placeholder="Ej: 12345678">
+</div>
+<div>
+<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Nombre del Beneficiario</label>
+<input id="voucher-name" type="text" required class="w-full border border-surface-variant rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" placeholder="Nombre completo">
+</div>
+<div class="bg-surface-container-low rounded-xl p-4">
+<span class="text-xs font-bold text-on-surface-variant">Monto del voucher:</span>
+<span id="voucher-amount-preview" class="text-lg font-black text-secondary ml-2">$0</span>
+</div>
+<div id="voucher-error" class="text-error text-sm font-medium hidden"></div>
+<button type="submit" id="voucher-submit" class="w-full bg-primary text-white font-bold py-3 rounded-xl hover:opacity-90 transition-opacity">
+EMITIR VOUCHER
+</button>
+</form>
+</div>
+</div>
 </main>
 <!-- Floating Action for Mobile / Quick Action -->
 <div class="fixed bottom-8 right-8 z-50 md:hidden">

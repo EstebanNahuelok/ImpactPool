@@ -14,6 +14,8 @@ const usersRoutes = require('./src/routes/users.routes');
 const x402InfoRoutes = require('./src/routes/x402.routes');
 const associationsRoutes = require('./src/routes/associations.routes');
 const rewardsRoutes = require('./src/routes/rewards.routes');
+const campaignsRoutes = require('./src/routes/campaigns.routes');
+const vouchersRoutes = require('./src/routes/vouchers.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -148,6 +150,8 @@ app.use('/api/users', usersRoutes);
 app.use('/api/x402', x402InfoRoutes);
 app.use('/api/associations', associationsRoutes);
 app.use('/api/rewards', rewardsRoutes);
+app.use('/api/campaigns', campaignsRoutes);
+app.use('/api/vouchers', vouchersRoutes);
 
 // GET /api/stats — estadísticas públicas
 app.get('/api/stats', async (req, res) => {
@@ -209,6 +213,7 @@ async function start() {
       try {
         const User = require('./src/models/User.model');
         const Association = require('./src/models/Association.model');
+        const Campaign = require('./src/models/Campaign.model');
 
         // Seed: usuario donador
         const seedEmail = process.env.DEV_SEED_EMAIL || 'user@gmail.com';
@@ -250,6 +255,71 @@ async function start() {
           console.log('Org association created: Fundación ImpactPool (verified)');
         } else {
           console.log('Org association already exists');
+        }
+        // Seed 4: Campañas vinculadas a la asociación
+        const assoc = await Association.findOne({ admin: orgUser._id });
+        if (assoc) {
+          const existingCampaigns = await Campaign.countDocuments({ association: assoc._id });
+          if (existingCampaigns === 0) {
+            await Campaign.insertMany([
+              {
+                code: 'ALIM-2024',
+                name: 'Nutrición Familiar',
+                description: 'Programa de canastas alimentarias mensuales para familias vulnerables',
+                category: 'canastas',
+                association: assoc._id,
+                benefit: 'Canasta Alimentaria Mensual',
+                voucherCost: 50,
+                totalVouchers: 200,
+                fundedVouchers: 120,
+                status: 'active',
+                icon: 'verified',
+              },
+              {
+                code: 'EDUC-2024',
+                name: 'Futuro Brillante',
+                description: 'Becas escolares semestrales para estudiantes de bajos recursos',
+                category: 'educacion',
+                association: assoc._id,
+                benefit: 'Beca Escolar Semestral',
+                voucherCost: 120,
+                totalVouchers: 100,
+                fundedVouchers: 35,
+                status: 'active',
+                icon: 'school',
+              },
+              {
+                code: 'SALUD-2024',
+                name: 'Salud Crítica',
+                description: 'Kits de medicamentos para comunidades sin acceso a salud',
+                category: 'salud',
+                association: assoc._id,
+                benefit: 'Kit de Medicamentos',
+                voucherCost: 30,
+                totalVouchers: 500,
+                fundedVouchers: 425,
+                status: 'active',
+                urgent: true,
+                icon: 'medical_services',
+              },
+              {
+                code: 'HABIT-2024',
+                name: 'Hogar Digno',
+                description: 'Refuerzo estructural de techos en viviendas precarias',
+                category: 'vivienda',
+                association: assoc._id,
+                benefit: 'Refuerzo Estructural Techo',
+                voucherCost: 450,
+                totalVouchers: 50,
+                fundedVouchers: 6,
+                status: 'active',
+                icon: 'home',
+              },
+            ]);
+            console.log('Campaigns seeded: 4 campañas creadas');
+          } else {
+            console.log('Campaigns already exist');
+          }
         }
       } catch (err) {
         console.warn('No se pudo crear usuarios dev:', err.message);

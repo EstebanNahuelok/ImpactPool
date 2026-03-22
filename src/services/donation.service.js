@@ -1,6 +1,7 @@
 const Donation = require('../models/Donation.model');
 const Association = require('../models/Association.model');
 const User = require('../models/User.model');
+const Campaign = require('../models/Campaign.model');
 const blockchainService = require('./blockchain.service');
 const { SPLIT, DONATION_STATUS } = require('../../config/constants');
 
@@ -11,7 +12,7 @@ class DonationService {
    * Crea una donación con el split 70/30
    * Incluye rollback: si blockchain falla, la donación queda como FAILED y no se suma al total
    */
-  async createDonation(donorId, associationId, totalAmount) {
+  async createDonation(donorId, associationId, totalAmount, campaignId = null) {
     const association = await Association.findById(associationId);
     if (!association) {
       throw new Error('Asociación no encontrada');
@@ -31,6 +32,7 @@ class DonationService {
     const donation = await Donation.create({
       donor: donorId,
       association: associationId,
+      campaign: campaignId,
       totalAmount,
       associationAmount,
       vaultAmount,
@@ -44,6 +46,10 @@ class DonationService {
       donation.status = DONATION_STATUS.COMPLETED;
       association.totalReceived += associationAmount;
       await association.save();
+      // Actualizar vouchers financiados de la campaña
+      if (campaignId) {
+        await Campaign.findByIdAndUpdate(campaignId, { $inc: { fundedVouchers: 1 } });
+      }
       console.log(`[DEV] Donación ${donation._id} simulada como completada`);
     } else {
       try {
@@ -67,6 +73,9 @@ class DonationService {
         // Solo actualizar total si la tx fue exitosa
         association.totalReceived += associationAmount;
         await association.save();
+        if (campaignId) {
+          await Campaign.findByIdAndUpdate(campaignId, { $inc: { fundedVouchers: 1 } });
+        }
       } catch (error) {
         // Rollback: marcar como FAILED, no actualizar totales
         donation.status = DONATION_STATUS.FAILED;

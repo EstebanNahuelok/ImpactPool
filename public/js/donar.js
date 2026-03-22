@@ -5,6 +5,7 @@
  */
 
 let selectedAssociationId = null;
+let selectedCampaignId = null;
 let selectedPaymentMethod = 'crypto'; // default
 
 function selectPaymentMethod(method) {
@@ -47,6 +48,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     populateAssociations(associations);
   } catch (err) {
     console.error('Error cargando asociaciones:', err);
+  }
+
+  // Detectar parámetros de campaña desde URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const campaignParam = urlParams.get('campaign');
+  const associationParam = urlParams.get('association');
+  if (campaignParam) selectedCampaignId = campaignParam;
+  if (associationParam) {
+    selectedAssociationId = associationParam;
+    const select = document.getElementById('association-select');
+    if (select) select.value = associationParam;
   }
 
   // === Botón de donación — buscar "Confirmar Contribución" ===
@@ -156,7 +168,8 @@ async function handleDonate() {
       body: JSON.stringify({
         associationId: selectedAssociationId,
         amount,
-        paymentMethod: selectedPaymentMethod
+        paymentMethod: selectedPaymentMethod,
+        campaignId: selectedCampaignId || undefined
       }),
     });
     if (result.status === 'completed') {

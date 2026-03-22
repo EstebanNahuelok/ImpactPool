@@ -1,308 +1,197 @@
 <!DOCTYPE html>
-
 <html lang="es"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ImpactPool | Campañas de Impacto</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "secondary-container": "#9ff5c1",
-                        "on-secondary-container": "#167249",
-                        "on-tertiary": "#ffffff",
-                        "on-secondary": "#ffffff",
-                        "secondary": "#0a6c44",
-                        "surface-variant": "#e3e2e6",
-                        "outline-variant": "#c4c6cf",
-                        "on-error": "#ffffff",
-                        "on-primary-container": "#86a0cd",
-                        "surface-container-highest": "#e3e2e6",
-                        "secondary-fixed": "#9ff5c1",
-                        "inverse-surface": "#2f3033",
-                        "on-tertiary-fixed": "#331100",
-                        "on-primary": "#ffffff",
-                        "on-primary-fixed-variant": "#2d476f",
-                        "surface": "#faf9fd",
-                        "surface-container-lowest": "#ffffff",
-                        "on-secondary-fixed-variant": "#005231",
-                        "on-primary-fixed": "#001b3c",
-                        "error": "#ba1a1a",
-                        "tertiary-fixed": "#ffdbca",
-                        "surface-dim": "#dad9dd",
-                        "primary-fixed-dim": "#adc7f7",
-                        "primary-container": "#1a365d",
-                        "on-tertiary-fixed-variant": "#773200",
-                        "surface-container": "#efedf1",
-                        "outline": "#74777f",
-                        "tertiary-container": "#5d2500",
-                        "tertiary": "#3b1500",
-                        "surface-container-high": "#e9e7eb",
-                        "tertiary-fixed-dim": "#ffb68f",
-                        "inverse-on-surface": "#f1f0f4",
-                        "primary": "#002045",
-                        "surface-tint": "#455f88",
-                        "on-background": "#1a1c1e",
-                        "inverse-primary": "#adc7f7",
-                        "on-surface": "#1a1c1e",
-                        "secondary-fixed-dim": "#83d8a6",
-                        "on-surface-variant": "#43474e",
-                        "on-error-container": "#93000a",
-                        "background": "#faf9fd",
-                        "surface-container-low": "#f4f3f7",
-                        "on-secondary-fixed": "#002111",
-                        "primary-fixed": "#d6e3ff",
-                        "error-container": "#ffdad6",
-                        "surface-bright": "#faf9fd",
-                        "on-tertiary-container": "#f57d32"
-                    },
-                    fontFamily: {
-                        "headline": ["Inter"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
-                    },
-                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "secondary-container": "#9ff5c1",
+                    "on-secondary-container": "#167249",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "secondary": "#0a6c44",
+                    "surface-variant": "#e3e2e6",
+                    "outline-variant": "#c4c6cf",
+                    "on-error": "#ffffff",
+                    "on-primary-container": "#86a0cd",
+                    "surface-container-highest": "#e3e2e6",
+                    "secondary-fixed": "#9ff5c1",
+                    "inverse-surface": "#2f3033",
+                    "on-tertiary-fixed": "#331100",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed-variant": "#2d476f",
+                    "surface": "#faf9fd",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed-variant": "#005231",
+                    "on-primary-fixed": "#001b3c",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#ffdbca",
+                    "surface-dim": "#dad9dd",
+                    "primary-fixed-dim": "#adc7f7",
+                    "primary-container": "#1a365d",
+                    "on-tertiary-fixed-variant": "#773200",
+                    "surface-container": "#efedf1",
+                    "outline": "#74777f",
+                    "tertiary-container": "#5d2500",
+                    "tertiary": "#3b1500",
+                    "surface-container-high": "#e9e7eb",
+                    "tertiary-fixed-dim": "#ffb68f",
+                    "inverse-on-surface": "#f1f0f4",
+                    "primary": "#002045",
+                    "surface-tint": "#455f88",
+                    "on-background": "#1a1c1e",
+                    "inverse-primary": "#adc7f7",
+                    "on-surface": "#1a1c1e",
+                    "secondary-fixed-dim": "#83d8a6",
+                    "on-surface-variant": "#43474e",
+                    "on-error-container": "#93000a",
+                    "background": "#faf9fd",
+                    "surface-container-low": "#f4f3f7",
+                    "on-secondary-fixed": "#002111",
+                    "primary-fixed": "#d6e3ff",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#faf9fd",
+                    "on-tertiary-container": "#f57d32"
                 },
+                fontFamily: {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+                },
+                borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
             },
-        }
-    </script>
+        },
+    }
+</script>
 <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
-        }
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        vertical-align: middle;
+    }
+    body { font-family: 'Inter', sans-serif; }
+</style>
 </head>
 <body class="bg-surface text-on-surface min-h-screen flex flex-col">
-<!-- Top Navigation Bar (Shared Component Logic) -->
+<!-- Top Navigation Bar -->
 <nav class="w-full sticky top-0 z-50 bg-white dark:bg-slate-950 shadow-sm dark:shadow-none font-inter antialiased tracking-tight">
 <div class="flex justify-between items-center px-6 py-4 max-w-screen-2xl mx-auto">
-<div class="text-2xl font-black tracking-tighter text-blue-900 dark:text-white">ImpactPool</div>
-<div class="hidden md:flex items-center gap-8">
-<a data-role="organization" class="text-slate-500 dark:text-slate-400 font-medium hover:text-blue-900 dark:hover:text-white transition-colors" href="dashboard.html">Dashboard</a>
-<a data-role="donor" class="text-slate-500 dark:text-slate-400 font-medium hover:text-blue-900 dark:hover:text-white transition-colors" href="donar.html">Donar</a>
-<a data-role="organization" class="text-blue-900 dark:text-white font-bold border-b-2 border-blue-900 dark:border-blue-400 pb-1" href="vouchers.html">Vouchers</a>
-<a data-role="donor" class="text-slate-500 dark:text-slate-400 font-medium hover:text-blue-900 dark:hover:text-white transition-colors" href="terminos_condiciones.html">Términos y condiciones</a>
-</div>
-<div class="flex items-center gap-4">
-<button data-action="logout" class="bg-primary text-on-primary px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-all" onclick="Session.logout()">Cerrar sesión</button>
-</div>
+    <div class="text-2xl font-black tracking-tighter text-blue-900 dark:text-white">ImpactPool</div>
+    <div class="hidden md:flex items-center gap-8">
+        <a data-role="organization" class="text-slate-500 dark:text-slate-400 font-medium hover:text-blue-900 dark:hover:text-white transition-colors" href="dashboard.html">Dashboard</a>
+        <a data-role="donor" class="text-slate-500 dark:text-slate-400 font-medium hover:text-blue-900 dark:hover:text-white transition-colors" href="donar.html">Donar</a>
+        <a class="text-blue-900 dark:text-white font-bold border-b-2 border-blue-900 dark:border-blue-400 pb-1" href="vouchers.html">Campañas</a>
+        <a data-role="donor" class="text-slate-500 dark:text-slate-400 font-medium hover:text-blue-900 dark:hover:text-white transition-colors" href="terminos_condiciones.html">Términos y condiciones</a>
+    </div>
+    <div class="flex items-center gap-4">
+        <button data-action="logout" class="bg-primary text-on-primary px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-all" onclick="Session.logout()">Cerrar sesión</button>
+    </div>
 </div>
 </nav>
+
 <main class="flex-grow max-w-screen-2xl mx-auto px-6 py-12 w-full">
 <!-- Header Section -->
 <header class="mb-12">
-<h1 class="text-5xl font-extrabold tracking-tight text-primary mb-4">Vouchers por Financiar</h1>
-<p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">
-                Elige un voucher validado por nuestras ONGs aliadas y garantiza ayuda directa a una familia.
-            </p>
+    <h1 class="text-5xl font-extrabold tracking-tight text-primary mb-4">Campañas de Impacto</h1>
+    <p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">
+        Elige una campaña activa de nuestras ONGs aliadas y garantiza ayuda directa a través de vouchers de impacto.
+    </p>
 </header>
+
 <div class="flex flex-col lg:flex-row gap-12">
 <!-- Main Content Area -->
 <div class="flex-grow">
-<!-- Category Filters (Asymmetric Layout) -->
-<div class="flex flex-wrap gap-3 mb-10">
-<button class="px-6 py-2.5 bg-primary text-on-primary rounded-xl font-semibold shadow-sm hover:opacity-90 transition-all">Todos</button>
-<button class="px-6 py-2.5 bg-surface-container-low text-on-surface font-medium rounded-xl hover:bg-surface-container-high transition-all">Canastas Básicas</button>
-<button class="px-6 py-2.5 bg-surface-container-low text-on-surface font-medium rounded-xl hover:bg-surface-container-high transition-all">Salud</button>
-<button class="px-6 py-2.5 bg-surface-container-low text-on-surface font-medium rounded-xl hover:bg-surface-container-high transition-all">Educación</button>
-<button class="px-6 py-2.5 bg-tertiary-container text-on-tertiary-container font-bold rounded-xl flex items-center gap-2 hover:opacity-90 transition-all">
-<span class="material-symbols-outlined text-sm" data-icon="emergency">emergency</span>
-                        Urgente
-                    </button>
+    <!-- Category Filters -->
+    <div class="flex flex-wrap gap-3 mb-10" id="category-filters">
+        <button data-category="all" class="px-6 py-2.5 bg-primary text-on-primary rounded-xl font-semibold shadow-sm hover:opacity-90 transition-all">Todas</button>
+        <button data-category="canastas" class="px-6 py-2.5 bg-surface-container-low text-on-surface font-medium rounded-xl hover:bg-surface-container-high transition-all">Canastas Básicas</button>
+        <button data-category="salud" class="px-6 py-2.5 bg-surface-container-low text-on-surface font-medium rounded-xl hover:bg-surface-container-high transition-all">Salud</button>
+        <button data-category="educacion" class="px-6 py-2.5 bg-surface-container-low text-on-surface font-medium rounded-xl hover:bg-surface-container-high transition-all">Educación</button>
+        <button data-category="urgent" class="px-6 py-2.5 bg-tertiary-container text-on-tertiary-container font-bold rounded-xl flex items-center gap-2 hover:opacity-90 transition-all">
+            <span class="material-symbols-outlined text-sm">emergency</span>
+            Urgente
+        </button>
+    </div>
+
+    <!-- Campaign Cards Container (populated by JS) -->
+    <div id="campaigns-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-8">
+        <div class="col-span-full text-center py-12 text-on-surface-variant">Cargando campañas...</div>
+    </div>
 </div>
-<!-- Bento Grid for Vouchers -->
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-8">
-<!-- Voucher Card 1 -->
-<div class="bg-surface-container-lowest rounded-xl p-8 flex flex-col justify-between transition-all hover:translate-y-[-4px]">
-<div>
-<div class="flex justify-between items-start mb-6">
-<div>
-<span class="text-xs font-black tracking-widest text-primary-fixed-variant uppercase mb-1 block">VOUCHER ID: #FAM-7721</span>
-<h3 class="text-2xl font-bold text-primary">Familia S-M</h3>
-</div>
-<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs font-bold tracking-tight">VALIDADO</span>
-</div>
-<p class="text-on-surface-variant font-medium text-lg mb-2">Canasta Alimentaria Mensual</p>
-<div class="flex items-center gap-2 text-sm text-outline mb-8">
-<span class="material-symbols-outlined text-base" data-icon="verified">verified</span>
-<span>ONG: Alianza Solidaria</span>
-</div>
-<div class="mb-8">
-<div class="flex justify-between text-sm font-bold mb-2">
-<span class="text-primary">60% financiado</span>
-<span class="text-outline">50 USDC Meta</span>
-</div>
-<div class="h-3 w-full bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-gradient-to-r from-secondary-fixed-dim to-secondary w-[60%] shadow-[0_0_8px_rgba(10,108,68,0.3)]"></div>
-</div>
-</div>
-</div>
-<button class="w-full py-4 bg-primary text-on-primary font-bold rounded-md hover:bg-primary-container transition-all active:scale-95 shadow-md">
-                            Financiar Voucher
-                        </button>
-</div>
-<!-- Voucher Card 2 -->
-<div class="bg-surface-container-lowest rounded-xl p-8 flex flex-col justify-between transition-all hover:translate-y-[-4px]">
-<div>
-<div class="flex justify-between items-start mb-6">
-<div>
-<span class="text-xs font-black tracking-widest text-primary-fixed-variant uppercase mb-1 block">VOUCHER ID: #EDU-092</span>
-<h3 class="text-2xl font-bold text-primary">Estudiante J. Rivera</h3>
-</div>
-<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs font-bold tracking-tight">VALIDADO</span>
-</div>
-<p class="text-on-surface-variant font-medium text-lg mb-2">Kit Escolar &amp; Conectividad</p>
-<div class="flex items-center gap-2 text-sm text-outline mb-8">
-<span class="material-symbols-outlined text-base" data-icon="school">school</span>
-<span>ONG: Educación para Todos</span>
-</div>
-<div class="mb-8">
-<div class="flex justify-between text-sm font-bold mb-2">
-<span class="text-primary">35% financiado</span>
-<span class="text-outline">120 USDC Meta</span>
-</div>
-<div class="h-3 w-full bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-gradient-to-r from-secondary-fixed-dim to-secondary w-[35%] shadow-[0_0_8px_rgba(10,108,68,0.3)]"></div>
-</div>
-</div>
-</div>
-<button class="w-full py-4 bg-primary text-on-primary font-bold rounded-md hover:bg-primary-container transition-all active:scale-95 shadow-md">
-                            Financiar Voucher
-                        </button>
-</div>
-<!-- Voucher Card 3 -->
-<div class="bg-surface-container-lowest rounded-xl p-8 flex flex-col justify-between transition-all hover:translate-y-[-4px] border-l-4 border-tertiary-container">
-<div>
-<div class="flex justify-between items-start mb-6">
-<div>
-<span class="text-xs font-black tracking-widest text-on-tertiary-container uppercase mb-1 block">URGENTE</span>
-<h3 class="text-2xl font-bold text-primary">Familia Lopez-G</h3>
-</div>
-<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs font-bold tracking-tight">VALIDADO</span>
-</div>
-<p class="text-on-surface-variant font-medium text-lg mb-2">Insumos Médicos Post-Quirúrgicos</p>
-<div class="flex items-center gap-2 text-sm text-outline mb-8">
-<span class="material-symbols-outlined text-base" data-icon="medical_services">medical_services</span>
-<span>ONG: Red Médica Vital</span>
-</div>
-<div class="mb-8">
-<div class="flex justify-between text-sm font-bold mb-2">
-<span class="text-primary">85% financiado</span>
-<span class="text-outline">300 USDC Meta</span>
-</div>
-<div class="h-3 w-full bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-gradient-to-r from-secondary-fixed-dim to-secondary w-[85%] shadow-[0_0_8px_rgba(10,108,68,0.3)]"></div>
-</div>
-</div>
-</div>
-<button class="w-full py-4 bg-primary text-on-primary font-bold rounded-md hover:bg-primary-container transition-all active:scale-95 shadow-md">
-                            Financiar Voucher
-                        </button>
-</div>
-<!-- Voucher Card 4 -->
-<div class="bg-surface-container-lowest rounded-xl p-8 flex flex-col justify-between transition-all hover:translate-y-[-4px]">
-<div>
-<div class="flex justify-between items-start mb-6">
-<div>
-<span class="text-xs font-black tracking-widest text-primary-fixed-variant uppercase mb-1 block">VOUCHER ID: #FAM-112</span>
-<h3 class="text-2xl font-bold text-primary">Familia D. Rojas</h3>
-</div>
-<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs font-bold tracking-tight">VALIDADO</span>
-</div>
-<p class="text-on-surface-variant font-medium text-lg mb-2">Refuerzo Estructural Techo</p>
-<div class="flex items-center gap-2 text-sm text-outline mb-8">
-<span class="material-symbols-outlined text-base" data-icon="home">home</span>
-<span>ONG: Hábitat Digno</span>
-</div>
-<div class="mb-8">
-<div class="flex justify-between text-sm font-bold mb-2">
-<span class="text-primary">12% financiado</span>
-<span class="text-outline">450 USDC Meta</span>
-</div>
-<div class="h-3 w-full bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-gradient-to-r from-secondary-fixed-dim to-secondary w-[12%] shadow-[0_0_8px_rgba(10,108,68,0.3)]"></div>
-</div>
-</div>
-</div>
-<button class="w-full py-4 bg-primary text-on-primary font-bold rounded-md hover:bg-primary-container transition-all active:scale-95 shadow-md">
-                            Financiar Voucher
-                        </button>
-</div>
-</div>
-</div>
+
 <!-- Sidebar / Summary Section -->
 <aside class="w-full lg:w-[400px] shrink-0">
 <div class="sticky top-24 space-y-8">
-<!-- Rule 70/30 Info Card (Glassmorphism) -->
-<div class="relative overflow-hidden bg-primary-container/90 backdrop-blur-xl p-8 rounded-xl text-on-primary border border-white/10">
-<h4 class="text-xl font-bold mb-4 flex items-center gap-2">
-<span class="material-symbols-outlined" data-icon="info">info</span>
-                            Regla de Transparencia 70/30
-                        </h4>
-<div class="space-y-4 text-sm text-on-primary-container leading-relaxed">
-<p><strong class="text-white">70% Impacto Inmediato:</strong> Se entrega directamente en forma de voucher digital a la familia para canje en comercios autorizados.</p>
-<p><strong class="text-white">30% Fondo Sostenible:</strong> Se destina a un fondo de reserva de impacto que genera rendimientos para financiar futuros vouchers.</p>
-</div>
-<div class="mt-6 flex items-center gap-2 text-xs font-bold text-secondary-fixed">
-<span class="material-symbols-outlined text-xs" data-icon="account_tree">account_tree</span>
-                            TRAZABILIDAD BLOCKCHAIN ACTIVA
-                        </div>
-</div>
-<!-- User Impact Widget -->
-<div class="bg-surface-container-low p-8 rounded-xl border-l-4 border-primary">
-<div class="flex items-center gap-4 mb-6">
-<div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary">
-<span class="material-symbols-outlined" data-icon="volunteer_activism">volunteer_activism</span>
-</div>
-<div>
-<h4 class="font-bold text-primary">Tu Impacto</h4>
-<p class="text-xs text-outline font-medium">Actualizado hace 2 min</p>
-</div>
-</div>
-<div class="grid grid-cols-2 gap-4">
-<div class="bg-surface-container-lowest p-4 rounded-lg">
-<p class="text-xs text-outline mb-1">Aportado</p>
-<p class="text-2xl font-black text-primary">850 <span class="text-xs font-normal">USDC</span></p>
-</div>
-<div class="bg-surface-container-lowest p-4 rounded-lg">
-<p class="text-xs text-outline mb-1">Vouchers</p>
-<p class="text-2xl font-black text-primary">12</p>
-</div>
-</div>
-<div class="mt-6 p-4 bg-secondary-container/30 rounded-lg flex items-center gap-3">
-<span class="material-symbols-outlined text-secondary" data-icon="trending_up">trending_up</span>
-<span class="text-sm font-semibold text-on-secondary-container">Has ayudado a 42 personas.</span>
-</div>
-</div>
-<!-- CTA for NGO's -->
-<div class="bg-surface-container-highest p-8 rounded-xl text-center">
-<h5 class="font-bold text-primary mb-2">¿Eres una ONG?</h5>
-<p class="text-sm text-on-surface-variant mb-6">Valida necesidades y publica vouchers para tus comunidades.</p>
-<button class="text-primary font-bold text-sm underline underline-offset-4 hover:text-primary-container transition-colors">Solicitar Alianza</button>
-</div>
+    <!-- Rule 70/30 Info Card -->
+    <div class="relative overflow-hidden bg-primary-container/90 backdrop-blur-xl p-8 rounded-xl text-on-primary border border-white/10">
+        <h4 class="text-xl font-bold mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined">info</span>
+            Transparencia 70/30
+        </h4>
+        <div class="space-y-4 text-sm text-on-primary-container leading-relaxed">
+            <p><strong class="text-white">70% Impacto Inmediato:</strong> Financia directamente la emisión de vouchers para familias validadas.</p>
+            <p><strong class="text-white">30% Fondo Sostenible:</strong> Se destina a un fondo de reserva de impacto que genera rendimientos perpetuos.</p>
+        </div>
+        <div class="mt-6 flex items-center gap-2 text-xs font-bold text-secondary-fixed">
+            <span class="material-symbols-outlined text-xs">account_tree</span>
+            TRAZABILIDAD BLOCKCHAIN ACTIVA
+        </div>
+    </div>
+    <!-- User Impact Widget -->
+    <div class="bg-surface-container-low p-8 rounded-xl border-l-4 border-primary shadow-sm">
+        <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary">
+                <span class="material-symbols-outlined">volunteer_activism</span>
+            </div>
+            <div>
+                <h4 class="font-bold text-primary">Tu Impacto</h4>
+                <p class="text-xs text-outline font-medium">Resumen general</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-surface-container-lowest p-4 rounded-lg">
+                <p class="text-xs text-outline mb-1">Aportado</p>
+                <p id="user-total-donated" class="text-2xl font-black text-primary">0 <span class="text-xs font-normal">USDC</span></p>
+            </div>
+            <div class="bg-surface-container-lowest p-4 rounded-lg">
+                <p class="text-xs text-outline mb-1">Vouchers Financiados</p>
+                <p id="user-voucher-count" class="text-2xl font-black text-primary">0</p>
+            </div>
+        </div>
+        <div class="mt-6 p-4 bg-secondary-container/30 rounded-lg flex items-center gap-3">
+            <span class="material-symbols-outlined text-secondary">trending_up</span>
+            <span id="user-impact-msg" class="text-sm font-semibold text-on-secondary-container">Comienza a donar para generar impacto.</span>
+        </div>
+    </div>
+    <!-- CTA for NGO's -->
+    <div class="bg-surface-container-highest p-8 rounded-xl text-center">
+        <h5 class="font-bold text-primary mb-2">¿Eres una ONG?</h5>
+        <p class="text-sm text-on-surface-variant mb-6">Crea campañas, valida necesidades y publica vouchers para tus comunidades.</p>
+        <button class="text-primary font-bold text-sm underline underline-offset-4 hover:text-primary-container transition-colors">Solicitar Alianza</button>
+    </div>
 </div>
 </aside>
 </div>
 </main>
-<!-- Footer (Shared Component Logic) -->
+
+<!-- Footer -->
 <footer class="w-full mt-auto bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
 <div class="flex flex-col md:flex-row justify-between items-center px-8 py-12 max-w-screen-2xl mx-auto gap-4">
-<div class="font-bold text-blue-900 dark:text-white">ImpactPool</div>
-<div class="flex gap-6">
-<a class="text-sm font-inter text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-white transition-colors" href="#">Privacidad</a>
-<a class="text-sm font-inter text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-white transition-colors" href="#">Términos de Servicio</a>
-<a class="text-sm font-inter text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-white transition-colors" href="#">Contacto</a>
-<a class="text-sm font-inter text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-white transition-colors" href="#">Documentación</a>
-</div>
-<p class="text-sm font-inter text-slate-600 dark:text-slate-400">© 2024 ImpactPool. Todos los derechos reservados. Transparencia inmutable.</p>
+    <div class="font-bold text-blue-900 dark:text-white">ImpactPool</div>
+    <div class="flex gap-6">
+        <a class="text-sm font-inter text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-white transition-colors" href="terminos_condiciones.html">Términos de Servicio</a>
+        <a class="text-sm font-inter text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-white transition-colors" href="#">Contacto</a>
+    </div>
+    <p class="text-sm font-inter text-slate-600 dark:text-slate-400">© 2024 ImpactPool. Todos los derechos reservados. Transparencia inmutable.</p>
 </div>
 </footer>
+
 <script src="js/session.js"></script>
+<script src="js/campaigns.js"></script>
 </body></html>

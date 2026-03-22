@@ -12,6 +12,11 @@ const donationSchema = new mongoose.Schema({
     ref: 'Association',
     required: true,
   },
+  campaign: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Campaign',
+    default: null,
+  },
   totalAmount: {
     type: Number,
     required: true,

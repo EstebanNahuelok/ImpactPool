@@ -7,7 +7,7 @@ const Association = require('../models/Association.model');
 // POST /api/donations - Crear donación
 router.post('/', authMiddleware, async (req, res) => {
   try {
-    const { associationId, amount } = req.body;
+    const { associationId, amount, campaignId } = req.body;
 
     if (!associationId || !amount || amount <= 0) {
       return res.status(400).json({ error: 'associationId y amount (> 0) requeridos' });
@@ -16,7 +16,8 @@ router.post('/', authMiddleware, async (req, res) => {
     const donation = await donationService.createDonation(
       req.user._id,
       associationId,
-      amount
+      amount,
+      campaignId || null
     );
 
     res.status(201).json(donation);

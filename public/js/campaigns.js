@@ -83,9 +83,7 @@ function renderCampaigns(campaigns) {
   grid.innerHTML = campaigns.map(c => {
     const emitted = c.emittedVouchers || 0;
     const active = c.activeVouchers || 0;
-    const funded = c.fundedVouchers || 0;
     const total = c.totalVouchers || 0;
-    const percent = c.fundedPercent || 0;
     const urgentBorder = c.urgent ? 'border-l-4 border-tertiary-container' : 'border border-outline-variant/30';
     const urgentLabel = c.urgent
       ? '<span class="text-xs font-black tracking-widest text-on-tertiary-container uppercase mb-1 block">URGENT</span>'
@@ -98,9 +96,9 @@ function renderCampaigns(campaigns) {
       ? `onclick="window.location.href='dashboard.html?campaign=${c._id}'"`
       : `onclick="window.location.href='donar.html?campaign=${c._id}&association=${c.association?._id || ''}'"`; 
 
-    // Sección de vouchers: info real para org, info de financiamiento para donantes
-    const voucherInfoSection = isOrg
-      ? `
+    // Sección de vouchers: datos reales de la API para ambos roles
+    const emittedPercent = total > 0 ? Math.round((emitted / total) * 100) : 0;
+    const voucherInfoSection = `
           <div class="mb-4 grid grid-cols-2 gap-3">
             <div class="p-3 bg-surface-container rounded-lg text-center">
               <span class="text-[10px] font-bold text-outline uppercase block mb-1">Issued</span>
@@ -115,20 +113,10 @@ function renderCampaigns(campaigns) {
           <div class="mb-8">
             <div class="flex justify-between text-sm font-bold mb-2">
               <span class="text-primary">${emitted} of ${total} Vouchers issued</span>
-              <span class="text-outline">${total > 0 ? Math.round((emitted / total) * 100) : 0}%</span>
+              <span class="text-outline">${emittedPercent}%</span>
             </div>
             <div class="h-3 w-full bg-surface-container-highest rounded-full overflow-hidden">
-              <div class="h-full bg-gradient-to-r from-secondary-fixed-dim to-secondary shadow-[0_0_8px_rgba(10,108,68,0.3)]" style="width: ${total > 0 ? Math.round((emitted / total) * 100) : 0}%"></div>
-            </div>
-          </div>`
-      : `
-          <div class="mb-8">
-            <div class="flex justify-between text-sm font-bold mb-2">
-              <span class="text-primary">${funded} of ${total} Vouchers funded</span>
-              <span class="text-outline">${percent}%</span>
-            </div>
-            <div class="h-3 w-full bg-surface-container-highest rounded-full overflow-hidden">
-              <div class="h-full bg-gradient-to-r from-secondary-fixed-dim to-secondary shadow-[0_0_8px_rgba(10,108,68,0.3)]" style="width: ${percent}%"></div>
+              <div class="h-full bg-gradient-to-r from-secondary-fixed-dim to-secondary shadow-[0_0_8px_rgba(10,108,68,0.3)]" style="width: ${emittedPercent}%"></div>
             </div>
           </div>`;
 

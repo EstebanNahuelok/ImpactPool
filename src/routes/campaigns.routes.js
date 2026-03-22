@@ -22,7 +22,7 @@ router.get('/', authMiddleware, async (req, res) => {
     // Agregar conteo real de vouchers emitidos por campaña
     const campaignIds = campaigns.map(c => c._id);
     const voucherCounts = await Voucher.aggregate([
-      { $match: { campaign: { $in: campaignIds } } },
+      { $match: { campaign: { $in: campaignIds }, status: { $ne: 'cancelled' } } },
       { $group: { _id: '$campaign', emittedCount: { $sum: 1 }, activeCount: { $sum: { $cond: [{ $eq: ['$status', 'active'] }, 1, 0] } } } },
     ]);
     const countMap = {};
@@ -52,7 +52,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
     }
 
     const voucherStats = await Voucher.aggregate([
-      { $match: { campaign: campaign._id } },
+      { $match: { campaign: campaign._id, status: { $ne: 'cancelled' } } },
       { $group: { _id: null, emittedCount: { $sum: 1 }, activeCount: { $sum: { $cond: [{ $eq: ['$status', 'active'] }, 1, 0] } } } },
     ]);
     const obj = campaign.toJSON();

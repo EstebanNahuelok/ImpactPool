@@ -54,6 +54,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     selectedAssociationId = associationParam;
   }
 
+  // Load campaigns into selector
+  await loadCampaignSelector(campaignParam);
+
   // If no campaign selected, show association dropdown and use static quick-select
   if (!selectedCampaignId) {
     try {
@@ -82,6 +85,46 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 });
+
+// ==================== CAMPAIGN SELECTOR ====================
+
+async function loadCampaignSelector(preselectedId) {
+  const select = document.getElementById('campaign-select');
+  if (!select) return;
+
+  try {
+    const campaigns = await Session.apiRequest('/campaigns');
+    campaigns.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c._id;
+      opt.textContent = `${c.name} — ${c.benefit} (${c.voucherCost} USDC/voucher)`;
+      opt.dataset.associationId = c.association?._id || '';
+      if (preselectedId && c._id === preselectedId) opt.selected = true;
+      select.appendChild(opt);
+    });
+
+    select.addEventListener('change', async () => {
+      const campaignId = select.value;
+      if (campaignId) {
+        selectedCampaignId = campaignId;
+        const selectedOpt = select.options[select.selectedIndex];
+        selectedAssociationId = selectedOpt.dataset.associationId;
+        await loadCampaignInfo(campaignId);
+      } else {
+        // Reset to general donation mode
+        selectedCampaignId = null;
+        currentCampaign = null;
+        const labelEl = document.getElementById('campaign-label');
+        if (labelEl) labelEl.style.display = 'none';
+        const legendEl = document.getElementById('voucher-legend');
+        if (legendEl) legendEl.style.display = 'none';
+        setupStaticQuickSelect();
+      }
+    });
+  } catch (err) {
+    console.error('Error loading campaigns for selector:', err);
+  }
+}
 
 // ==================== CAMPAIGN MODE ====================
 

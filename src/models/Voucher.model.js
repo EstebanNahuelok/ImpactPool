@@ -23,7 +23,7 @@ const voucherSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['active', 'redeemed', 'expired'],
+    enum: ['active', 'redeemed', 'expired', 'cancelled'],
     default: 'active',
   },
 }, { timestamps: true });

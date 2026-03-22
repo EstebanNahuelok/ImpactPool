@@ -84,4 +84,38 @@ router.post('/', authMiddleware, async (req, res) => {
   }
 });
 
+// PATCH /api/vouchers/:id/cancel — cancelar voucher (solo org admin)
+router.patch('/:id/cancel', authMiddleware, async (req, res) => {
+  try {
+    const voucher = await Voucher.findById(req.params.id).populate({
+      path: 'campaign',
+      populate: { path: 'association' },
+    });
+    if (!voucher) {
+      return res.status(404).json({ error: 'Voucher not found' });
+    }
+
+    // Verificar que el usuario es admin de la asociación dueña de la campaña
+    const association = await Association.findById(voucher.campaign.association._id);
+    if (!association || association.admin.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ error: 'No permission to cancel vouchers in this campaign' });
+    }
+
+    if (voucher.status !== 'active') {
+      return res.status(400).json({ error: 'Only active vouchers can be cancelled' });
+    }
+
+    voucher.status = 'cancelled';
+    await voucher.save();
+
+    const populated = await Voucher.findById(voucher._id)
+      .populate('beneficiary', 'dni name')
+      .populate('campaign', 'code name');
+
+    res.json(populated);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

@@ -108,17 +108,18 @@ async function handleVoucherSubmit(e) {
 
 async function loadCampaignView(campaignId) {
   try {
-    const [campaign, vouchers] = await Promise.all([
+    const [campaign, vouchers, donations] = await Promise.all([
       Session.apiRequest(`/campaigns/${campaignId}`),
       Session.apiRequest(`/vouchers?campaign=${campaignId}`),
+      Session.apiRequest(`/campaigns/${campaignId}/donations`),
     ]);
-    renderCampaignDashboard(campaign, vouchers);
+    renderCampaignDashboard(campaign, vouchers, donations);
   } catch (err) {
     console.error('Error loading campaign:', err);
   }
 }
 
-function renderCampaignDashboard(campaign, vouchers) {
+function renderCampaignDashboard(campaign, vouchers, donations = []) {
   // Header
   const header = document.querySelector('header');
   if (header) {
@@ -130,14 +131,53 @@ function renderCampaignDashboard(campaign, vouchers) {
 
   // Stats
   const activeVouchers = vouchers.filter(v => v.status === 'active');
-  const totalAmount = vouchers.reduce((sum, v) => sum + (v.amount || 0), 0);
+  const completedDonations = donations.filter(d => d.status === 'completed');
+  const totalDonated = completedDonations.reduce((sum, d) => sum + (d.totalAmount || 0), 0);
+  const assocReceived = completedDonations.reduce((sum, d) => sum + (d.associationAmount || 0), 0);
+  const suggestedVouchers = campaign.voucherCost > 0 ? Math.floor(assocReceived / campaign.voucherCost) : 0;
 
-  document.getElementById('stat-label-1').textContent = 'TOTAL ISSUED VALUE';
-  document.getElementById('stat-value-1').textContent = `$${totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+  document.getElementById('stat-label-1').textContent = 'DONATIONS RECEIVED';
+  document.getElementById('stat-value-1').textContent = `$${totalDonated.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
   document.getElementById('stat-label-2').textContent = 'VOUCHERS ISSUED';
   document.getElementById('stat-value-2').textContent = `${vouchers.length} / ${campaign.totalVouchers}`;
   document.getElementById('stat-label-3').textContent = 'ACTIVE VOUCHERS';
   document.getElementById('stat-value-3').textContent = activeVouchers.length;
+
+  // Donation info panel
+  let donationPanel = document.getElementById('donation-info-panel');
+  if (!donationPanel) {
+    donationPanel = document.createElement('div');
+    donationPanel.id = 'donation-info-panel';
+    const statsSection = document.getElementById('stats-overview');
+    if (statsSection) {
+      statsSection.parentNode.insertBefore(donationPanel, statsSection.nextSibling);
+    } else {
+      const grid = document.getElementById('vouchers-grid');
+      if (grid) grid.parentNode.insertBefore(donationPanel, grid);
+    }
+  }
+  donationPanel.className = 'mt-6 mb-6 p-6 bg-surface-container-low rounded-2xl';
+  donationPanel.innerHTML = `
+    <div class="flex flex-wrap items-center gap-6">
+      <div>
+        <span class="text-[10px] font-bold text-outline uppercase block mb-1">TOTAL DONATED</span>
+        <span class="text-2xl font-black text-secondary">$${totalDonated.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+      </div>
+      <div>
+        <span class="text-[10px] font-bold text-outline uppercase block mb-1">AVAILABLE FOR VOUCHERS (70%)</span>
+        <span class="text-2xl font-black text-primary">$${assocReceived.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+      </div>
+      <div>
+        <span class="text-[10px] font-bold text-outline uppercase block mb-1">SUGGESTED VOUCHERS</span>
+        <span class="text-2xl font-black text-on-tertiary-container">${suggestedVouchers}</span>
+        <span class="text-xs text-on-surface-variant"> ($${campaign.voucherCost}/each)</span>
+      </div>
+      <div>
+        <span class="text-[10px] font-bold text-outline uppercase block mb-1">ALREADY ISSUED</span>
+        <span class="text-2xl font-black text-primary">${vouchers.length}</span>
+      </div>
+    </div>
+  `;
 
   // Preview amount en modal
   const amountPreview = document.getElementById('voucher-amount-preview');
@@ -152,9 +192,14 @@ function renderCampaignDashboard(campaign, vouchers) {
       active: { label: 'Active', bg: 'bg-secondary-container', text: 'text-on-secondary-container' },
       redeemed: { label: 'Redeemed', bg: 'bg-surface-container-highest', text: 'text-on-surface-variant' },
       expired: { label: 'Expired', bg: 'bg-tertiary-fixed', text: 'text-on-tertiary-fixed-variant' },
+      cancelled: { label: 'Cancelled', bg: 'bg-error-container', text: 'text-on-error-container' },
     };
     const st = statusConfig[v.status] || statusConfig.active;
     const date = new Date(v.createdAt).toLocaleDateString('es-AR');
+
+    const cancelBtn = v.status === 'active'
+      ? `<button onclick="confirmCancelVoucher('${v._id}', '${v.code}')" class="mt-3 w-full py-2 rounded-lg bg-error/10 text-error text-xs font-bold uppercase tracking-widest hover:bg-error/20 transition-colors">Cancel Voucher</button>`
+      : '';
 
     const card = document.createElement('div');
     card.className = `group relative bg-surface-container-lowest rounded-2xl p-6 transition-all duration-300 hover:translate-y-[-4px] ${v.status !== 'active' ? 'opacity-75' : ''}`;
@@ -186,6 +231,7 @@ function renderCampaignDashboard(campaign, vouchers) {
           </div>
         </div>
       </div>
+      ${cancelBtn}
     `;
     grid.appendChild(card);
   });
@@ -214,14 +260,17 @@ function renderCampaignDashboard(campaign, vouchers) {
     vouchers.forEach(v => {
       const row = document.createElement('tr');
       row.className = 'hover:bg-surface-container-lowest transition-colors border-t border-surface-variant/10';
-      const stClass = v.status === 'active' ? 'text-secondary' : v.status === 'redeemed' ? 'text-primary' : 'text-error';
-      const stLabel = v.status === 'active' ? 'ACTIVE' : v.status === 'redeemed' ? 'REDEEMED' : 'EXPIRED';
+      const stClass = v.status === 'active' ? 'text-secondary' : v.status === 'redeemed' ? 'text-primary' : v.status === 'cancelled' ? 'text-error' : 'text-error';
+      const stLabel = v.status === 'active' ? 'ACTIVE' : v.status === 'redeemed' ? 'REDEEMED' : v.status === 'cancelled' ? 'CANCELLED' : 'EXPIRED';
+      const cancelAction = v.status === 'active'
+        ? `<button onclick="confirmCancelVoucher('${v._id}', '${v.code}')" class="ml-3 text-[10px] font-bold text-error hover:underline">CANCEL</button>`
+        : '';
       row.innerHTML = `
         <td class="px-8 py-5 font-mono text-xs">${v.code}</td>
         <td class="px-8 py-5 font-bold">${v.beneficiary?.name || '—'}</td>
         <td class="px-8 py-5 font-mono text-sm">${v.beneficiary?.dni || '—'}</td>
         <td class="px-8 py-5 font-black text-secondary">$${(v.amount || 0).toFixed(2)}</td>
-        <td class="px-8 py-5 text-right"><span class="text-[10px] font-black uppercase ${stClass}">${stLabel}</span></td>
+        <td class="px-8 py-5 text-right"><span class="text-[10px] font-black uppercase ${stClass}">${stLabel}</span>${cancelAction}</td>
       `;
       tbody.appendChild(row);
     });
@@ -298,4 +347,53 @@ function renderOrgDashboard(donations) {
     `;
     tbody.appendChild(row);
   });
+}
+
+// ==================== CANCEL VOUCHER ====================
+
+function confirmCancelVoucher(voucherId, voucherCode) {
+  // Create confirmation modal dynamically
+  let modal = document.getElementById('cancel-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'cancel-modal';
+    document.body.appendChild(modal);
+  }
+
+  modal.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm';
+  modal.innerHTML = `
+    <div class="bg-surface-container-lowest rounded-2xl p-8 max-w-sm w-full mx-4 shadow-xl">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="material-symbols-outlined text-error text-3xl">warning</span>
+        <h3 class="text-xl font-bold text-primary">Cancel Voucher</h3>
+      </div>
+      <p class="text-on-surface-variant mb-2">Are you sure you want to cancel voucher <strong class="text-primary font-mono">${voucherCode}</strong>?</p>
+      <p class="text-xs text-error mb-6">This action cannot be undone.</p>
+      <div class="flex gap-3">
+        <button id="cancel-modal-dismiss" class="flex-1 py-3 rounded-lg bg-surface-container-high text-on-surface font-bold hover:bg-surface-container-highest transition-colors">No, Keep It</button>
+        <button id="cancel-modal-confirm" class="flex-1 py-3 rounded-lg bg-error text-on-error font-bold hover:bg-error/90 transition-colors">Yes, Cancel</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('cancel-modal-dismiss').addEventListener('click', () => {
+    modal.remove();
+  });
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.remove();
+  });
+  document.getElementById('cancel-modal-confirm').addEventListener('click', async () => {
+    await cancelVoucher(voucherId);
+    modal.remove();
+  });
+}
+
+async function cancelVoucher(voucherId) {
+  try {
+    await Session.apiRequest(`/vouchers/${voucherId}/cancel`, { method: 'PATCH' });
+    await loadCampaignView(currentCampaignId);
+  } catch (err) {
+    console.error('Error cancelling voucher:', err);
+    alert(err.message || 'Error cancelling voucher');
+  }
 }

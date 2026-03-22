@@ -97,6 +97,7 @@
 <div class="hidden md:flex gap-8 items-center">
 <a data-role="organization" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="dashboard.html">Dashboard</a>
 <a data-role="donor" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="donar.html">Donate</a>
+<a data-role="donor" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="vouchers.html">Campaigns</a>
 <a data-role="organization" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="vouchers.html">Vouchers</a>
 <a data-role="donor" class="font-inter tracking-tight font-medium text-sm text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors" href="terminos_condiciones.html">Terms & Conditions</a>
 </div>
@@ -158,12 +159,17 @@
 <!-- Subtle decorative gradient -->
 <div class="absolute top-0 right-0 w-64 h-64 bg-secondary/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
 <div class="relative z-10">
-<div class="flex items-center justify-between mb-10">
+<div class="flex items-center justify-between mb-4">
 <h3 class="text-2xl font-bold text-primary">Contribution Portal</h3>
 <div class="flex gap-2">
 <span class="material-symbols-outlined text-on-surface-variant">account_balance_wallet</span>
 <span class="text-xs font-mono text-on-surface-variant">0x71C...4f2E</span>
 </div>
+</div>
+<!-- Campaign Label (shown when campaign selected) -->
+<div id="campaign-label" class="mb-8 p-3 bg-primary/5 border border-primary/10 rounded-lg flex items-center gap-2" style="display:none;">
+<span class="material-symbols-outlined text-primary text-sm">campaign</span>
+<span id="campaign-label-text" class="text-sm font-semibold text-primary"></span>
 </div>
 <!-- Currency Selector -->
 <div class="grid grid-cols-2 gap-4 mb-8">
@@ -184,12 +190,17 @@
 <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2 ml-1">CONTRIBUTION AMOUNT</label>
 <div class="flex items-center bg-surface-container-low rounded-xl px-6 py-4 focus-within:ring-1 focus-within:ring-primary/20 transition-all">
 <span class="text-3xl font-bold text-primary mr-2">$</span>
-<input class="bg-transparent border-none focus:ring-0 text-3xl font-bold text-primary w-full p-0 placeholder:text-surface-variant" placeholder="0.00" type="number"/>
+<input id="amount-input" class="bg-transparent border-none focus:ring-0 text-3xl font-bold text-primary w-full p-0 placeholder:text-surface-variant" placeholder="0.00" type="number"/>
 <span class="text-sm font-bold text-on-surface-variant ml-2">USD</span>
+</div>
+<!-- Dynamic voucher count legend -->
+<div id="voucher-legend" class="mt-3 flex items-center gap-2 text-xs font-medium text-secondary" style="display:none;">
+<span class="material-symbols-outlined text-xs">info</span>
+<span>You're funding <span id="voucher-count" class="font-bold">0</span> vouchers for this campaign</span>
 </div>
 </div>
 <!-- Quick Select -->
-<div class="flex flex-wrap gap-3">
+<div id="quick-select" class="flex flex-wrap gap-3">
 <button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface text-sm font-bold hover:bg-secondary-container hover:text-on-secondary-container transition-colors">$100</button>
 <button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface text-sm font-bold hover:bg-secondary-container hover:text-on-secondary-container transition-colors">$500</button>
 <button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface text-sm font-bold hover:bg-secondary-container hover:text-on-secondary-container transition-colors">$1,000</button>

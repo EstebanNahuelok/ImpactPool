@@ -1,12 +1,13 @@
 /**
- * ImpactoPool — Donar Script
- * Incluir en donar.html
- * Carga asociaciones verificadas y permite enviar donaciones.
+ * ImpactoPool — Donate Script
+ * For donar.html
+ * Loads campaign info (if selected) or associations, handles donation flow.
  */
 
 let selectedAssociationId = null;
 let selectedCampaignId = null;
-let selectedPaymentMethod = 'crypto'; // default
+let selectedPaymentMethod = 'crypto';
+let currentCampaign = null;
 
 function selectPaymentMethod(method) {
   selectedPaymentMethod = method;
@@ -35,49 +36,121 @@ function selectPaymentMethod(method) {
   }
 }
 
-// Exponer globalmente para el onclick del HTML
 window.selectPaymentMethod = selectPaymentMethod;
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Verificar sesión
   if (!Session.requireAuth()) return;
 
-  // === Cargar asociaciones verificadas ===
-  try {
-    const associations = await Session.apiRequest('/associations?verified=true');
-    populateAssociations(associations);
-  } catch (err) {
-    console.error('Error cargando asociaciones:', err);
-  }
-
-  // Detectar parámetros de campaña desde URL
   const urlParams = new URLSearchParams(window.location.search);
   const campaignParam = urlParams.get('campaign');
   const associationParam = urlParams.get('association');
-  if (campaignParam) selectedCampaignId = campaignParam;
-  if (associationParam) {
-    selectedAssociationId = associationParam;
-    const select = document.getElementById('association-select');
-    if (select) select.value = associationParam;
+
+  if (campaignParam) {
+    selectedCampaignId = campaignParam;
+    await loadCampaignInfo(campaignParam);
   }
 
-  // === Botón de donación — buscar "Confirmar Contribución" ===
+  if (associationParam) {
+    selectedAssociationId = associationParam;
+  }
+
+  // If no campaign selected, show association dropdown and use static quick-select
+  if (!selectedCampaignId) {
+    try {
+      const associations = await Session.apiRequest('/associations?verified=true');
+      populateAssociations(associations);
+    } catch (err) {
+      console.error('Error loading associations:', err);
+    }
+    setupStaticQuickSelect();
+  }
+
+  // Donate button
   const allButtons = document.querySelectorAll('button');
-  let donateBtn = null;
   allButtons.forEach(btn => {
     if (btn.textContent.includes('Confirm Contribution')) {
-      donateBtn = btn;
+      btn.addEventListener('click', handleDonate);
     }
   });
 
-  if (donateBtn) {
-    donateBtn.addEventListener('click', handleDonate);
+  // Amount input listener
+  const amountInput = document.getElementById('amount-input');
+  if (amountInput) {
+    amountInput.addEventListener('input', () => {
+      updatePreview(amountInput.value);
+      updateVoucherCount(amountInput.value);
+    });
   }
+});
 
-  // === Quick-select amount buttons ===
-  const amountInput = document.querySelector('input[type="number"]');
-  const quickBtns = document.querySelectorAll('button');
-  quickBtns.forEach(btn => {
+// ==================== CAMPAIGN MODE ====================
+
+async function loadCampaignInfo(campaignId) {
+  try {
+    const campaign = await Session.apiRequest(`/campaigns/${campaignId}`);
+    currentCampaign = campaign;
+
+    // Auto-set association from campaign
+    if (campaign.association) {
+      selectedAssociationId = campaign.association._id || campaign.association;
+    }
+
+    // Show campaign label
+    const labelEl = document.getElementById('campaign-label');
+    const labelText = document.getElementById('campaign-label-text');
+    if (labelEl && labelText) {
+      labelText.textContent = `Campaign: ${campaign.name} — ${campaign.benefit}`;
+      labelEl.style.display = '';
+    }
+
+    // Show voucher legend
+    const legendEl = document.getElementById('voucher-legend');
+    if (legendEl) legendEl.style.display = '';
+
+    // Generate dynamic quick-select buttons based on voucherCost
+    generateQuickSelect(campaign.voucherCost);
+
+  } catch (err) {
+    console.error('Error loading campaign:', err);
+  }
+}
+
+function generateQuickSelect(voucherCost) {
+  const container = document.getElementById('quick-select');
+  if (!container) return;
+
+  const presets = [2, 10, 20, 100];
+  container.innerHTML = presets.map(count => {
+    const amount = count * voucherCost;
+    const formatted = amount.toLocaleString('en-US');
+    return `<button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface text-sm font-bold hover:bg-secondary-container hover:text-on-secondary-container transition-colors" onclick="setQuickAmount(${amount})">$${formatted} (${count} Vouchers)</button>`;
+  }).join('');
+}
+
+function setQuickAmount(val) {
+  const input = document.getElementById('amount-input');
+  if (input) {
+    input.value = val;
+    updatePreview(val);
+    updateVoucherCount(val);
+  }
+}
+window.setQuickAmount = setQuickAmount;
+
+function updateVoucherCount(value) {
+  const countEl = document.getElementById('voucher-count');
+  if (!countEl || !currentCampaign) return;
+  const amount = parseFloat(value) || 0;
+  countEl.textContent = Math.floor(amount / currentCampaign.voucherCost);
+}
+
+// ==================== NON-CAMPAIGN MODE ====================
+
+function setupStaticQuickSelect() {
+  const container = document.getElementById('quick-select');
+  if (!container) return;
+  const amountInput = document.getElementById('amount-input');
+  container.querySelectorAll('button').forEach(btn => {
     const text = btn.textContent.trim();
     const match = text.match(/^\$([0-9,]+)$/);
     if (match && amountInput) {
@@ -87,27 +160,23 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     }
   });
-
-  if (amountInput) {
-    amountInput.addEventListener('input', () => updatePreview(amountInput.value));
-  }
-});
+}
 
 function populateAssociations(associations) {
-  const amountLabel = document.querySelector('label');
-  if (!amountLabel) return;
-
   let select = document.getElementById('association-select');
   if (!select) {
     const wrapper = document.createElement('div');
-    wrapper.className = 'mb-6';
+    wrapper.className = 'mb-2';
     wrapper.innerHTML = `
       <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2 ml-1">TARGET ASSOCIATION</label>
       <select id="association-select" class="w-full px-4 py-3 rounded-xl bg-surface-container-low border-none focus:ring-1 focus:ring-primary/20 text-on-surface">
         <option value="">Select an association...</option>
       </select>
     `;
-    amountLabel.parentElement.insertBefore(wrapper, amountLabel.parentElement.firstChild);
+    const spaceContainer = document.querySelector('.space-y-6');
+    if (spaceContainer) {
+      spaceContainer.insertBefore(wrapper, spaceContainer.firstChild);
+    }
     select = document.getElementById('association-select');
   }
 
@@ -123,6 +192,8 @@ function populateAssociations(associations) {
   });
 }
 
+// ==================== SHARED ====================
+
 function updatePreview(value) {
   const amount = parseFloat(value) || 0;
   const previewEls = document.querySelectorAll('[data-preview]');
@@ -136,7 +207,7 @@ function updatePreview(value) {
 }
 
 async function handleDonate() {
-  const amountInput = document.querySelector('input[type="number"]');
+  const amountInput = document.getElementById('amount-input');
   const amount = parseFloat(amountInput ? amountInput.value : 0);
 
   if (!selectedAssociationId) {
@@ -148,7 +219,6 @@ async function handleDonate() {
     return;
   }
 
-  // Si eligió cripto, verificar wallet
   if (selectedPaymentMethod === 'crypto') {
     if (typeof window.ethereum === 'undefined') {
       showDonateMessage('MetaMask not detected. Install the extension to pay with USDC.', 'error');
@@ -169,7 +239,7 @@ async function handleDonate() {
         associationId: selectedAssociationId,
         amount,
         paymentMethod: selectedPaymentMethod,
-        campaignId: selectedCampaignId || undefined
+        campaignId: selectedCampaignId || undefined,
       }),
     });
     if (result.status === 'completed') {
@@ -178,6 +248,7 @@ async function handleDonate() {
       showDonateMessage(`Donation registered but status: ${result.status}. The blockchain transaction may be pending.`, 'error');
     }
     if (amountInput) amountInput.value = '';
+    updateVoucherCount(0);
   } catch (err) {
     showDonateMessage(err.message, 'error');
   }
@@ -189,8 +260,7 @@ function showDonateMessage(msg, type) {
     el = document.createElement('div');
     el.id = 'donate-msg';
     el.className = 'text-center text-sm font-medium p-3 rounded-lg mt-4';
-    const main = document.querySelector('main') || document.body;
-    const form = document.querySelector('.relative.z-10') || main;
+    const form = document.querySelector('.relative.z-10') || document.querySelector('main') || document.body;
     form.appendChild(el);
   }
   el.textContent = msg;

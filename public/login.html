@@ -90,7 +90,7 @@
 <!-- Header / Top Navigation -->
 <header class="w-full top-0 sticky bg-white dark:bg-slate-950 h-20 z-50">
 <div class="flex justify-between items-center max-w-7xl mx-auto px-6 h-full">
-<div class="text-2xl font-black text-[#002045] dark:text-blue-500 tracking-tighter">ImpactPool</div>
+<a href="landingpage.html" class="text-2xl font-black text-[#002045] dark:text-blue-500 tracking-tighter hover:opacity-80 transition-opacity">ImpactPool</a>
 <div class="flex items-center gap-4">
 <span class="text-sm font-medium text-on-surface-variant">Secure Node 01-A</span>
 <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
@@ -128,12 +128,21 @@
 <!-- Login Interaction Column -->
 <div class="lg:col-span-6">
 <div class="glass-card rounded-xl p-8 lg:p-10 shadow-sm border border-white/20">
-<div class="mb-10 text-center">
-<h2 class="text-2xl font-bold text-primary mb-2">Identify Yourself</h2>
-<p class="text-on-surface-variant text-sm">Choose your authentication method.</p>
+<!-- Tab Switcher -->
+<div class="flex mb-8 bg-surface-container-low rounded-lg p-1" id="auth-tabs">
+<button data-tab="login" class="flex-1 py-3 text-sm font-bold rounded-md bg-primary text-on-primary transition-all">Sign In</button>
+<button data-tab="register-donor" class="flex-1 py-3 text-sm font-bold rounded-md text-on-surface-variant hover:bg-surface-container transition-all">Register</button>
+<button data-tab="register-org" class="flex-1 py-3 text-sm font-bold rounded-md text-on-surface-variant hover:bg-surface-container transition-all">NGO</button>
+</div>
+
+<!-- LOGIN PANEL -->
+<div id="panel-login">
+<div class="mb-8 text-center">
+<h2 class="text-2xl font-bold text-primary mb-2">Welcome Back</h2>
+<p class="text-on-surface-variant text-sm">Sign in to your account.</p>
 </div>
 <!-- Wallet Connection Area -->
-<div class="space-y-4 mb-8">
+<div class="space-y-3 mb-6">
 <button class="w-full flex items-center justify-between p-4 bg-primary text-on-primary rounded-lg hover:bg-primary-container transition-all duration-300 group">
 <div class="flex items-center gap-4">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
@@ -149,34 +158,95 @@
 <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
 </button>
 </div>
-<div class="relative flex items-center gap-4 mb-8">
+<div class="relative flex items-center gap-4 mb-6">
 <div class="h-[1px] flex-grow bg-outline-variant opacity-30"></div>
-<span class="text-[10px] uppercase font-bold tracking-[0.2em] text-outline">
-
-        <span class="text-slate-300">OR SIGN IN WITH EMAIL</span>
-
-</span>
+<span class="text-[10px] uppercase font-bold tracking-[0.2em] text-slate-300">OR SIGN IN WITH EMAIL</span>
 <div class="h-[1px] flex-grow bg-outline-variant opacity-30"></div>
 </div>
-<!-- Traditional Login Form -->
-<form class="space-y-6">
-<div class="">
-<label class="block text-xs font-bold text-primary mb-2 uppercase tracking-wider">EMAIL ADDRESS<br></label>
-<input class="w-full px-4 py-3 rounded-lg bg-surface-container-low border-none focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest text-on-surface placeholder:text-outline/50 transition-all" placeholder="name@organization.org" type="email">
+<form id="login-form" class="space-y-5">
+<div>
+<label class="block text-xs font-bold text-primary mb-2 uppercase tracking-wider">EMAIL ADDRESS</label>
+<input id="login-email" class="w-full px-4 py-3 rounded-lg bg-surface-container-low border-none focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest text-on-surface placeholder:text-outline/50 transition-all" placeholder="name@email.com" type="email">
 </div>
-<div class="">
-<div class="flex justify-between items-center mb-2">
-<label class="text-xs font-bold text-primary uppercase tracking-wider">PASSWORD</label>
-<a class="text-[10px] font-bold text-secondary uppercase hover:underline" href="#">FORGOT?</a>
+<div>
+<label class="text-xs font-bold text-primary uppercase tracking-wider block mb-2">PASSWORD</label>
+<input id="login-password" class="w-full px-4 py-3 rounded-lg bg-surface-container-low border-none focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest text-on-surface placeholder:text-outline/50 transition-all" placeholder="••••••••" type="password">
 </div>
-<input class="w-full px-4 py-3 rounded-lg bg-surface-container-low border-none focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest text-on-surface placeholder:text-outline/50 transition-all" placeholder="••••••••" type="password">
-</div>
-<button class="w-full py-4 bg-surface-container-lowest text-primary border border-primary/10 font-black rounded-lg hover:bg-primary hover:text-on-primary transition-all duration-300" type="button">SIGN IN</button>
+<button id="login-btn" class="w-full py-4 bg-surface-container-lowest text-primary border border-primary/10 font-black rounded-lg hover:bg-primary hover:text-on-primary transition-all duration-300" type="button">SIGN IN</button>
 </form>
-<div class="mt-8 text-center">
-<p class="text-xs text-on-surface-variant">
-                            New to the impact network? <a class="text-primary font-bold hover:underline" href="#">Request NGO verification</a>
-</p>
+</div>
+
+<!-- REGISTER DONOR PANEL -->
+<div id="panel-register-donor" class="hidden">
+<div class="mb-8 text-center">
+<h2 class="text-2xl font-bold text-primary mb-2">Create Account</h2>
+<p class="text-on-surface-variant text-sm">Join the impact network as a donor.</p>
+</div>
+<!-- Step 1: Form -->
+<form id="register-donor-form" class="space-y-5">
+<div>
+<label class="block text-xs font-bold text-primary mb-2 uppercase tracking-wider">FULL NAME</label>
+<input id="reg-donor-name" class="w-full px-4 py-3 rounded-lg bg-surface-container-low border-none focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest text-on-surface placeholder:text-outline/50 transition-all" placeholder="Your full name" type="text" required>
+</div>
+<div>
+<label class="block text-xs font-bold text-primary mb-2 uppercase tracking-wider">EMAIL ADDRESS</label>
+<input id="reg-donor-email" class="w-full px-4 py-3 rounded-lg bg-surface-container-low border-none focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest text-on-surface placeholder:text-outline/50 transition-all" placeholder="name@email.com" type="email" required>
+</div>
+<div>
+<label class="block text-xs font-bold text-primary mb-2 uppercase tracking-wider">PASSWORD</label>
+<input id="reg-donor-password" class="w-full px-4 py-3 rounded-lg bg-surface-container-low border-none focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest text-on-surface placeholder:text-outline/50 transition-all" placeholder="Min. 6 characters" type="password" required minlength="6">
+</div>
+<button id="reg-donor-btn" class="w-full py-4 bg-primary text-on-primary font-black rounded-lg hover:opacity-90 transition-all" type="button">SEND VERIFICATION CODE</button>
+</form>
+<!-- Step 2: Verification Code -->
+<div id="reg-donor-verify" class="hidden">
+<div class="text-center mb-6">
+<span class="material-symbols-outlined text-5xl text-secondary mb-3">mark_email_read</span>
+<h3 class="text-lg font-bold text-primary">Check your email</h3>
+<p id="verify-email-sent" class="text-sm text-on-surface-variant mt-2">We sent a 6-digit code to your email.</p>
+</div>
+<div class="mb-6">
+<label class="block text-xs font-bold text-primary mb-2 uppercase tracking-wider">VERIFICATION CODE</label>
+<input id="reg-donor-code" class="w-full px-4 py-4 rounded-lg bg-surface-container-low border-none focus:ring-1 focus:ring-primary/20 text-center text-2xl font-mono tracking-[0.5em] text-on-surface placeholder:text-outline/50 transition-all" placeholder="000000" type="text" maxlength="6">
+</div>
+<button id="verify-donor-btn" class="w-full py-4 bg-secondary text-on-secondary font-black rounded-lg hover:opacity-90 transition-all" type="button">VERIFY & CREATE ACCOUNT</button>
+<button id="resend-code-btn" class="w-full py-3 mt-3 text-sm font-bold text-primary hover:underline" type="button">Resend code</button>
+</div>
+</div>
+
+<!-- REGISTER ORG PANEL -->
+<div id="panel-register-org" class="hidden">
+<div class="mb-8 text-center">
+<h2 class="text-2xl font-bold text-primary mb-2">NGO Registration</h2>
+<p class="text-on-surface-variant text-sm">Apply for organization partnership.</p>
+</div>
+<!-- Step 1: Form -->
+<form id="register-org-form" class="space-y-5">
+<div>
+<label class="block text-xs font-bold text-primary mb-2 uppercase tracking-wider">ORGANIZATION NAME</label>
+<input id="reg-org-name" class="w-full px-4 py-3 rounded-lg bg-surface-container-low border-none focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest text-on-surface placeholder:text-outline/50 transition-all" placeholder="e.g., Foundation for Social Impact" type="text" required>
+</div>
+<div>
+<label class="block text-xs font-bold text-primary mb-2 uppercase tracking-wider">CONTACT EMAIL</label>
+<input id="reg-org-email" class="w-full px-4 py-3 rounded-lg bg-surface-container-low border-none focus:ring-1 focus:ring-primary/20 focus:bg-surface-container-lowest text-on-surface placeholder:text-outline/50 transition-all" placeholder="contact@organization.org" type="email" required>
+</div>
+<button id="reg-org-btn" class="w-full py-4 bg-primary text-on-primary font-black rounded-lg hover:opacity-90 transition-all" type="button">SUBMIT APPLICATION</button>
+</form>
+<!-- Step 2: Confirmation -->
+<div id="reg-org-confirm" class="hidden text-center py-6">
+<span class="material-symbols-outlined text-6xl text-secondary mb-4">task_alt</span>
+<h3 class="text-xl font-bold text-primary mb-3">Application Received</h3>
+<p class="text-on-surface-variant leading-relaxed mb-4 max-w-sm mx-auto">Thank you for your interest in joining ImpactPool. Our partnerships team will review your application and contact you at the provided email within 48 business hours to guide you through the onboarding process.</p>
+<div class="p-4 bg-surface-container-low rounded-xl text-left">
+<p class="text-xs font-bold text-primary uppercase tracking-wider mb-2">What happens next?</p>
+<ul class="text-sm text-on-surface-variant space-y-2">
+<li class="flex items-start gap-2"><span class="material-symbols-outlined text-secondary text-sm mt-0.5">check_circle</span> Application review by our team</li>
+<li class="flex items-start gap-2"><span class="material-symbols-outlined text-secondary text-sm mt-0.5">check_circle</span> Identity & documentation verification</li>
+<li class="flex items-start gap-2"><span class="material-symbols-outlined text-secondary text-sm mt-0.5">check_circle</span> Account setup & onboarding call</li>
+</ul>
+</div>
+<button class="mt-6 text-sm font-bold text-primary hover:underline" onclick="switchTab('login')">← Back to Sign In</button>
+</div>
 </div>
 </div>
 <!-- Trust Badge -->
@@ -191,7 +261,7 @@
 <footer class="w-full py-12 bg-[#002045] dark:bg-slate-950 border-t border-white/10 mt-auto">
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto px-6 font-['Inter'] text-sm leading-6">
 <div class="space-y-4">
-<div class="text-xl font-bold text-white">ImpactPool</div>
+<a href="landingpage.html" class="text-xl font-bold text-white hover:opacity-80 transition-opacity">ImpactPool</a>
 <p class="text-slate-300 max-w-sm">
                     Powering global social change through immutable transparency and decentralized fund orchestration.
                 </p>
@@ -199,12 +269,12 @@
 </div>
 <div class="grid grid-cols-2 gap-4">
 <div class="flex flex-col gap-2">
-<a class="text-slate-300 hover:text-[#0a6c44] transition-all" href="#">Terms & Conditions</a>
-<a class="text-slate-300 hover:text-[#0a6c44] transition-all" href="#">Privacy Policy</a>
+<a class="text-slate-300 hover:text-[#0a6c44] transition-all" href="terminos_condiciones.html">Terms & Conditions</a>
+<a class="text-slate-300 hover:text-[#0a6c44] transition-all" href="privacy.html">Privacy Policy</a>
 </div>
 <div class="flex flex-col gap-2">
-<a class="text-slate-300 hover:text-[#0a6c44] transition-all" href="#">Contact</a>
-<a class="text-slate-300 hover:text-[#0a6c44] transition-all" href="#">FAQ</a>
+<a class="text-slate-300 hover:text-[#0a6c44] transition-all" href="contact.html">Contact</a>
+<a class="text-slate-300 hover:text-[#0a6c44] transition-all" href="faq.html">FAQ</a>
 </div>
 </div>
 </div>

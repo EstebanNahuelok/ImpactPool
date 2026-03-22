@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Contact | ImpactPool</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "surface-bright":"#faf9fd","surface-container-high":"#e9e7eb","surface-dim":"#dad9dd",
+        "on-secondary":"#ffffff","error-container":"#ffdad6","on-secondary-container":"#167249",
+        "surface-container-lowest":"#ffffff","on-primary":"#ffffff","background":"#faf9fd",
+        "surface-container-low":"#f4f3f7","surface-variant":"#e3e2e6","secondary-container":"#9ff5c1",
+        "on-primary-container":"#86a0cd","on-surface-variant":"#43474e","surface":"#faf9fd",
+        "on-error":"#ffffff","error":"#ba1a1a","secondary":"#0a6c44",
+        "primary-container":"#1a365d","outline-variant":"#c4c6cf","primary":"#002045",
+        "tertiary-container":"#5d2500","on-surface":"#1a1c1e","tertiary":"#3b1500",
+        "surface-container":"#efedf1","on-tertiary":"#ffffff","on-background":"#1a1c1e","outline":"#74777f",
+        "surface-container-highest":"#e3e2e6","on-tertiary-container":"#f57d32"
+      },
+      fontFamily: {"headline":["Inter"],"body":["Inter"],"label":["Inter"]},
+      borderRadius: {"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},
+    },
+  },
+}
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { font-family: 'Inter', sans-serif; }
+</style>
+<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="ImpactPool" />
+<link rel="manifest" href="/site.webmanifest" />
+</head>
+<body class="bg-surface text-on-surface selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- Navigation -->
+<nav class="w-full top-0 sticky bg-white z-50">
+<div class="flex justify-between items-center max-w-7xl mx-auto px-6 h-20">
+<a href="landingpage.html" class="text-2xl font-black text-[#002045] tracking-tighter hover:opacity-80 transition-opacity">ImpactPool</a>
+<a href="login.html" class="bg-primary text-on-primary px-6 py-2 rounded-md font-medium transition-colors hover:bg-primary-container">Sign In</a>
+</div>
+</nav>
+<!-- Header -->
+<header class="bg-surface-container-low pt-24 pb-16">
+<div class="max-w-7xl mx-auto px-6">
+<div class="max-w-2xl">
+<span class="text-secondary font-bold tracking-widest text-xs uppercase mb-4 block">Get In Touch</span>
+<h1 class="text-[3.5rem] font-black leading-none tracking-tighter text-primary mb-6">Contact Us</h1>
+<p class="text-on-surface-variant leading-relaxed opacity-80">Have questions about ImpactPool? We'd love to hear from you. Reach out to our team for support, partnerships, or general inquiries.</p>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-20">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+<!-- Contact Info -->
+<div class="lg:col-span-5 space-y-8">
+<div class="space-y-6">
+<div class="flex items-start gap-4 p-6 bg-surface-container-low rounded-xl">
+<div class="w-12 h-12 rounded-xl bg-primary-container flex items-center justify-center text-on-primary flex-shrink-0">
+<span class="material-symbols-outlined">mail</span>
+</div>
+<div>
+<h3 class="font-bold text-primary mb-1">Email</h3>
+<p class="text-on-surface-variant text-sm">For general inquiries and support</p>
+<a href="mailto:hello@impactpool.org" class="text-secondary font-bold text-sm hover:underline">hello@impactpool.org</a>
+</div>
+</div>
+
+<div class="flex items-start gap-4 p-6 bg-surface-container-low rounded-xl">
+<div class="w-12 h-12 rounded-xl bg-secondary-container flex items-center justify-center text-on-secondary-container flex-shrink-0">
+<span class="material-symbols-outlined">handshake</span>
+</div>
+<div>
+<h3 class="font-bold text-primary mb-1">Partnerships</h3>
+<p class="text-on-surface-variant text-sm">NGO onboarding and collaborations</p>
+<a href="mailto:partners@impactpool.org" class="text-secondary font-bold text-sm hover:underline">partners@impactpool.org</a>
+</div>
+</div>
+
+<div class="flex items-start gap-4 p-6 bg-surface-container-low rounded-xl">
+<div class="w-12 h-12 rounded-xl bg-tertiary-container flex items-center justify-center text-on-tertiary-container flex-shrink-0">
+<span class="material-symbols-outlined">bug_report</span>
+</div>
+<div>
+<h3 class="font-bold text-primary mb-1">Technical Support</h3>
+<p class="text-on-surface-variant text-sm">Bug reports and technical issues</p>
+<a href="mailto:support@impactpool.org" class="text-secondary font-bold text-sm hover:underline">support@impactpool.org</a>
+</div>
+</div>
+
+<div class="flex items-start gap-4 p-6 bg-surface-container-low rounded-xl">
+<div class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined">schedule</span>
+</div>
+<div>
+<h3 class="font-bold text-primary mb-1">Response Time</h3>
+<p class="text-on-surface-variant text-sm">We aim to respond to all inquiries within 24–48 business hours.</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Contact Form -->
+<div class="lg:col-span-7">
+<div class="bg-surface-container-low p-8 rounded-xl">
+<h2 class="text-2xl font-bold text-primary mb-6">Send us a message</h2>
+<form id="contact-form" class="space-y-5">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div>
+<label class="block text-xs font-bold text-primary mb-2 uppercase tracking-wider">Full Name</label>
+<input class="w-full px-4 py-3 rounded-lg bg-white border border-outline-variant/30 focus:ring-1 focus:ring-primary/20 focus:border-primary text-on-surface placeholder:text-outline/50 transition-all" placeholder="Your name" type="text" required>
+</div>
+<div>
+<label class="block text-xs font-bold text-primary mb-2 uppercase tracking-wider">Email</label>
+<input class="w-full px-4 py-3 rounded-lg bg-white border border-outline-variant/30 focus:ring-1 focus:ring-primary/20 focus:border-primary text-on-surface placeholder:text-outline/50 transition-all" placeholder="name@email.com" type="email" required>
+</div>
+</div>
+<div>
+<label class="block text-xs font-bold text-primary mb-2 uppercase tracking-wider">Subject</label>
+<select class="w-full px-4 py-3 rounded-lg bg-white border border-outline-variant/30 focus:ring-1 focus:ring-primary/20 focus:border-primary text-on-surface transition-all">
+<option value="">Select a topic</option>
+<option value="general">General Inquiry</option>
+<option value="partnership">NGO Partnership</option>
+<option value="donation">Donation Support</option>
+<option value="technical">Technical Issue</option>
+<option value="other">Other</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-bold text-primary mb-2 uppercase tracking-wider">Message</label>
+<textarea class="w-full px-4 py-3 rounded-lg bg-white border border-outline-variant/30 focus:ring-1 focus:ring-primary/20 focus:border-primary text-on-surface placeholder:text-outline/50 transition-all resize-none" placeholder="How can we help you?" rows="5" required></textarea>
+</div>
+<button type="submit" class="w-full py-4 bg-primary text-on-primary font-black rounded-lg hover:bg-primary-container transition-all">SEND MESSAGE</button>
+</form>
+<div id="contact-success" class="hidden text-center py-8">
+<span class="material-symbols-outlined text-5xl text-secondary mb-3">check_circle</span>
+<h3 class="text-lg font-bold text-primary">Message Sent!</h3>
+<p class="text-sm text-on-surface-variant mt-2">Thank you for reaching out. We'll get back to you soon.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-[#002045] text-white w-full py-12 border-t border-white/10 mt-20">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto px-6 font-['Inter'] text-sm leading-6">
+<div>
+<div class="text-xl font-bold text-white mb-4">ImpactPool</div>
+<p class="text-slate-300 max-w-xs">© 2024 ImpactPool. The Transparent Ledger. Empowering global impact through verifiable trust.</p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col gap-2">
+<a class="text-white font-bold hover:text-[#0a6c44] transition-all" href="terminos_condiciones.html">Terms & Conditions</a>
+<a class="text-slate-300 hover:text-[#0a6c44] transition-all" href="privacy.html">Privacy Policy</a>
+</div>
+<div class="flex flex-col gap-2">
+<a class="text-slate-300 hover:text-[#0a6c44] transition-all" href="contact.html">Contact</a>
+<a class="text-slate-300 hover:text-[#0a6c44] transition-all" href="faq.html">FAQ</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+document.getElementById('contact-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  this.classList.add('hidden');
+  document.getElementById('contact-success').classList.remove('hidden');
+});
+</script>
+</body></html>

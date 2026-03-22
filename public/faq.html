@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FAQ | ImpactPool</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "surface-bright":"#faf9fd","surface-container-high":"#e9e7eb","surface-dim":"#dad9dd",
+        "on-secondary":"#ffffff","error-container":"#ffdad6","on-secondary-container":"#167249",
+        "surface-container-lowest":"#ffffff","on-primary":"#ffffff","background":"#faf9fd",
+        "surface-container-low":"#f4f3f7","surface-variant":"#e3e2e6","secondary-container":"#9ff5c1",
+        "on-primary-container":"#86a0cd","on-surface-variant":"#43474e","surface":"#faf9fd",
+        "on-error":"#ffffff","error":"#ba1a1a","secondary":"#0a6c44",
+        "primary-container":"#1a365d","outline-variant":"#c4c6cf","primary":"#002045",
+        "tertiary-container":"#5d2500","on-surface":"#1a1c1e","tertiary":"#3b1500",
+        "surface-container":"#efedf1","on-tertiary":"#ffffff","on-background":"#1a1c1e","outline":"#74777f",
+        "surface-container-highest":"#e3e2e6","on-tertiary-container":"#f57d32"
+      },
+      fontFamily: {"headline":["Inter"],"body":["Inter"],"label":["Inter"]},
+      borderRadius: {"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},
+    },
+  },
+}
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { font-family: 'Inter', sans-serif; }
+  details summary { cursor: pointer; list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details[open] summary .icon-expand { display: none; }
+  details:not([open]) summary .icon-collapse { display: none; }
+</style>
+<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="ImpactPool" />
+<link rel="manifest" href="/site.webmanifest" />
+</head>
+<body class="bg-surface text-on-surface selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- Navigation -->
+<nav class="w-full top-0 sticky bg-white z-50">
+<div class="flex justify-between items-center max-w-7xl mx-auto px-6 h-20">
+<a href="landingpage.html" class="text-2xl font-black text-[#002045] tracking-tighter hover:opacity-80 transition-opacity">ImpactPool</a>
+<a href="login.html" class="bg-primary text-on-primary px-6 py-2 rounded-md font-medium transition-colors hover:bg-primary-container">Sign In</a>
+</div>
+</nav>
+<!-- Header -->
+<header class="bg-surface-container-low pt-24 pb-16">
+<div class="max-w-7xl mx-auto px-6">
+<div class="max-w-2xl">
+<span class="text-secondary font-bold tracking-widest text-xs uppercase mb-4 block">Help Center</span>
+<h1 class="text-[3.5rem] font-black leading-none tracking-tighter text-primary mb-6">FAQ</h1>
+<p class="text-on-surface-variant leading-relaxed opacity-80">Find answers to the most common questions about ImpactPool, our donation model, blockchain integration, and digital vouchers.</p>
+</div>
+</div>
+</header>
+<main class="max-w-4xl mx-auto px-6 py-20">
+<!-- General Section -->
+<div class="mb-16">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-xl bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">info</span>
+</div>
+<h2 class="text-2xl font-bold tracking-tight text-primary">General</h2>
+</div>
+<div class="space-y-3">
+<details class="bg-surface-container-low rounded-xl overflow-hidden group">
+<summary class="flex items-center justify-between p-6 font-bold text-primary">
+<span>What is ImpactPool?</span>
+<span class="material-symbols-outlined icon-expand text-outline transition-transform">expand_more</span>
+<span class="material-symbols-outlined icon-collapse text-outline transition-transform">expand_less</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant leading-relaxed">
+ImpactPool is a decentralized donation platform that ensures transparency and accountability. Every contribution is tracked on the Avalanche blockchain, allowing donors to verify exactly how their funds are distributed and used by partner organizations.
+</div>
+</details>
+
+<details class="bg-surface-container-low rounded-xl overflow-hidden group">
+<summary class="flex items-center justify-between p-6 font-bold text-primary">
+<span>How does the 70/30 model work?</span>
+<span class="material-symbols-outlined icon-expand text-outline transition-transform">expand_more</span>
+<span class="material-symbols-outlined icon-collapse text-outline transition-transform">expand_less</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant leading-relaxed">
+When you make a donation, 70% goes directly to the beneficiaries through digital vouchers that can be redeemed for essential goods and services. The remaining 30% is held in a blockchain-based vault (DonationVault) to generate sustainable yield that funds ongoing operations and future impact initiatives.
+</div>
+</details>
+
+<details class="bg-surface-container-low rounded-xl overflow-hidden group">
+<summary class="flex items-center justify-between p-6 font-bold text-primary">
+<span>Who can use ImpactPool?</span>
+<span class="material-symbols-outlined icon-expand text-outline transition-transform">expand_more</span>
+<span class="material-symbols-outlined icon-collapse text-outline transition-transform">expand_less</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant leading-relaxed">
+Anyone can register as a donor to contribute to campaigns. Non-profit organizations (NGOs) can apply for a partnership account to create campaigns and distribute vouchers to their beneficiaries. All users must complete identity verification.
+</div>
+</details>
+</div>
+</div>
+
+<!-- Donations Section -->
+<div class="mb-16">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-xl bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">volunteer_activism</span>
+</div>
+<h2 class="text-2xl font-bold tracking-tight text-primary">Donations</h2>
+</div>
+<div class="space-y-3">
+<details class="bg-surface-container-low rounded-xl overflow-hidden group">
+<summary class="flex items-center justify-between p-6 font-bold text-primary">
+<span>What payment methods are supported?</span>
+<span class="material-symbols-outlined icon-expand text-outline transition-transform">expand_more</span>
+<span class="material-symbols-outlined icon-collapse text-outline transition-transform">expand_less</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant leading-relaxed">
+ImpactPool supports cryptocurrency donations via MetaMask and Coinbase Wallet (AVAX, USDC on Avalanche), as well as the x402 HTTP payment protocol for on-chain payments. Future updates will integrate traditional payment rails through Fiserv/Clover POS systems.
+</div>
+</details>
+
+<details class="bg-surface-container-low rounded-xl overflow-hidden group">
+<summary class="flex items-center justify-between p-6 font-bold text-primary">
+<span>Can I choose which campaign to support?</span>
+<span class="material-symbols-outlined icon-expand text-outline transition-transform">expand_more</span>
+<span class="material-symbols-outlined icon-collapse text-outline transition-transform">expand_less</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant leading-relaxed">
+Yes. When making a donation, you can select a specific campaign from the available campaigns list. Each campaign shows its goal, current progress, and the organization managing it, so you can make an informed decision.
+</div>
+</details>
+
+<details class="bg-surface-container-low rounded-xl overflow-hidden group">
+<summary class="flex items-center justify-between p-6 font-bold text-primary">
+<span>Are donations tax-deductible?</span>
+<span class="material-symbols-outlined icon-expand text-outline transition-transform">expand_more</span>
+<span class="material-symbols-outlined icon-collapse text-outline transition-transform">expand_less</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant leading-relaxed">
+Tax deductibility depends on your jurisdiction and the specific organization receiving the funds. ImpactPool provides blockchain-verified receipts that can be used as proof of donation for tax purposes. Consult your local tax advisor for specific guidance.
+</div>
+</details>
+</div>
+</div>
+
+<!-- Vouchers Section -->
+<div class="mb-16">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-xl bg-tertiary-container flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined">confirmation_number</span>
+</div>
+<h2 class="text-2xl font-bold tracking-tight text-primary">Digital Vouchers</h2>
+</div>
+<div class="space-y-3">
+<details class="bg-surface-container-low rounded-xl overflow-hidden group">
+<summary class="flex items-center justify-between p-6 font-bold text-primary">
+<span>What are digital vouchers?</span>
+<span class="material-symbols-outlined icon-expand text-outline transition-transform">expand_more</span>
+<span class="material-symbols-outlined icon-collapse text-outline transition-transform">expand_less</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant leading-relaxed">
+Digital vouchers are blockchain-verified tokens distributed to beneficiaries by partner organizations. Each voucher has a specific monetary value and can be redeemed for essential goods and services at approved vendors. The 70% direct-impact portion of every donation is converted into these vouchers.
+</div>
+</details>
+
+<details class="bg-surface-container-low rounded-xl overflow-hidden group">
+<summary class="flex items-center justify-between p-6 font-bold text-primary">
+<span>How are vouchers distributed?</span>
+<span class="material-symbols-outlined icon-expand text-outline transition-transform">expand_more</span>
+<span class="material-symbols-outlined icon-collapse text-outline transition-transform">expand_less</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant leading-relaxed">
+Partner organizations create campaigns and assign vouchers to verified beneficiaries. Each voucher is recorded on the blockchain along with the beneficiary's anonymous identifier, the assigned value, and a unique redemption code. Organizations manage distribution through their dashboard.
+</div>
+</details>
+</div>
+</div>
+
+<!-- Blockchain Section -->
+<div class="mb-16">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">token</span>
+</div>
+<h2 class="text-2xl font-bold tracking-tight text-primary">Blockchain & Technology</h2>
+</div>
+<div class="space-y-3">
+<details class="bg-surface-container-low rounded-xl overflow-hidden group">
+<summary class="flex items-center justify-between p-6 font-bold text-primary">
+<span>Why Avalanche blockchain?</span>
+<span class="material-symbols-outlined icon-expand text-outline transition-transform">expand_more</span>
+<span class="material-symbols-outlined icon-collapse text-outline transition-transform">expand_less</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant leading-relaxed">
+Avalanche provides fast transaction finality (under 2 seconds), low fees, and high throughput — critical for a donation platform processing many small transactions. Its support for custom subnets (L1s) allows ImpactPool to operate on a dedicated chain optimized for social impact operations.
+</div>
+</details>
+
+<details class="bg-surface-container-low rounded-xl overflow-hidden group">
+<summary class="flex items-center justify-between p-6 font-bold text-primary">
+<span>What is the x402 payment protocol?</span>
+<span class="material-symbols-outlined icon-expand text-outline transition-transform">expand_more</span>
+<span class="material-symbols-outlined icon-collapse text-outline transition-transform">expand_less</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant leading-relaxed">
+x402 is an HTTP-native payment protocol that enables on-chain payments as part of standard web requests. It allows ImpactPool to accept donations via API calls with automatic on-chain settlement, making the payment experience seamless for users and developers integrating with our platform.
+</div>
+</details>
+
+<details class="bg-surface-container-low rounded-xl overflow-hidden group">
+<summary class="flex items-center justify-between p-6 font-bold text-primary">
+<span>Do I need a crypto wallet to donate?</span>
+<span class="material-symbols-outlined icon-expand text-outline transition-transform">expand_more</span>
+<span class="material-symbols-outlined icon-collapse text-outline transition-transform">expand_less</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant leading-relaxed">
+While crypto wallets (MetaMask, Coinbase Wallet) provide the most seamless experience, ImpactPool is designed to support multiple payment methods. You can also sign up with email and password and donate through supported payment channels. Your on-chain activity will be recorded even without a personal wallet.
+</div>
+</details>
+</div>
+</div>
+
+<!-- CTA -->
+<div class="text-center pt-12 border-t border-surface-container-high">
+<p class="text-on-surface-variant mb-6">Still have questions? We're here to help.</p>
+<div class="flex justify-center gap-4">
+<a href="contact.html" class="bg-primary text-on-primary px-8 py-3 rounded-md font-bold hover:bg-primary-container transition-all">Contact Us</a>
+<a href="login.html" class="text-primary font-bold px-8 py-3 hover:bg-surface-container-low rounded-md transition-all">Back to Login</a>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-[#002045] text-white w-full py-12 border-t border-white/10 mt-20">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto px-6 font-['Inter'] text-sm leading-6">
+<div>
+<div class="text-xl font-bold text-white mb-4">ImpactPool</div>
+<p class="text-slate-300 max-w-xs">© 2024 ImpactPool. The Transparent Ledger. Empowering global impact through verifiable trust.</p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col gap-2">
+<a class="text-white font-bold hover:text-[#0a6c44] transition-all" href="terminos_condiciones.html">Terms & Conditions</a>
+<a class="text-slate-300 hover:text-[#0a6c44] transition-all" href="privacy.html">Privacy Policy</a>
+</div>
+<div class="flex flex-col gap-2">
+<a class="text-slate-300 hover:text-[#0a6c44] transition-all" href="contact.html">Contact</a>
+<a class="text-slate-300 hover:text-[#0a6c44] transition-all" href="faq.html">FAQ</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>
